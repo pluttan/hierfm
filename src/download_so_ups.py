@@ -10,7 +10,7 @@ Sources (all open, no login):
   2. atsenergo.ru   ATS (market operator): monthly xlsx per subject of the RF with the
        hourly total actual consumption of the subject, MW ("fact_region").
 
-Runs on the mac (stdlib only, python 3.9+). Repeatable: existing files are skipped,
+Runs anywhere with the standard library only (python 3.9+); used on the mac and on pcomp. Repeatable: existing files are skipped,
 the current period is always refreshed. Pauses between requests keep the load low.
 
     python3 -u src/download_so_ups.py dict genconsum subrf ats --start 2015
@@ -25,6 +25,8 @@ import datetime as dt
 import json
 import os
 import re
+import signal
+import socket
 import ssl
 import sys
 import time
@@ -44,15 +46,41 @@ OES_EAST = 540000
 PAUSE = 0.3
 
 
+# pcomp resolves names over TCP (resolv.conf: options use-vc) and a lookup sometimes hangs for minutes.
+# One lookup per host is enough for a download run, so the answers are kept in memory.
+_GAI = socket.getaddrinfo
+_GAI_CACHE = {}
+
+
+def _cached_getaddrinfo(host, *args, **kwargs):
+    key = (host, args, tuple(sorted(kwargs.items())))
+    if key not in _GAI_CACHE:
+        _GAI_CACHE[key] = _GAI(host, *args, **kwargs)
+    return _GAI_CACHE[key]
+
+
+socket.getaddrinfo = _cached_getaddrinfo
+
+
+def _hung(*_):
+    raise TimeoutError("request hung (TLS or the server did not answer)")
+
+
 def http(url, data=None, tries=5, timeout=90):
-    """GET or POST with retries; returns bytes."""
+    """GET or POST with retries; returns bytes. A watchdog alarm stops a hang that the socket
+    timeout does not cover."""
     last = None
+    signal.signal(signal.SIGALRM, _hung)
     for k in range(tries):
         try:
             req = urllib.request.Request(url, data=data, headers={
                 "User-Agent": UA, "X-Requested-With": "XMLHttpRequest"})
-            with urllib.request.urlopen(req, context=CTX, timeout=timeout) as r:
-                body = r.read()
+            signal.alarm(timeout + 30)
+            try:
+                with urllib.request.urlopen(req, context=CTX, timeout=timeout) as r:
+                    body = r.read()
+            finally:
+                signal.alarm(0)
             time.sleep(PAUSE)
             return body
         except Exception as exc:  # noqa: BLE001 - retry on any network error
@@ -107,7 +135,7 @@ def per_day(root, name, start, end, make_url):
         while day <= last:
             key = day.isoformat()
             if key not in have:
-                have[key] = json.loads(http(make_url(day)))
+                have[key] = json.loads(http(make_url(day), tries=8, timeout=15))
             day += dt.timedelta(days=1)
         save(out, json.dumps(have, ensure_ascii=False).encode("utf8"))
         print(name, y, len(have), flush=True)

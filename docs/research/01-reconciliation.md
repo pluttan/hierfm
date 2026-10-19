@@ -41,8 +41,8 @@
 
 Источники:
 
-- Gross, Sohl. «Disaggregation methods to expedite product line forecasting». Journal of Forecasting, 1990. [Н]
-- Athanasopoulos, Ahmed, Hyndman. «Hierarchical forecasts for Australian domestic tourism». International Journal of Forecasting, 25(1), 2009. [Н]
+- Gross, Sohl. «Disaggregation methods to expedite product line forecasting». 1990, том 9, выпуск 3. Статья существует. Журнал (Journal of Forecasting) и страницы (233–254) источники дают противоречиво. (не проверено)
+- Athanasopoulos, Ahmed, Hyndman. «Hierarchical forecasts for Australian domestic tourism». International Journal of Forecasting, 25(1), 146–166, 2009. [П, проверено в сессии проверки]
 
 Для проекта: top-down по долям нагрузки субъектов близок к практике диспетчерского планирования. Он полезен как слабая база для сравнения.
 
@@ -63,7 +63,7 @@ Hyndman, Ahmed, Athanasopoulos, Shang. «Optimal combination forecasts for hiera
 
 Wickramasuriya, Athanasopoulos, Hyndman. «Optimal forecast reconciliation for hierarchical and grouped time series through trace minimization». Journal of the American Statistical Association, 114(526), 804–819, 2019. DOI 10.1080/01621459.2018.1448825. [П]
 
-Результаты: замкнутая формула для P, несмещённость при P S = I, минимум суммарной дисперсии ошибок. Авторы предлагают четыре оценки W:
+Результаты: замкнутая формула для P, несмещённость при P S = I, минимум суммарной дисперсии ошибок. Авторы рассматривают пять оценок W (в таблице ols и wls_struct взяты из общего семейства, sam и shr предложены как оценки по данным):
 
 | Оценка | W | Свойства |
 |---|---|---|
@@ -91,7 +91,7 @@ Wickramasuriya, Athanasopoulos, Hyndman. «Optimal forecast reconciliation for h
 
 Цель W_target: диагональ выборочных дисперсий (цель D в пакете corpcor). Интенсивность lambda считается по аналитической формуле Ledoit–Wolf. Оценка положительно определена при любом T [П, по описанию в поиске].
 
-Развитие: пакет FoReco предлагает вариант `oasd` (oracle approximating shrinkage toward diagonal), ссылка в документации FoReco на Ando и Xiao (2023). [П для факта наличия опции в документации FoReco; сама работа Ando и Xiao не проверена и в arXiv не найдена.]
+Развитие: пакет FoReco предлагает вариант `oasd` (oracle approximating shrinkage toward diagonal), ссылка в документации FoReco на Ando и Xiao (2023). Работа существует: Sakai Ando, Mingmei Xiao. «High-Dimensional Covariance Matrix Estimation: Shrinkage Toward a Diagonal Target». IMF Working Paper WP/23/257, декабрь 2023, https://www.imf.org/en/publications/wp/issues/2023/12/08/high-dimensional-covariance-matrix-estimation-shrinkage-toward-a-diagonal-target-542025. Это рабочая статья МВФ, не журнал. Метод расширяет OAS (Chen и др. 2009): сжатие идёт к диагонали выборочной матрицы, выборочные дисперсии не меняются. Результаты выведены в предположении нормальности. [П]
 
 ### 3.2 Неопределённость самой оценки W
 
@@ -177,8 +177,8 @@ van Erven, Cugliari. «Game-theoretically optimal reconciliation of contemporane
 - Jeon, Panagiotelis, Petropoulos. «Reconciliation of probabilistic forecasts with an application to wind power». arXiv:1808.02635; European Journal of Operational Research, 279, 364–379, 2019. [А] Данные: ветроэнергетика, температурная иерархия.
 - Panagiotelis, Gamakumara, Athanasopoulos, Hyndman. «Probabilistic forecast reconciliation: Properties, evaluation and score optimisation». European Journal of Operational Research, 306(2), 693–706, 2023. DOI 10.1016/j.ejor.2022.07.040. [П]
 - Wickramasuriya. «Probabilistic forecast reconciliation under the Gaussian framework». arXiv:2103.11128, 2021. [А] Если несогласованное распределение гауссово, MinT минимизирует логарифмическую оценку; лог-оценка MinT по каждому маргиналу лучше, чем у OLS. Основа для метода «согласование выборок ковариацией A».
-- Corani и др. «Probabilistic reconciliation of hierarchical forecast via Bayes' rule». arXiv:1906.03105, ECML PKDD 2020. [П, список авторов не сверён]
-- Ben Taieb, Taylor, Hyndman. «Coherent Probabilistic Forecasts for Hierarchical Time Series». ICML 2017, PMLR 70. [П]
+- Corani, Azzimonti, Augusto, Zaffalon. «Probabilistic reconciliation of hierarchical forecast via Bayes' rule». ECML PKDD 2020, 211–226. Версия на arXiv:1906.03105 названа «Reconciling Hierarchical Forecasts via Bayes' Rule». [П]
+- Ben Taieb, Taylor, Hyndman. «Coherent Probabilistic Forecasts for Hierarchical Time Series». ICML 2017, PMLR 70, 3348–3357. https://proceedings.mlr.press/v70/taieb17a.html [П]
 - Rangapuram и др. «End-to-End Learning of Coherent Probabilistic Forecasts for Hierarchical Time Series». ICML 2021, PMLR 139, 8832–8843. [П] На arXiv версии не найдено.
 - Olivares и др. «Probabilistic Hierarchical Forecasting with Deep Poisson Mixtures». arXiv:2110.13179; International Journal of Forecasting, 2023. [А]
 
@@ -187,14 +187,14 @@ van Erven, Cugliari. «Game-theoretically optimal reconciliation of contemporane
 | Работа | Что сделано | Метка |
 |---|---|---|
 | Ben Taieb, Taylor, Hyndman. «Hierarchical Probabilistic Forecasting of Electricity Demand With Smart Meter Data». JASA, 116(533), 27–43, 2021. DOI 10.1080/01621459.2020.1736081 | Иерархия счётчиков Великобритании; когерентные вероятностные прогнозы; достаточно моделировать малый набор зависимостей | [П] |
-| Ben Taieb и др. «Regularization in Hierarchical Time Series Forecasting with Application to Electricity Smart Meter Data». AAAI | Регуляризация согласования на данных счётчиков; год и список авторов не сверены | [П по названию, остальное Н] |
+| Ben Taieb, Yu, Barreto, Rajagopal. «Regularization in Hierarchical Time Series Forecasting with Application to Electricity Smart Meter Data». AAAI 2017 (том 31), https://ojs.aaai.org/index.php/AAAI/article/view/11167 | Регуляризация согласования на данных счётчиков | [П] |
 | Jeon, Panagiotelis, Petropoulos 2019 | Ветроэнергетика, Крит | [А] |
 | Møller и др. 2024 | Нагрузка Швеции, стандартные ошибки весов | [А] |
 | Girolimetto, Di Fonzo 2024 | Почасовая фотоэлектрическая генерация | [А] |
 | Leprince, Madsen, Møller, Zeiler. «Hierarchical learning, forecasting coherent spatio-temporal individual and aggregated building loads». arXiv:2301.12967, 2023 | Здания, пространственные и временные иерархии, функция потерь со структурой согласования | [А] |
 | Zheng и др. «Coherent Hierarchical Probabilistic Forecasting of Electric Vehicle Charging Demand». arXiv:2411.00337, 2024 | Станции зарядки; сценарии согласуются слоем выпуклой оптимизации | [А] |
 | Aikawa и др. 2025 | Электропотребление Швейцарии | [Т] |
-| Ghelasi и др. «Hierarchical forecasting for aggregated curves with an application to day-ahead electricity price auctions». arXiv:2305.16255, 2023 | Кривые заявок на рынке на сутки вперёд | [П, только название по API; первый автор Ghelasi по API] |
+| Ghelasi и др. «Hierarchical forecasting for aggregated curves with an application to day-ahead electricity price auctions». arXiv:2305.16255, 2023 | Кривые заявок на рынке на сутки вперёд | [П; авторы Ghelasi, Ziel] |
 
 Пробелы:
 
@@ -225,7 +225,7 @@ van Erven, Cugliari. «Game-theoretically optimal reconciliation of contemporane
 
 ### 8.3 scikit-hts
 
-- Версия 0.5.12 в PyPI, загружена 2021-09-02, это последняя версия. Статус в описании: alpha. Заявлена поддержка Python 3.6–3.8. [П]
+- Версия 0.5.12 в PyPI, загружена 2021-09-02, это последняя версия. Статус в описании: alpha. Поле requires_python в PyPI пустое; поддержка Python 3.6–3.8 из описания не подтверждена. [П]
 - Проект не обновляется более пяти лет. Состав методов в этой сессии не удалось проверить (страница PyPI и README на GitHub недоступны). По памяти: bottom-up, средние исторические доли, OLS, WLS. [Н]
 - Рекомендация: не использовать как основу, только упомянуть в обзоре.
 
@@ -238,7 +238,7 @@ van Erven, Cugliari. «Game-theoretically optimal reconciliation of contemporane
 
 ## 9. Скачанные PDF
 
-Каталог: `/Volumes/pr/bmstu/papers/soglasovanie-prognozov/docs/papers/`. Загрузка выполнена на маке, во всех файлах первые байты `%PDF`.
+Каталог: `/Volumes/pr/bmstu/papers/soglasovanie-prognozov/docs/papers/`. Загрузка выполнена на маке, во всех файлах первые байты `%PDF`. Мак недоступен, поэтому эти файлы при проверке не открыты. Каталог /data/hierfm/docs/papers на pcomp пуст. (не проверено)
 
 | Файл | arXiv | Тема |
 |---|---|---|
@@ -278,7 +278,44 @@ van Erven, Cugliari. «Game-theoretically optimal reconciliation of contemporane
 
 - Прочитать обзор Athanasopoulos и др. 2024 целиком. Выписать раздел про малую выборку и ковариацию.
 - Прочитать Ben Taieb и Koo 2019 (PDF в репозитории Монса) и Ben Taieb и др. 2021. Проверить, как они оценивают W на данных счётчиков.
-- Проверить существование и выходные данные: Ando и Xiao 2023, AAAI-статья Ben Taieb и др., Corani и др. 2020, Gross и Sohl 1990, Athanasopoulos и др. 2009.
+- Проверить журнал и страницы Gross и Sohl 1990 по странице издателя.
 - Проверить, есть ли код у Aikawa и др. и Steinmeister и Pauly (в этой сессии репозитории не искали).
 - Определить, как получать остатки при длине окна 1–4 недели: число скользящих начал прогноза, горизонт, шаг.
 - Оценить на реальных данных ЕЭС, насколько структурная ковариация (ОЭС, часовой пояс) объясняет выборочную корреляцию ошибок.
+
+## 12. Проверка
+
+Дата проверки: 2026-10-19. Проверяющий сверил ссылки веб-поиском и API arXiv.
+
+Подтверждены: название, авторы, год, место публикации.
+
+- arXiv (все 23 идентификатора из текста): 2103.11129, 2402.06480, 2506.19554, 2409.18550, 2510.20383, 2602.22694, 2006.02043, 2605.29611, 2409.12856, 2602.05030, 2510.21249, 2305.18809, 2006.08570, 2303.17277, 2410.19407, 2305.05330, 1808.02635, 2103.11128, 1906.03105, 2110.13179, 2301.12967, 2411.00337, 2305.16255.
+- Журналы и труды: Hyndman 2011 (CSDA 55(9)), Wickramasuriya 2019 (JASA 114), Panagiotelis 2021 (IJF 37(1)), Athanasopoulos 2024 (IJF 40(2)), Schäfer и Strimmer 2005, Ben Taieb и Koo 2019 (KDD, 1337–1347), van Erven и Cugliari 2015 (Springer), Athanasopoulos 2017 (EJOR 262(1)), Panagiotelis 2023 (EJOR 306(2)), Ben Taieb, Taylor, Hyndman 2021 (JASA 116(533)), Rangapuram 2021 (ICML, PMLR 139, 8832–8843), Athanasopoulos, Ahmed, Hyndman 2009 (IJF 25(1), 146–166), Jeon 2019 (EJOR 279), Girolimetto 2024 (IJF 40(3)), Aikawa 2026 (TMLR, по mlanthology).
+- Содержание сверено с абстрактом: Wickramasuriya 2021 (порядок MinT-U, MinT, OLS, базовые), Hyndman 2011, Wickramasuriya 2019, Panagiotelis 2021, Aikawa (постановка и SDP), Ando и Xiao.
+
+Исправлено:
+
+- Ando и Xiao 2023 существуют: это рабочая статья МВФ WP/23/257, не журнал. Ссылка добавлена в раздел 3.1.
+- AAAI-статья Ben Taieb: авторы Ben Taieb, Yu, Barreto, Rajagopal, год 2017. Раньше список авторов был неполным.
+- Corani и др.: добавлены четыре автора и страницы; название в ECML отличается от названия на arXiv.
+- Ghelasi, Ziel: указаны оба автора.
+- Ben Taieb, Taylor, Hyndman 2017: добавлены страницы 3348–3357.
+- Athanasopoulos, Ahmed, Hyndman 2009: добавлены страницы, метка [Н] заменена на [П].
+- MinT 2019: «четыре оценки» заменено на «пять», так как в таблице пять строк.
+- scikit-hts: поддержка Python 3.6–3.8 не подтверждена (requires_python пуст).
+
+Не проверено:
+
+- Gross, Sohl 1990: статья существует, но источники называют разные журналы и страницы. Не цитируйте журнал, пока не откроете страницу издателя.
+- Spiliotis 2021 (Applied Soft Computing) и Di Fonzo, Girolimetto (IJF 2023): годы и журналы остались из памяти (метка [Н]).
+- Полные тексты Aikawa, Steinmeister и Møller читал автор обзора, не проверяющий. Числа результатов (0,888; 0,808; 0,867; 1,110; около 10% и 9,1%) не пересчитаны.
+- Утверждение о ERM «lasso» и режимах hierarchicalforecast взято из кода, при проверке не открывалось.
+
+Числа и библиотеки:
+
+- hierarchicalforecast: версия 1.5.3, загрузка 2026-09-24, Python от 3.10, Apache 2.0. Совпадает с PyPI.
+- scikit-hts: версия 0.5.12, 2021-09-02, статус Alpha. Совпадает с PyPI.
+- FoReco: версия 1.3.1, опубликована 2026-07-09. Совпадает с CRAN.
+- gtop 0.2.0 (CRAN, 2015-03-05): совпадает.
+
+Скачанные данные: файл заявляет пустой список, проверять нечего. Каталог /data/hierfm/docs/papers на pcomp пуст. Пятнадцать PDF из раздела 9 лежат только на недоступном маке и не проверены.

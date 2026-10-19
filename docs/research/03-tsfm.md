@@ -34,7 +34,7 @@
 | Chronos-2 | 120 млн | Apache-2.0 | `amazon/chronos-2` | 21 квантиль: 0,01; 0,05; 0,1 … 0,9; 0,95; 0,99 | Да. Групповое внимание. Прошлые и будущие известные ковариаты | контекст 8192, горизонт 1024 | `chronos-forecasting>=2.0` |
 | Chronos-Bolt (base) | 205 млн | Apache-2.0 | `amazon/chronos-bolt-base` | квантили, в примере 0,1; 0,5; 0,9 | Только одномерный. Ковариаты через AutoGluon | контекст 2048, горизонт 64 (из карточки Chronos-2) | `chronos-forecasting`, `autogluon` |
 | TimesFM-3 | 330 млн | TimesFM Non-Commercial License v1.0 | `google/timesfm-3.0-pytorch` | точка и 9 квантилей (0,1 … 0,9) | Да. Несколько целей, прошлые и будущие ковариаты | контекст до 15 360 точек, горизонт не ограничен явно | `timesfm[torch]` или `timesfm[mlx]` |
-| TimesFM-2.5 | 200 млн | Apache-2.0 | `google/timesfm-2.5-200m-pytorch` | точка и квантили 0,1 … 0,9 (таблица с 10 колонками) | Только одномерный. Ковариаты через XReg | контекст до 16 тыс., горизонт до 1 тыс. с головой квантилей | `timesfm` |
+| TimesFM-2.5 | 200 млн в названии; по метаданным Hugging Face 231 млн | Apache-2.0 | `google/timesfm-2.5-200m-pytorch` | точка и квантили 0,1 … 0,9 (таблица с 10 колонками) | Только одномерный. Ковариаты через XReg | контекст до 16 тыс., горизонт до 1 тыс. с головой квантилей | `timesfm` |
 | TimesFM-2.0 | 500 млн | Apache-2.0 | `google/timesfm-2.0-500m-pytorch` (id не проверял) | квантили | Нет | контекст 2048 | `timesfm==1.3.0` |
 | TiRex-2 | 82,5 млн всего, 38,4 млн активны для одномерного ряда | Apache-2.0 | `NX-AI/TiRex-2` | 9 квантилей 0,1 … 0,9 (проверено по `model-config.yaml`) | Да. Прошлые и будущие ковариаты, несколько целей | `model-config.yaml`: `context_len` 2048, `future_len` 320 (проверено). Статья заявляет устойчивость при любом контексте | `tirex-2` |
 | TiRex (первая) | 35 млн | лицензия NXAI (`license:other`) | `NX-AI/TiRex` | квантили | Нет | не указано | `tirex-ts` |
@@ -58,7 +58,7 @@
 
 ## 3. Короткие заметки по моделям
 
-**Chronos-2.** Кодировщик в духе T5. Групповое внимание делит информацию между рядами одной группы: между переменными многомерного ряда, между целью и ковариатами, между рядами пакета (режим `cross learning`). Обучен на корпусах Chronos и GIFT-Eval Pretrain и на синтетике. Тестовые части пересекающихся с GIFT-Eval наборов исключены (карточка). Дата выхода 20 октября 2025. Пропускная способность в статье: 300 рядов в секунду на A10G. На CPU работает (карточка). О MPS на странице ничего нет.
+**Chronos-2.** Кодировщик в духе T5. Групповое внимание делит информацию между рядами одной группы: между переменными многомерного ряда, между целью и ковариатами, между рядами пакета (режим `cross learning`). Обучен на корпусах Chronos и GIFT-Eval Pretrain и на синтетике. Тестовые части пересекающихся с GIFT-Eval наборов исключены (карточка). Дата выхода 20 октября 2025 (дата выхода весов не проверена; статья на arXiv подана 17 октября 2025). Пропускная способность в статье: 300 рядов в секунду на A10G. На CPU работает (карточка). О MPS на странице ничего нет.
 
 **TimesFM-3.** Блок «Stacked Mixing Transformer with Variate Attention», 20 слоёв, размерность 1280, 16 голов (карточка). Горизонт прогноза строится за один проход добавлением замаскированных токенов. Обучение: GiftEvalPretrain без наборов, пересекающихся с fev-bench, Wikipedia Pageviews до ноября 2023, Google Trends до конца 2022, синтетика. Веса распространяются по некоммерческой лицензии. Для научной статьи это допустимо. В статье нужно указать лицензию.
 
@@ -167,14 +167,14 @@
 
 **Модели без дообучения против обученных**
 
-- Obermeier, Pruckner, Haselbeck, Zeiselmair. FETS Benchmark: Foundation Models Enable Scalable and Generalizable Energy Time Series Forecasting. arXiv:2604.22328, 2026. 54 набора, 9 категорий. Медианная NRMSE: Chronos-2 0,472, TiRex-2 0,474, XGBoost 0,611, случайный лес 0,696. Модели с ковариатами без дообучения лучше всего. Эффект растёт на высоких уровнях агрегации (национальная нагрузка, централизованное теплоснабжение). Обсуждения утечки на странице аннотации нет. https://arxiv.org/abs/2604.22328
+- Obermeier, Pruckner, Haselbeck, Zeiselmair. FETS Benchmark: Foundation Models Enable Scalable and Generalizable Energy Time Series Forecasting. arXiv:2604.22328, 2026; опубликована в Energy and AI, 2026. 54 набора, 9 категорий. Медианная NRMSE: Chronos-2 0,472, TiRex-2 0,474, XGBoost 0,611, случайный лес 0,696. Модели с ковариатами без дообучения лучше всего. Эффект растёт на высоких уровнях агрегации (национальная нагрузка, централизованное теплоснабжение). Обсуждения утечки на странице аннотации нет. https://arxiv.org/abs/2604.22328
 - Hertel, Pütz, Kolar, Schäfer, Mikut, Hagenmeyer. A Benchmark for Electrical Load Forecasting Across Grid Levels: Time-Series Transformers Outperform Established Methods. arXiv:2607.15705, 2026. Десять методов, три уровня сети. Трансформеры, обученные на задаче, снижают ошибку на 6,6–10,7 %. Chronos-2 без дообучения конкурентоспособен на двух из трёх наборов, но «не ловит особые события» в данных оператора системы передачи. Это проигрыш в нашей постановке: праздники и аномалии. https://arxiv.org/abs/2607.15705
 - Hertel, Nikoltchovska, Pütz, Mikut, Schäfer, Hagenmeyer. Explainable Load Forecasting with Covariate-Informed Time Series Foundation Models. arXiv:2604.28149, 2026. Chronos-2 и TabPFN-TS на сутки вперёд для оператора системы передачи. Без дообучения они на уровне Трансформера, обученного на многолетних данных. https://arxiv.org/abs/2604.28149
 - Pendyala, Fu, Yan, Virani. Assessing Covariate-Informed Grid Load Forecasting with a Time-Series Foundation Model. arXiv:2609.06656, IJCNN 2026. Данные ENTSO-E и ISO New England. Chronos-2 без дообучения отстаёт от обученных моделей и быстрее теряет точность с ростом горизонта. После дообучения лучше на коротких горизонтах. Цифры MAPE (4,31 против 4,52 и 4,65 у TCN и Трансформера на ENTSO-E при 30 шагах) я видел только во вторичном пересказе в поиске, не проверял в тексте. https://arxiv.org/abs/2609.06656
-- Kaljevic, Arzola, Zhang. Benchmarking Time Series Foundation Models for Load Forecasting Under Covariate Uncertainty. arXiv:2610.07232, 5 октября 2026. Четыре обученные модели и четыре предобученные на трёх наборах. Chronos-2 лучшая и без дообучения, и с ним, если будущие ковариаты известны или точны. Шумный прогноз ковариат ухудшает её быстрее, чем обученную TimesNet. Для нас это важно: прогноз температуры не идеален. https://arxiv.org/abs/2610.07232
+- Kaljevic, Arzola, Zhang. Benchmarking Time Series Foundation Models for Load Forecasting Under Covariate Uncertainty. arXiv:2610.07232, 5 октября 2026; принята на IEEE PES Grid Edge Conference & Expo 2027. Четыре обученные модели и четыре предобученные на трёх наборах. Chronos-2 лучшая и без дообучения, и с ним, если будущие ковариаты известны или точны. Шумный прогноз ковариат ухудшает её быстрее, чем обученную TimesNet. Для нас это важно: прогноз температуры не идеален. https://arxiv.org/abs/2610.07232
 - Simeone. Time Series Foundation Models for Energy Load Forecasting on Consumer Hardware: A Multi-Dimensional Zero-Shot Benchmark. arXiv:2602.10848, 2026. Данные ERCOT, 2020–2024. При контексте 2048 ч и горизонте сутки лучшие модели дают MASE около 0,31, это на 47 % лучше сезонного наивного. Chronos-2: покрытие 95 % при номинале 90 %. Moirai-2 и Prophet перенапряжены, покрытие около 70 %. Работа без рецензии. https://arxiv.org/abs/2602.10848
-- Spoek, Ben Hicham, Derzsi, Althaus, Mitsos, Müller. Systematic Evaluation of TabPFN-TS and Chronos-2 for Zero-Shot Heat Load Forecasting in District Heating Networks. arXiv:2608.20024, 2026. Chronos-2 с температурой лучше обученных базовых моделей. Длинный контекст не помог (лучшее окно 12 недель). Это совпадает с нашей идеей короткой истории. https://arxiv.org/abs/2608.20024
-- Meyer, Zapata, Kaltenpoth, Müller. Benchmarking Time Series Foundation Models for Short-Term Household Electricity Load Forecasting. arXiv:2410.09487, 2024. Chronos, TimesFM и Time-MoE на уровне Трансформеров, обученных с нуля. Часть моделей превосходит их с ростом контекста. https://arxiv.org/abs/2410.09487
+- Spoek, Ben Hicham, Derzsi, Althaus, Mitsos, Müller. Systematic Evaluation of TabPFN-TS and Chronos-2 for Zero-Shot Heat Load Forecasting in District Heating Networks. arXiv:2608.20024, 2026. Chronos-2 с температурой лучше обученных базовых моделей. Длинный контекст не помог (лучшее окно 12 недель). Главный тест идёт на идеальном прогнозе погоды, это ограничение работы. Это совпадает с нашей идеей короткой истории. https://arxiv.org/abs/2608.20024
+- Meyer, Zapata, Kaltenpoth, Müller. Benchmarking Time Series Foundation Models for Short-Term Household Electricity Load Forecasting. arXiv:2410.09487, 2024; IEEE Access, т. 13, с. 218141–218153, 2025. Chronos, TimesFM и Time-MoE на уровне Трансформеров, обученных с нуля. Часть моделей превосходит их с ростом контекста. https://arxiv.org/abs/2410.09487
 
 **Где модели проигрывают**
 
@@ -221,10 +221,10 @@
 
 ### 6.2. Работы об утечке
 
-- Meyer, Kaltenpoth, Zalipski, Müller. Rethinking Evaluation in the Era of Time Series Foundation Models: (Un)known Information Leakage Challenges. arXiv:2510.13654 (v3 февраль 2026). Два вида утечки: пересечение выборок из-за повторного использования наборов и временное пересечение коррелированных рядов. Цифра «47–184 % меньше MSE на утёкших наборах» пришла из пересказа поиска, в аннотации её нет. Помечаю как не проверено. https://arxiv.org/abs/2510.13654
+- Meyer, Kaltenpoth, Zalipski, Müller. Rethinking Evaluation in the Era of Time Series Foundation Models: (Un)known Information Leakage Challenges. arXiv:2510.13654 (v3 февраль 2026). Два вида утечки: пересечение выборок из-за повторного использования наборов и временное пересечение коррелированных рядов. Цифра «47–184 % меньше MSE на утёкших наборах» пришла из пересказа поиска, в аннотации её нет. Помечаю как не проверено. Место публикации: препринт arXiv, рецензируемого места страница не называет. https://arxiv.org/abs/2510.13654
 - Shchur и др. fev-bench: A Realistic Benchmark for Time Series Forecasting. arXiv:2509.26468, 2025. Введён показатель утечки: доля пар «модель–задача», где обучающие данные пересекаются с тестом. https://arxiv.org/abs/2509.26468
-- Qiao и др. It's TIME: Towards the Next Generation of Time Series Forecasting Benchmarks. arXiv:2602.12147, 2026. 50 новых наборов, 98 задач, цель: оценка без утечки. Есть ли в нём энергетика, на странице не указано. https://arxiv.org/abs/2602.12147
-- TS-Arena: площадка прогнозов с предварительной регистрацией (arXiv:2512.20761, найдено в поиске, страницу не открывал). Идея: прогнозы сдают до появления факта.
+- Qiao и др. It's TIME: Towards the Next Generation of Time Series Forecasting Benchmarks. arXiv:2602.12147, 2026 (ICML 2026). 50 новых наборов, 98 задач, цель: оценка без утечки. Есть ли в нём энергетика, на странице не указано. https://arxiv.org/abs/2602.12147
+- Meyer, Kaltenpoth, Albers, Zalipski, Müller. TS-Arena: A Live Forecast Pre-Registration Platform. arXiv:2512.20761, KDD 2026 (проверено). Идея: прогнозы сдают до появления факта.
 
 ### 6.3. Что делать в нашем опыте
 
@@ -239,11 +239,11 @@
 
 ## 7. Калибровка интервалов
 
-- Adler, Chang, Draxler, Abdi, Smyth. Beyond Accuracy: Are Time Series Foundation Models Well-Calibrated? arXiv:2510.16060, ICLR 2026. Пять моделей и две базовые линии. Модели лучше откалиброваны, чем базовые линии, и не склонны систематически к излишней уверенности или осторожности. https://arxiv.org/abs/2510.16060
-- Michael, Symeonides, Trihinas. Evaluating Accuracy and Probabilistic Reliability of Zero-Shot Time Series Foundation Models. arXiv:2609.25788, 22 сентября 2026. Шесть моделей на энергетике, транспорте, финансах. Модели на xLSTM (в том числе TiRex) сохраняют калибровку на всех горизонтах. Патчевые трансформеры точны, но теряют калибровку на длинных горизонтах. https://arxiv.org/abs/2609.25788
+- Adler, Chang, Draxler, Abdi, Smyth. Beyond Accuracy: Are Time Series Foundation Models Well-Calibrated? arXiv:2510.16060, ICLR 2026 (проверено). Пять моделей и две базовые линии. Модели лучше откалиброваны, чем базовые линии, и не склонны систематически к излишней уверенности или осторожности. https://arxiv.org/abs/2510.16060
+- Michael, Symeonides, Trihinas. Evaluating Accuracy and Probabilistic Reliability of Zero-Shot Time Series Foundation Models. arXiv:2609.25788, 22 сентября 2026; принята на ADBIS 2026. Шесть моделей на энергетике, транспорте, финансах. Модели на xLSTM (в том числе TiRex) сохраняют калибровку на всех горизонтах. Патчевые трансформеры точны, но теряют калибровку на длинных горизонтах. https://arxiv.org/abs/2609.25788
 - Simeone (arXiv:2602.10848): Chronos-2 хорошо откалиброван, Moirai-2 перенапряжен (см. раздел 5).
 - Achour, Bouher, Nguyen, Chesneau. Foundation models for time series forecasting: Application in conformal prediction. arXiv:2507.08858, 2025. При малом объёме данных предобученные модели дают более надёжные конформные интервалы и оставляют больше данных на калибровку. Это прямо поддерживает постановку «короткая история». https://arxiv.org/abs/2507.08858
-- Работа ICLR 2026 об условном покрытии при высокой волатильности (Improving Conditional Coverage in Time-Series Foundation Models via Direct Volatility Modeling) найдена в поиске, текст не открывал.
+- Работа об условном покрытии при высокой волатильности (Improving Conditional Coverage in Time-Series Foundation Models via Direct Volatility Modeling): авторы, год и место не проверены (не проверено). Не цитировать без проверки.
 
 **Следствие для опытов.** Три выбранные модели не имеют уровней 0,025 и 0,975 в нативном выходе.
 
@@ -320,25 +320,25 @@
 Работы с проверенной аннотацией (страница arXiv открыта).
 
 - Ansari и др. Chronos-2: From Univariate to Universal Forecasting. arXiv:2510.15821, 2025. https://arxiv.org/abs/2510.15821
-- Ansari и др. Chronos: Learning the Language of Time Series. arXiv:2403.07815, 2024 (TMLR, по памяти). https://arxiv.org/abs/2403.07815
-- Das, Kong, Sen, Zhou. A decoder-only foundation model for time-series forecasting (TimesFM). arXiv:2310.10688, 2023 (ICML 2024, по памяти). https://arxiv.org/abs/2310.10688
+- Ansari и др. Chronos: Learning the Language of Time Series. arXiv:2403.07815, 2024 (TMLR, по памяти; страница arXiv место не называет). https://arxiv.org/abs/2403.07815
+- Das, Kong, Sen, Zhou. A decoder-only foundation model for time-series forecasting (TimesFM). arXiv:2310.10688, 2023 (ICML 2024, по памяти; страница arXiv место не называет). https://arxiv.org/abs/2310.10688
 - Podest и др. TiRex-2: Generalizing TiRex to Multivariate Data and Streaming. arXiv:2607.01204, 2026. https://arxiv.org/abs/2607.01204
 - Auer, Podest, Klotz, Böck, Klambauer, Hochreiter. TiRex: Zero-Shot Forecasting Across Long and Short Horizons with Enhanced In-Context Learning. arXiv:2505.23719, NeurIPS 2025. https://arxiv.org/abs/2505.23719
 - Khwaja и др. Toto 2.0: Time Series Forecasting Enters the Scaling Era. arXiv:2605.20119, 2026. https://arxiv.org/abs/2605.20119
 - Cohen и др. This Time is Different: An Observability Perspective on Time Series Foundation Models (Toto 1.0). arXiv:2505.14766, 2025. https://arxiv.org/abs/2505.14766
 - Liu и др. Moirai 2.0: When Less Is More for Time Series Forecasting. arXiv:2511.11698, 2025 (v3 февраль 2026). https://arxiv.org/abs/2511.11698
-- Woo и др. Unified Training of Universal Time Series Forecasting Transformers (Moirai). arXiv:2402.02592, 2024. https://arxiv.org/abs/2402.02592
+- Woo и др. Unified Training of Universal Time Series Forecasting Transformers (Moirai). arXiv:2402.02592, 2024 (ICML 2024, по памяти). https://arxiv.org/abs/2402.02592
 - Liu и др. Moirai-MoE: Empowering Time Series Foundation Models with Sparse Mixture of Experts. arXiv:2410.10469, 2024. https://arxiv.org/abs/2410.10469
 - Liu, Qin, Shi, Chen, Yang, Huang, Wang, Long. Sundial: A Family of Highly Capable Time Series Foundation Models. arXiv:2502.00816, 2025. https://arxiv.org/abs/2502.00816
-- Feng и др. Kairos: Toward Adaptive and Parameter-Efficient Time Series Foundation Models. arXiv:2509.25826. https://arxiv.org/abs/2509.25826
+- Feng и др. Kairos: Toward Adaptive and Parameter-Efficient Time Series Foundation Models. arXiv:2509.25826, 2025 (NeurIPS 2026 по комментарию на arXiv). https://arxiv.org/abs/2509.25826
 - Ekambaram и др. Tiny Time Mixers (TTMs). arXiv:2401.03955, NeurIPS 2024. https://arxiv.org/abs/2401.03955
 - Rasul и др. Lag-Llama: Towards Foundation Models for Probabilistic Time Series Forecasting. arXiv:2310.08278, 2023. https://arxiv.org/abs/2310.08278
 - Garza, Challu, Mergenthaler-Canseco. TimeGPT-1. arXiv:2310.03589, 2023. https://arxiv.org/abs/2310.03589
 - Shchur и др. fev-bench: A Realistic Benchmark for Time Series Forecasting. arXiv:2509.26468, 2025. https://arxiv.org/abs/2509.26468
-- Aksu и др. GIFT-Eval: A Benchmark For General Time Series Forecasting Model Evaluation. arXiv:2410.10393, 2024 (название увидел в результатах поиска, страницу не открывал). https://arxiv.org/abs/2410.10393
+- Aksu и др. GIFT-Eval: A Benchmark For General Time Series Forecasting Model Evaluation. arXiv:2410.10393, 2024 (проверено). https://arxiv.org/abs/2410.10393
 - Thierry, Rochet. TW3Cast. arXiv:2609.28506, 2026. https://arxiv.org/abs/2609.28506
 - Le Naour, Nabil, Petralia. TS-ICL. arXiv:2606.05878, 2026. https://arxiv.org/abs/2606.05878
-- Qiao и др. It's TIME. arXiv:2602.12147, 2026. https://arxiv.org/abs/2602.12147
+- Qiao и др. It's TIME. arXiv:2602.12147, 2026 (ICML 2026). https://arxiv.org/abs/2602.12147
 - Meyer, Kaltenpoth, Zalipski, Müller. Rethinking Evaluation in the Era of Time Series Foundation Models. arXiv:2510.13654, 2025. https://arxiv.org/abs/2510.13654
 - Работы по нагрузке и калибровке из разделов 5 и 7 с адресами arXiv там же.
 
@@ -374,3 +374,29 @@
 Примечание о месте. После загрузки на диске `/Volumes/pr` осталось около 3 ГБ свободного места. Другие процессы тоже пишут на этот диск. Перед записью прогнозов проверьте `df -h /Volumes/pr`.
 
 Пакет `timesfm 3.0.2` содержит классы `TimesFM3Forecaster` (импорт `from timesfm3.torch.timesfm3_forecaster import TimesFM3Forecaster`) и старый `TimesFM_2p5_200M_torch`. Метод `predict` принимает `past_only_covariates` и `past_future_covariates`. Эти параметры я не запускал.
+
+## 14. Проверка
+
+Дата проверки: 2026-10-19. Проверяющий открыл страницы arXiv и карточки Hugging Face через веб и API.
+
+**Ссылки.** Проверено 36 работ. Все существуют, авторы и годы совпали с файлом. Выдуманных ссылок нет.
+
+Проверены такие работы: Chronos-2, Chronos, TimesFM, TiRex, TiRex-2, Toto 1.0, Toto 2.0, Moirai, Moirai-MoE, Moirai 2.0, Sundial, Kairos, TTM, Lag-Llama, TimeGPT-1, GIFT-Eval, fev-bench, It's TIME, TW3Cast, TS-ICL, FETS, Hertel (две работы), Pendyala, Kaljevic, Simeone, Spoek, Meyer (три работы), Adler, Michael, Achour.
+
+**Исправлено в тексте.**
+- Добавлены места публикации, которые страницы arXiv называют прямо: Energy and AI (FETS), IEEE Access 2025 (Meyer и др., бытовая нагрузка), IEEE PES Grid Edge 2027 (Kaljevic), ADBIS 2026 (Michael), ICML 2026 (TIME), KDD 2026 (TS-Arena), NeurIPS 2026 (Kairos, по комментарию).
+- TS-Arena раньше упоминался без авторов. Теперь указаны авторы и место.
+- Работа об условном покрытии (ICLR 2026) помечена «не проверено», потому что автора и название проверить не удалось. Не цитируйте её.
+- У TimesFM-2.5 размер в названии 200 млн, а в метаданных Hugging Face 231 млн. Оба числа указаны.
+- Место публикации Chronos (TMLR), TimesFM и Moirai (ICML 2024) страницы arXiv не называют. Оно оставлено «по памяти».
+
+**Утверждения о содержании работ.** Совпали с аннотациями: FETS (NRMSE 0,472, 0,474, 0,611, 0,696), Hertel 2607.15705 (6,6–10,7 %, Chronos-2 не ловит особые события), Hertel 2604.28149, Pendyala (отставание без дообучения), Kaljevic, Simeone (MASE 0,31, 47 %, покрытие 95 % и 70 % при номинале 90 %), Spoek (12 недель), Adler, Michael (xLSTM держит калибровку), Achour, TW3Cast (третье место из 130, две записи выше агентные).
+- Замечание к Simeone: покрытие 95 % при номинале 90 % означает, что интервалы Chronos-2 немного шире нужного. Это не точная калибровка. В разделе 7 слово «хорошо откалиброван» следует понимать так.
+- Meyer и др. 2510.13654: цифра «47–184 %» в аннотации отсутствует, пометка «не проверено» верна.
+- Цифры MAPE из Pendyala в аннотации отсутствуют, пометка верна.
+
+**Числа.** По данным Hugging Face API совпали: Chronos-2 119,5 млн параметров, Apache-2.0; TimesFM-3 330,7 млн, лицензия `other` (TimesFM Non-Commercial License v1.0); TiRex-2 82,5 млн, Apache-2.0; Toto-2.0-2.5B 2,45 млрд, Apache-2.0; Moirai-2.0-small 11,4 млн, CC BY-NC 4.0; Kairos 50 млн, Apache-2.0; Sundial 128 млн, Apache-2.0. На карточке TimesFM-3 число квантилей и длина контекста не указаны; цифры 9 квантилей и 15 360 в файле взяты из `config.json` и кода и здесь не перепроверены. Таблицы GIFT-Eval и fev-bench пересчитаны автором из сырых файлов. Проверяющий их не повторял, они остаются «рассчитано автором».
+
+**Скачанные данные.** Заявлен пустой список. Каталога `/data/hierfm/weights` на pcomp нет.
+
+**Что нельзя проверить сейчас.** Разделы 10 и 13 описывают установку и запуск на маке. Мака нет, поэтому эти результаты (формы выходов, время, размер окружения) не воспроизводятся. Считайте их заявлением автора. Запуск нужно повторить на кластере.

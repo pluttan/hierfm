@@ -19,7 +19,7 @@
 5. Сумма независимых выборок даёт узкие интервалы верхнего уровня, если ряды связаны положительно. Это следует из формулы дисперсии суммы [расчёт]. Прямых эмпирических работ в энергетике найдено мало. Косвенные данные есть в Panagiotelis (рабочая версия) и Ben Taieb (препринт).
 6. Оценки совместных прогнозов слабо чувствительны к ошибке в корреляции. Энергетическая оценка меняется на 7 % даже при замене полной корреляции нулевой (Alexander и соавторы). Variogram score чувствительнее, но он не строго собственный.
 7. Работ, которые сочетают предобученные модели временных рядов, короткую историю и согласование по иерархии энергосистемы, в этом поиске не найдено. Это нужно проверить отдельным поиском перед заявкой на новизну.
-8. Оценка неопределённости самой ковариации MinT почти не изучена. Carrara и соавторы (2025) прямо пишут, что до их работы ни одна схема согласования не учитывала её. Это близко к методу A.
+8. Оценка неопределённости самой ковариации MinT почти не изучена. Carrara и соавторы (2025) учитывают её через обратное распределение Уишарта (утверждение «первые в мире» не проверено). Это близко к методу A.
 
 ## 2. Основа: вероятностное согласование
 
@@ -59,12 +59,12 @@
 
 ### 2.3 Оценка неопределённости ковариации
 
-**Carrara и соавторы.** Modeling the uncertainty on the covariance matrix for probabilistic forecast reconciliation. arXiv 2506.19554, 2025. [PDF: `carrara2025-covunc.pdf`] Полный список авторов в файле, здесь указан только первый (Chiara Carrara).
+**Carrara, Azzimonti, Corani, Zambon.** Modeling uncertainty in the covariance matrix for probabilistic forecast reconciliation. arXiv 2506.19554, 2025 (версия v5 от 03.09.2026). Журнальная версия: International Journal of Forecasting, DOI 10.1016/j.ijforecast.2026.07.003 (по записи arXiv; том и страницы не проверены). Название и авторы исправлены при проверке. [PDF: `carrara2025-covunc.pdf`]
 Ссылка: https://arxiv.org/abs/2506.19554
 
 - Байесовская постановка с обратным распределением Уишарта. Результат: многомерное t-распределение.
 - Утверждение (с. 1): если считать ковариацию известной, дисперсия занижается, а согласованные интервалы систематически узки.
-- Утверждение: до этой работы ни одна схема согласования не учитывала неопределённость ковариации.
+- Утверждение «до этой работы ни одна схема не учитывала неопределённость ковариации» в аннотации arXiv не найдено (не проверено). Аннотация говорит лишь, что ковариацию обычно оценивают и считают известной. Данные работы: три туристических набора, не энергетика.
 - Для проекта: прямой конкурент по идее метода A. Нужно прочитать полностью, сравнить с нашим сжатием к структурному приору и проверить, что они делают при коротких окнах.
 
 ### 2.4 Бутстрап и независимая сборка снизу вверх
@@ -103,27 +103,27 @@
 - Одна модель учится на всей иерархии. Согласование встроено в модель как слой с решением в замкнутой форме. Приём репараметризации.
 - Для проекта: нужно обучение на данных иерархии. Предобученные модели без дообучения так не работают. Метод служит сравнением «сверху», а не прямым конкурентом.
 
-**Olivares и соавторы.** Probabilistic hierarchical forecasting with deep Poisson mixtures. International Journal of Forecasting 40(2), 470–489, 2024. arXiv 2110.13179. [PDF: `olivares2024-dpmn.pdf`] Состав авторов по записи библиотеки: Olivares, Meetei, Ma, Reddy, Cao, Dicker [не проверено по PDF].
+**Olivares и соавторы.** Probabilistic hierarchical forecasting with deep Poisson mixtures. International Journal of Forecasting 40(2), 470–489, 2024 (подтверждено поиском). arXiv 2110.13179. Авторы подтверждены по arXiv: Olivares, Meetei, Ma, Reddy, Cao, Dicker. [PDF: `olivares2024-dpmn.pdf`]
 Ссылка: https://arxiv.org/abs/2110.13179
 
 - Модель DPMN строит когерентность по построению через смесь Пуассона. Зависимость задают скрытые переменные.
 - Для проекта: эталон среди обучаемых моделей, но ориентирован на счётные данные.
 
-**Hollyman, Petropoulos, Tipping.** Hierarchies everywhere: managing and measuring uncertainty in hierarchical time series. arXiv 2209.15583. Место журнальной публикации не проверено.
+**Hollyman, Petropoulos, Tipping.** Hierarchies everywhere: managing and measuring uncertainty in hierarchical time series. arXiv 2209.15583. Журнальной публикации поиск не нашёл, только препринт arXiv (30.09.2022). Полное название: Hierarchies Everywhere: Managing & Measuring Uncertainty in Hierarchical Time Series.
 Ссылка: https://arxiv.org/abs/2209.15583
 
 - Байесовский подход. Согласованные прогнозы вероятностны даже без вероятностных базовых прогнозов.
 
 ### 3.3 Байесовское согласование через условное распределение
 
-**Corani, Azzimonti, Rubattu и соавторы.** Probabilistic reconciliation of count time series. arXiv 2207.09322, 2022 (версии до апреля 2023); в списке авторов первых версий есть Antonucci. [PDF: `corani2022-count.pdf`] Журнальная версия по документации `bayesRecon`: Corani и соавторы, 2024 [не проверено].
+**Corani, Azzimonti, Rubattu (в поздних версиях добавлен Antonucci).** Probabilistic reconciliation of count time series. arXiv 2207.09322, 2022 (4 версии, последняя 26.04.2023). Журнальная версия, International Journal of Forecasting 2024: не подтверждена поиском (не проверено). [PDF: `corani2022-count.pdf`]
 Ссылка: https://arxiv.org/abs/2207.09322
 
 - Согласование как условное распределение: верхний и нижний уровни связаны ограничением суммы, прогноз получают по обобщённому правилу Байеса.
 - Результат по их данным: заметный выигрыш против гауссова и усечённого гауссова согласования для счётных рядов.
 - Для нагрузки (непрерывная величина) выигрыш не переносится автоматически. Нужен вывод для непрерывного случая или гауссова версия.
 
-**Zambon, Agosto, Giudici, Corani.** Properties of the reconciled distributions for Gaussian and count forecasts. International Journal of Forecasting, 2024. DOI 10.1016/j.ijforecast.2023.12.004. arXiv 2303.15135. [PDF: `zambon2024-properties.pdf`]
+**Zambon, Agosto, Giudici, Corani.** Properties of the reconciled distributions for Gaussian and count forecasts. International Journal of Forecasting 40(4), 2024. DOI 10.1016/j.ijforecast.2023.12.004 (подтверждено поиском). arXiv 2303.15135. [PDF: `zambon2024-properties.pdf`]
 Ссылка: https://arxiv.org/abs/2303.15135
 
 - Анализ дисперсии согласованного распределения для гауссова и счётного случаев.
@@ -131,7 +131,7 @@
 
 ### 3.4 Согласование по нескольким осям и условное
 
-**Girolimetto, Athanasopoulos, Di Fonzo, Hyndman.** Cross-temporal probabilistic forecast reconciliation: Methodological and practical issues. International Journal of Forecasting 40(3), 1134–1151, 2024. arXiv 2303.17277. [PDF: `girolimetto2024-crosstemporal.pdf`]
+**Girolimetto, Athanasopoulos, Di Fonzo, Hyndman.** Cross-temporal probabilistic forecast reconciliation: Methodological and practical issues. International Journal of Forecasting, 2024 (том и страницы 40(3), 1134–1151 не подтверждены; DOI статьи 10.1016/j.ijforecast.2023.10.003 по записи поиска). arXiv 2303.17277. [PDF: `girolimetto2024-crosstemporal.pdf`]
 Ссылка: https://arxiv.org/abs/2303.17277
 
 - Выборки из несогласованного кросс-временного распределения: гауссовы и бутстрап.
@@ -139,11 +139,11 @@
 - Реализация: пакет R `FoReco`.
 - Для проекта: возможное расширение (почасовые + суточные уровни). В первую версию статьи не входит.
 
-**Principato, Stoltz, Amara-Ouali, Goude, Hamrouche, Poggi.** Conformal prediction for hierarchical data. arXiv 2411.13479. Год публикации по ссылке Carrara: 2025. PDF не скачан (лимит 15 файлов).
+**Principato, Stoltz, Amara-Ouali, Goude, Hamrouche, Poggi.** Conformal prediction for hierarchical data. arXiv 2411.13479. Версия на arXiv от 20.11.2024. Опубликована в Transactions on Machine Learning Research, 2026 (по странице автора, не проверено по сайту TMLR). PDF не скачан.
 Ссылка: https://arxiv.org/abs/2411.13479
 
 - Конформный интервал плюс проекция на когерентное подпространство. Авторы доказывают, что области уменьшаются. Это конкурент по покрытию, не по сценариям.
-- Версия для временных рядов на момент их страницы в разработке [не проверено]. Нужно проверить, вышла ли.
+- Версия для временных рядов не проверена.
 
 ## 4. Восстановление зависимости: перестановка Шааке и копулы
 
@@ -172,19 +172,19 @@
 
 ### 4.3 Сравнения методов и варианты
 
-- **Schefzik, R.** A similarity-based implementation of the Schaake shuffle. arXiv 1507.02079. Шаблон берут с дат, где прогноз похож на текущий. Журнал и год публикации не проверены.
+- **Schefzik, R.** A similarity-based implementation of the Schaake shuffle. arXiv 1507.02079. Шаблон берут с дат, где прогноз похож на текущий. Год препринта 2015 (автор подтверждён). Журнальная публикация не найдена (не проверено).
   Ссылка: https://arxiv.org/abs/1507.02079
   Применение к нам: выбирать даты окна по близости прогноза температуры. Это вариант метода B.
-- Сравнение многомерных методов постобработки на глобальном ансамбле ECMWF: arXiv 2206.10237. Авторов и журнал не проверял. По результату поиска: Schaake shuffle остаётся сильным эталоном, а продвинутые расширения ECC и Schaake shuffle не дали значимого выигрыша над базовыми версиями.
+- Сравнение многомерных методов постобработки на глобальном ансамбле ECMWF: arXiv 2206.10237. Авторы: Lakatos, Lerch, Hemri, Baran. Журнал: Quarterly Journal of the Royal Meteorological Society 149(752), 856–877, 2023. Результат по результату поиска, не по тексту (не проверено): Schaake shuffle остаётся сильным эталоном, а продвинутые расширения ECC и Schaake shuffle не дали значимого выигрыша над базовыми версиями.
   Ссылка: https://arxiv.org/abs/2206.10237
 
 ### 4.4 Энергетика
 
-- **Pinson, Madsen, Nielsen, Papaefthymiou, Klöckl.** From probabilistic forecasts to statistical scenarios of short-term wind power production. Wind Energy 12(1), 51–62, 2009. DOI 10.1002/we.284. Гауссова копула для зависимости ошибок по горизонтам.
+- **Pinson, Papaefthymiou, Klöckl, Nielsen, Madsen.** From probabilistic forecasts to statistical scenarios of short-term wind power production. Wind Energy 12(1), 51–62, 2009. DOI 10.1002/we.284. Гауссова копула для зависимости ошибок по горизонтам.
   Ссылка: https://doi.org/10.1002/we.284
-- **Pinson, Girard.** Evaluating the quality of scenarios of short-term wind power generation. Applied Energy 96, 12–20, 2012. DOI 10.1016/j.apenergy.2011.11.004. Многомерные инструменты проверки сценариев. Один из первых применяет energy score к сценариям ветра.
+- **Pinson, Girard.** Evaluating the quality of scenarios of short-term wind power generation. Applied Energy 96, 12–20, 2012. DOI 10.1016/j.apenergy.2011.11.004. Многомерные инструменты проверки сценариев. Утверждение «один из первых применяет energy score» не проверено.
   Ссылка: https://ideas.repec.org/a/eee/appene/v96y2012icp12-20.html
-- **Grothe, Kächele, Krüger.** From point forecasts to multivariate probabilistic forecasts: the Schaake shuffle for day-ahead electricity price forecasting. arXiv 2204.10154. Журнал не проверен. [PDF: `grothe2022-schaake-price.pdf`] Зависимость между 24 часами цены. Схема и алгоритм в приложении A.
+- **Grothe, Kächele, Krüger.** From point forecasts to multivariate probabilistic forecasts: the Schaake shuffle for day-ahead electricity price forecasting. arXiv 2204.10154. Журнальная версия не проверена. Авторы и название подтверждены по arXiv. [PDF: `grothe2022-schaake-price.pdf`] Зависимость между 24 часами цены. Схема и алгоритм в приложении A.
   Ссылка: https://arxiv.org/abs/2204.10154
 - Иерархии нагрузки: Ben Taieb (2021), Jeon (2019). Остальных работ именно про Schaake shuffle на региональной нагрузке энергосистемы не найдено. В этом поиске пробел.
 
@@ -193,9 +193,9 @@
 ### 5.1 Energy score
 
 - Определение: ES = E||X − y|| − 0,5 E||X − X'||. Строго собственная оценка [общеизвестный факт, не перепроверен по первоисточнику Gneiting и Raftery 2007].
-- Слабое место 1. Оценка почти не реагирует на неверную корреляцию. Alexander и соавторы: даже когда полная корреляция принята за нулевую, оценка меняется лишь на 7 % (сноска 1 в тексте работы).
-- Слабое место 2. Историческая работа Pinson и Tastu (2013, технический отчёт DTU) считалась доказательством слабой различающей способности. Статья 1910.07325 оспаривает метод оценки: относительное изменение оценки вместо теста Diebold-Mariano. С тестом DM energy score показал лучший результат в их симуляциях. Сам отчёт Pinson и Tastu найти не удалось.
-  Ссылка на оспаривающую работу: https://arxiv.org/abs/1910.07325 (название: Multivariate forecasting evaluation: on sensitive and strictly proper scoring rules; авторов не проверял).
+- Слабое место 1. Оценка почти не реагирует на неверную корреляцию. Alexander и соавторы пишут (текст arXiv проверен): в худшем случае, когда полную корреляцию принимают за нулевую, energy score меняется лишь на 7 %. Они приводят это как довод в пользу variogram score.
+- Слабое место 2. Историческая работа Pinson и Tastu (2013, технический отчёт DTU) считалась доказательством слабой различающей способности. Статья Ziel и Berk (arXiv 1910.07325) оспаривает метод оценки: относительное изменение оценки вместо теста Diebold-Mariano. С тестом DM energy score показал лучший результат в их симуляциях. Сам отчёт Pinson и Tastu найти не удалось.
+  Ссылка на оспаривающую работу: https://arxiv.org/abs/1910.07325 (Ziel, Berk. Multivariate forecasting evaluation: On sensitive and strictly proper scoring rules. arXiv 2019; авторы и название подтверждены).
 - Следствие для опытов: энергетическую оценку считать вместе с тестом DM и с variogram score. Одну её для вывода о зависимости не использовать.
 
 ### 5.2 Variogram score
@@ -208,12 +208,12 @@
 - Не различает прогнозы, которые отличаются только постоянным смещением (по пересказу в работе Alexander и соавторов).
 - Параметр p: рекомендация p = 0,5 у Alexander и соавторов (финансовые данные).
 
-**Alexander, Coulon, Han, Meng.** Evaluating the discrimination ability of proper multivariate scoring rules. Annals of Operations Research 334(1), 857–883. arXiv 2101.12693. Год выпуска тома не проверен. [PDF: `alexander2023-scoring-discrimination.pdf`]
+**Alexander, Coulon, Han, Meng.** Evaluating the discrimination ability of proper multivariate scoring rules. Annals of Operations Research 334(1), 857–883, март 2024 (подтверждено поиском). arXiv 2101.12693. [PDF: `alexander2023-scoring-discrimination.pdf`]
 Ссылка: https://arxiv.org/abs/2101.12693
 
 - Сравнение energy score и трёх variogram score в имитации на данных по сырью, валюте и ставкам. Лучшая: variogram score с p = 0,5.
 
-**Marcotte, Zantedeschi, Drouin, Chapados.** Regions of reliability in the evaluation of multivariate probabilistic forecasts. ICML 2023, PMLR 202. arXiv 2304.09836. [PDF: `marcotte2023-regions.pdf`] Состав авторов дан по памяти [не проверено].
+**Marcotte, Zantedeschi, Drouin, Chapados.** Regions of reliability in the evaluation of multivariate probabilistic forecasts. ICML 2023, PMLR 202. arXiv 2304.09836. [PDF: `marcotte2023-regions.pdf`] Авторы подтверждены: Marcotte, Zantedeschi, Drouin, Chapados. PMLR 202, 23958–24004.
 Ссылка: https://arxiv.org/abs/2304.09836
 
 - Систематическое сравнение CRPS, energy score, variogram score, отрицательного логарифма правдоподобия на синтетических и реальных распределениях.
@@ -222,7 +222,7 @@
 
 ### 5.3 Обзоры по оценке
 
-- Bjerregård, Møller, Madsen. An introduction to multivariate probabilistic forecast evaluation. Energy and AI, 2021. Поиск не нашёл страницы статьи и DOI. Ссылку не подтвердил. Есть учебные слайды DTU тех же авторов: https://02427.compute.dtu.dk/slides/multivariate_probabilistic_forecast_evaluation.pdf (проверено существование по поиску).
+- Bjerregård, Møller, Madsen. An introduction to multivariate probabilistic forecast evaluation. Energy and AI, 2021. Повторный поиск не нашёл ни статьи, ни DOI. Существование статьи не подтверждено (не проверено); в выводах не использовать. Есть учебные слайды DTU тех же авторов: https://02427.compute.dtu.dk/slides/multivariate_probabilistic_forecast_evaluation.pdf (проверено существование по поиску).
 - Практическое правило для проекта: считать CRPS по узлам, energy score и variogram score на пространстве узлов одного уровня и на всём векторе. Отдельно считать «CRPS суммы» для верхнего уровня.
 
 ## 6. Калибровка суммы независимых сценариев
@@ -267,7 +267,7 @@
 
 ## 10. Список скачанных файлов
 
-В `/Volumes/pr/bmstu/papers/soglasovanie-prognozov/docs/papers/`:
+Заявлено в `/Volumes/pr/bmstu/papers/soglasovanie-prognozov/docs/papers/` на маке. Мак недоступен, наличие файлов не проверено:
 
 - `wickramasuriya2024-gaussian.pdf`
 - `corani2022-count.pdf`
@@ -295,3 +295,24 @@
 5. Проверить новизну: поиск «foundation model» плюс «forecast reconciliation» плюс «short history» плюс «load». В этом поиске такой работы нет, но поиск был не исчерпывающим.
 6. Выбрать набор метрик: CRPS по узлам, energy score, variogram score с p = 0,5, покрытие 80 и 95 %, тест DM, MCB.
 7. Взять эталоны: BASE, IndepBU, MinT(Shrink), PERMBU/DepBU, ECC, ScoreOptE (ProbReco), конформный подход.
+
+## 12. Проверка
+
+Проверено 19.10.2026 веб-поиском и запросами к API arXiv.
+
+Результат по ссылкам:
+
+- Подтверждены существование, авторы и год: Panagiotelis 2023, Wickramasuriya 2024, Ben Taieb 2017 и 2021, Jeon 2019, Rangapuram 2021, Olivares 2024, Zambon 2024, Schefzik 2013, Clark 2004, Scheuerer и Hamill 2015, Marcotte 2023, Alexander 2024, Pinson 2009, Pinson и Girard 2012, Chronos-2.
+- Исправлены: полное название и авторы Carrara (добавлены Azzimonti, Corani, Zambon, найдена журнальная версия IJF); авторы статьи 1910.07325 (Ziel, Berk); авторы и журнал статьи 2206.10237 (Lakatos, Lerch, Hemri, Baran; QJRMS 2023); порядок авторов Pinson 2009; авторы Corani 2022 (три автора, Antonucci в поздних версиях); том Alexander (март 2024); статус Principato (TMLR 2026, по странице автора); Hollyman (журнальной версии не найдено).
+- Снята уверенность: утверждение, что Carrara первые учли неопределённость ковариации (в аннотации его нет), и утверждение, что Pinson и Girard первыми применили energy score. Обе фразы помечены «не проверено».
+- Число «7 %» подтверждено текстом Alexander и соавторов: это худший случай, когда полную корреляцию принимают за нулевую. Ошибка приписки исправлена: это довод авторов, а не независимый результат.
+- Не подтверждено: Bjerregård, Møller, Madsen в Energy and AI 2021 (статья не найдена, есть только слайды DTU); журнальная версия Corani 2024; том и страницы Girolimetto 2024.
+- Не проверено по тексту: содержание PDF, которые якобы прочитаны (Panagiotelis, Ben Taieb, строки 4398–4469). Файлы лежат на недоступном маке.
+
+Результат по скачанным файлам:
+
+- Заявленный список скачанных файлов 14 PDF находится на маке. Мак недоступен, проверить их нельзя.
+- На pcomp в `/data/hierfm/docs/papers` лежат только 7 других PDF (Ledoit, Daniels и Kass, Friedman, Bickel и Levina, Chen). Это файлы другой темы, файлов из раздела 10 там нет.
+- Данные в этой теме не скачивались.
+
+Числа, лицензии и размеры моделей в документе не приводятся, кроме расчёта раздела 6 (sqrt(1 + 9·0,5) = 2,35, верно).

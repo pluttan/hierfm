@@ -62,7 +62,10 @@ def _score_origin(k, cfg, spec, h):
     scale = metrics.mase_scale(ds.y[pos - min(cfg.context, cfg.history_hours):pos], cfg.season)
     rng_base = cfg.seed * 1_000_003 + k
     days_back = min(365, cfg.history_days or 365)
-    strata = {"holiday": f"{o:%m-%d}" in cfg.holidays, "cold": bool(_G["cold"][k])}
+    # the origin is local midnight written in UTC (21:00 UTC for Moscow), so its UTC date is the day
+    # before the forecast day; shift to local midnight before matching the holiday list
+    day = o + pd.Timedelta(hours=(24 - cfg.origin_hour) % 24)
+    strata = {"holiday": f"{day:%m-%d}" in cfg.holidays, "cold": bool(_G["cold"][k])}
 
     hist_tpl = dependence.anomaly_template(ds.y, pos, h, cfg.samples, days_back=days_back, season=cfg.season)
     temp_tpl = None

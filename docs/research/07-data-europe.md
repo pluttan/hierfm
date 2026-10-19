@@ -4,7 +4,7 @@
 
 ## 1. Итог
 
-Данные скачаны на мак в `/Volumes/pr/bmstu/papers/soglasovanie-prognozov/data/raw/europe/` (332 МБ). Ключи не нужны.
+Данные лежат на pcomp в `/data/hierfm/data/raw/europe/` (332 МБ). Ключи не нужны. Мак недоступен, всё скачано и собрано на pcomp.
 
 Основная иерархия имеет три уровня: Европа-3, страны, зоны.
 
@@ -14,7 +14,7 @@
 
 Всего 22 узла и 18 листьев. Шаг часовой, время UTC, период 2020-01-01 .. 2026-09-30 (59 160 часов).
 
-Расширенная иерархия добавляет ещё 27 стран как листья уровня 1 (данные energy-charts). Получается 1 + 30 + 18 = 49 узлов и 45 листьев. Рекомендуется исключить Черногорию и Северную Македонию (нули и пропуски).
+Расширенная иерархия добавляет ещё 24 страны как листья уровня 1 (данные energy-charts). Сборка по умолчанию исключает ME, MK и IE (раздел 7). Получается 46 узлов и 42 листа.
 
 Не получилось: зоны Норвегии (NO1–NO5), Швеции (SE1–SE4) и Италии без токена ENTSO-E. Подробности в разделе 3.
 
@@ -29,8 +29,8 @@
 | `smard/` | SMARD (Bundesnetzagentur), фильтр 410 "Netzlast" | Германия и зоны 50Hertz, Amprion, TenneT, TransnetBW | 1 ч | 8,6 МБ |
 | `energinet/` | Energinet, набор ProductionConsumptionSettlement | GrossConsumptionMWh для DK1 и DK2, потери, power-to-heat | 1 ч | 8,4 МБ |
 | `odre/` | ODRE, RTE eco2mix | потребление 12 регионов Франции и всей страны, наборы def и tr | 30 мин (регионы), 15 мин (страна) | 113 МБ |
-| `energy_charts/` | energy-charts.info, ряд "Load" | 30 стран, из данных ENTSO-E | 15 мин или 1 ч | 78 МБ |
-| `openmeteo/` | Open-Meteo | температура 2 м в 43 точках: `archive/` (реанализ, с 2020) и `histfc/` (архив прогнозов, с 2022) | 1 ч | 110 МБ |
+| `energy_charts/` | energy-charts.info, ряд "Load" | 30 стран, из данных ENTSO-E | 15 мин или 1 ч | 92 МБ |
+| `openmeteo/` | Open-Meteo | температура 2 м в 43 точках: `archive/` (реанализ, с 2020) и `histfc/` (архив прогнозов, с 2022) | 1 ч | 111 МБ |
 
 Страны energy-charts: AT BE BG CH CZ DE DK EE ES FI FR GR HR HU IE IT LT LU LV ME MK NL NO PL PT RO RS SE SI SK. Ошибок загрузки нет (`failures.json` не создан). Великобритании и Украины в списке нет, мы их не запрашивали.
 
@@ -40,7 +40,7 @@
 - Файлы ODRE содержат поле `nature`: "Données définitives" до 2026-08-31, затем "temps réel". Данные последних месяцев предварительные, их могут уточнить.
 - Файл ODRE открывается с меткой BOM. Читайте с кодировкой `utf-8-sig`.
 - Координаты точек Open-Meteo приблизительные: префектура региона или опорный город. Это замена весов по населению, не сами веса.
-- Лицензии назвал по памяти, не проверял: SMARD и energy-charts CC BY 4.0, ODRE Licence Ouverte, Open-Meteo бесплатно для некоммерческого использования. Проверьте перед публикацией.
+- Лицензии: Energinet CC BY 4.0 (FAQ портала, проверено). Open-Meteo: бесплатный API только для некоммерческого использования, данные CC BY 4.0 (open-meteo.com/en/terms, проверено). SMARD, energy-charts (CC BY 4.0) и ODRE (Licence Ouverte) названы по памяти (не проверено). Проверьте перед публикацией.
 
 ## 3. Какие источники проверены
 
@@ -71,9 +71,9 @@
 | TimesFM 1.0 | Das et al., arXiv:2310.10688 | Google Trends, Wiki Pageviews, Electricity (321 ряд), Traffic, Weather, M4, LibCity, Favorita | Не указана. |
 | TimesFM 2.5 | карточка Hugging Face `google/timesfm-2.5-200m-pytorch` | GiftEvalPretrain, Wikimedia (до ноября 2023), Google Trends (до конца 2022), синтетика | Не указана. |
 | Moirai (LOTSA) | Woo et al., arXiv:2402.02592, приложение | Набор ProEnFo: Spanish Energy (35 064 часа, это 2015–2018), GEF12/14/17, Covid19 Energy, PDB, ELF; Monash; BuildingsBench | Только Spanish Energy. Таблицы не называют ENTSO-E, SMARD, RTE, Energinet. |
-| Moirai-2 | arXiv:2511.11698 | GIFT-Eval Pretrain, часть GIFT-Eval TrainTest, Chronos-Mixup, KernelSynth, внутренняя телеметрия Salesforce (около 2024 года) | Новые энергетические наборы не названы. |
+| Moirai-2 | Liu et al., arXiv:2511.11698 | GIFT-Eval Pretrain, GIFT-Eval TrainTest, Chronos-Mixup (около 30 млн рядов), KernelSynth, внутренняя телеметрия Salesforce (около 2,15 млн суточных рядов, год не указан) | Новые энергетические наборы не названы. |
 
-Оценочные наборы, которые могут пересечься с нашими. fev-bench (arXiv:2509.26468) содержит три задачи "ENTSO-e Load" (15 мин, 30 мин, 1 ч). Нагрузка взята из Open Power System Data (2020), горизонт 168 часов для часовой задачи. Периоды в статье не названы. Размер 43 822 часа даёт около пяти лет, это мой расчёт. Тот же OPSD заканчивается 2020 годом.
+Оценочные наборы, которые могут пересечься с нашими. fev-bench (arXiv:2509.26468) содержит три задачи "ENTSO-e Load" (15 мин, 30 мин, 1 ч). Нагрузка взята из Open Power System Data (2020), горизонт 168 часов для часовой задачи. Данные взяты из OPSD (2020), погода из Renewables.ninja. Периоды в статье не названы. Размер 43 822 часа даёт около пяти лет, это мой расчёт. Тот же OPSD заканчивается 2020 годом.
 
 Что остаётся неизвестным.
 
@@ -152,44 +152,104 @@
 - Данные ODRE за 2026 год предварительные. Возможны уточнения.
 - Утечка исключена только по времени. Нужно написать это явно и указать, что списки корпусов проверены лишь по статьям.
 - Средняя температура по одной точке на зону грубая. Для Германии и Франции корреляции температуры между зонами будут завышены.
-- Нет праздников и календаря: пакет `holidays` не установлен. Ставить нужно на маке (на vpnvm нельзя).
+- Нет праздников и календаря: пакет `holidays` не установлен. Ставить не на vpnvm и не на pcomp.
 - Нет весов по населению. Источник (например GeoNames или Eurostat) не скачан.
 
 ## 10. Что проверить до опытов
 
 - Найти причину разовых расхождений (6,6% во Франции, 0,54% в Германии) и решить, как их чистить.
 - Объяснить разницу Дании 4,4%: сравнить определения Energinet и ENTSO-E.
-- Решить, исключать ли ME, MK, IE.
+- Решено: ME, MK, IE исключены из расширения по умолчанию (параметр `exclude`).
 - Проверить лицензии и ссылки на источники в тексте статьи.
-- Установить `holidays` на маке и подготовить календарь по странам.
+- Подготовить календарь праздников по странам (пакет `holidays` нужно ставить не на vpnvm и не на pcomp).
 - Решить, нужен ли токен ENTSO-E для зон NO/SE/IT.
 - Проверить Toto, TiRex, Sundial и Moirai 1.1 на утечку, если эти модели войдут в статью.
 
-## 11. Команды
+## 11. Сборка в формат hierfm
 
-Повторная загрузка (на маке, из папки `src`):
+Скрипт `src/build_europe.py`, функция `build(raw_dir, out_dir, extended=False, start=None, end=None, max_gap=6, long_gap=168, exclude=("ME","MK","IE"))`. Использует pandas и пакет `hierfm` (на pcomp pandas 3.0.1 уже есть, ставить ничего не пришлось).
+
+Результат в `out_dir`:
+
+- `load.parquet`: индекс `ds` (UTC, час), столбец на каждый лист, МВт;
+- `hierarchy.json`: уровни `europe`, `country`, `zone`; в атрибутах `tz` и источник (`ODRE`, `SMARD`, `Energinet`);
+- `temp.parquet`: температура 2 м из `openmeteo/archive`, столбец на лист;
+- `temp_forecast.parquet`: температура из `openmeteo/histfc`, с 2022-01-01, до этой даты пусто;
+- `build_meta.json`: окно, число узлов, число заполненных часов на лист.
+
+Правила сборки.
+
+- Подчасовые ряды усредняются до часа, метка часа равна его началу.
+- ODRE: данные "définitives" главнее "temps réel" в общих часах.
+- Нули и отрицательные значения считаются пропусками.
+- Дыры до 6 часов заполняются линейной интерполяцией.
+- Дыры от 7 до 168 часов заполняются средним того же часа неделей раньше и позже. Это нужно для ES (35 часов), SK (11), EE (7).
+- Окно режется по общему покрытию всех листьев.
+- Страна с зонами равна сумме зон. Её ряд из другого источника в данные не входит.
+
+Результат запуска на pcomp (папки `/data/hierfm/data/processed/`).
+
+| Папка | Листья | Узлы | Окно | Часов |
+|---|---|---|---|---|
+| `europe3` | 18 | 22 | 2020-01-01 00:00 .. 2026-09-30 21:00 UTC | 59 158 |
+| `europe_ext` | 42 | 46 | то же | 59 158 |
+
+Проверено `hierfm.data.load`: ряды читаются, пропусков нет, ранг S равен числу листьев (18 и 42), температура полная. В `temp_forecast` пропуски только до 2022 года. Последние два часа 30 сентября отрезаны, потому что в Energinet нет часов 22:00 и 23:00.
+
+Не сделано и ограничения.
+
+- Заполнено мало, но не нулевое число часов: 7 на лист во Франции (в основном дыры ODRE), до 85 в SI, 79 в RO, 50 в SK. Список в `build_meta.json`.
+- Выбросы (6,6% во Франции, 0,54% в Германии) не чистятся. Нужно посмотреть отдельно.
+- Архив прогнозов Open-Meteo (`historical-forecast-api`) склеен из свежих запусков модели. Это не строго прогноз на сутки вперёд. Название файла `temp_forecast` здесь условно.
+- Праздники и календарь в данные не входят.
+
+Команды (на pcomp, из `/data/hierfm`):
 
 ```
-nice /opt/homebrew/bin/python3.12 -u download_europe.py --out /Volumes/pr/bmstu/papers/soglasovanie-prognozov/data/raw/europe
+rsync -a /home/pluttan/dev/hierfm/src/ pcomp:/data/hierfm/src/      # с vpnvm
+rsync -a --exclude __pycache__ /home/pluttan/dev/hierfm/hierfm/ pcomp:/data/hierfm/hierfm/
+ssh pcomp 'cd /data/hierfm && PYTHONPATH=. nice -n 19 python3 -u src/build_europe.py data/raw/europe data/processed/europe3'
+ssh pcomp 'cd /data/hierfm && PYTHONPATH=. nice -n 19 python3 -u src/build_europe.py data/raw/europe data/processed/europe_ext --extended'
 ```
 
-Проверка иерархии:
-
-```
-nice /opt/homebrew/bin/python3.12 -u check_europe_hierarchy.py RAW_DIR OUT_JSON
-```
-
-Python на маке: полный путь `/opt/homebrew/bin/python3.12`, в сеансе ssh без входа его нет в PATH.
+Проверка сумм (только стандартная библиотека): `python3 -u src/check_europe_hierarchy.py data/raw/europe OUT_JSON`. Повторная загрузка: `python3 -u src/download_europe.py --out data/raw/europe`.
 
 ## 12. Источники
 
-- Ansari A. F. и др. Chronos: Learning the Language of Time Series. TMLR 2024. arXiv:2403.07815. https://arxiv.org/abs/2403.07815
-- Ansari A. F. и др. Chronos-2. 2025. arXiv:2510.15821. https://arxiv.org/abs/2510.15821
-- Das A. и др. A decoder-only foundation model for time-series forecasting (TimesFM). ICML 2024. arXiv:2310.10688. https://arxiv.org/abs/2310.10688
-- Woo G. и др. Unified Training of Universal Time Series Forecasting Transformers (Moirai, LOTSA). ICML 2024. arXiv:2402.02592. https://arxiv.org/abs/2402.02592
-- Moirai 2.0. 2025. arXiv:2511.11698. https://arxiv.org/abs/2511.11698 (авторов не проверял)
-- fev-bench. arXiv:2509.26468. https://arxiv.org/abs/2509.26468 (авторов не проверял)
-- Wang Z. и др. Benchmarks and Custom Package for Electrical Load Forecasting (ProEnFo). NeurIPS 2023, Datasets and Benchmarks. arXiv:2307.07191. https://arxiv.org/abs/2307.07191
+- Ansari A. F. и др. Chronos: Learning the Language of Time Series. TMLR 2024 (подтверждено поиском). arXiv:2403.07815. https://arxiv.org/abs/2403.07815
+- Ansari A. F. и др. Chronos-2: From Univariate to Universal Forecasting. 2025, препринт. arXiv:2510.15821. https://arxiv.org/abs/2510.15821
+- Das A., Kong W., Sen R., Zhou Y. A decoder-only foundation model for time-series forecasting (TimesFM). ICML 2024 (по памяти, на странице arXiv не указано). arXiv:2310.10688. https://arxiv.org/abs/2310.10688
+- Woo G., Liu C., Kumar A., Xiong C., Savarese S., Sahoo D. Unified Training of Universal Time Series Forecasting Transformers (Moirai, LOTSA). ICML 2024 (по памяти, на странице arXiv не указано). arXiv:2402.02592. https://arxiv.org/abs/2402.02592
+- Liu C., Aksu T., Liu J., Liu X., Yan H., Pham Q., Savarese S., Sahoo D., Xiong C., Li J. Moirai 2.0: When Less Is More for Time Series Forecasting. 2025, препринт. arXiv:2511.11698. https://arxiv.org/abs/2511.11698
+- Shchur O., Ansari A. F., Turkmen C., Stella L., Erickson N., Guerron P., Bohlke-Schneider M., Wang Y. fev-bench: A Realistic Benchmark for Time Series Forecasting. 2025, препринт. arXiv:2509.26468. https://arxiv.org/abs/2509.26468
+- Wang Z., Wen Q., Zhang C., Sun L., Von Krannichfeldt L., Wang Y. Benchmarks and Custom Package for Electrical Load Forecasting (ProEnFo). 2023, подано на NeurIPS 2023 Datasets and Benchmarks (принятие не подтверждено). arXiv:2307.07191. Позже статью переименовали: v2 Benchmarks and Custom Package for Energy Forecasting, v3 Bridging AI and Energy Forecasting. https://arxiv.org/abs/2307.07191
 - Карточка TimesFM 2.5: https://huggingface.co/google/timesfm-2.5-200m-pytorch
 - Список подмножеств LOTSA: https://huggingface.co/datasets/Salesforce/lotsa_data
 - SMARD: https://www.smard.de/ ; Energinet: https://api.energidataservice.dk/ ; ODRE: https://odre.opendatasoft.com/ ; energy-charts: https://api.energy-charts.info/ ; Open-Meteo: https://open-meteo.com/ ; Open Power System Data: https://data.open-power-system-data.org/time_series/
+
+## 13. Проверка
+
+Дата проверки 2026-10-19. Проверка независимая, выполнена по первоисточникам и по файлам на pcomp.
+
+Ссылки. Проверено 7 работ по страницам arXiv и текстам статей. Выдуманных ссылок нет. Исправлено:
+
+- Moirai-2: назван полный заголовок и десять авторов. Телеметрия Salesforce не относится к 2024 году, год в статье не указан. Это суточные ряды (около 2,15 млн).
+- fev-bench: добавлены авторы (Shchur и др.). Данные ENTSO-e Load взяты из OPSD (2020), погода из Renewables.ninja. Цифры (96, 96, 168 точек горизонта, 43 822 часа) подтверждены.
+- ProEnFo: статью переименовали дважды (v2 и v3). Принятие на NeurIPS 2023 не подтверждено, найдено только подачу. Авторы исправлены.
+- Chronos-2: добавлен заголовок. Таблица 6 в статье содержит 23 реальных набора и не содержит ENTSO-e. Фраза "ни один набор fev-bench не был виден при обучении" подтверждена.
+- Chronos: TMLR 2024 подтверждён. Kaggle-набор Spanish Energy описан как "4 года по Испании", годы 2015-2018 в статье не названы.
+- TimesFM 1.0 и Moirai: площадка ICML 2024 на страницах arXiv не указана. Оставлена по памяти, помечена.
+- TimesFM 2.5: 2025-10-02 это дата обновления файлов (слияние матриц QKV), не дата выпуска. Размер 200 млн параметров и лицензия Apache-2.0 подтверждены. В приложении статьи Moirai подтверждены таблица ProEnFo (Spanish 35 064 наблюдения) и отсутствие ENTSO-E, SMARD, RTE, Energinet.
+- Не проверено: лицензии SMARD, energy-charts, ODRE; происхождение Kaggle-набора от ENTSO-E и REE; Svenska kraftnät, Statnett и другие записи раздела 3.
+
+Данные на pcomp. Проверено командами ls, head, tail, wc и чтением parquet.
+
+- Размер `europe/` 332 МБ верен. Исправлены размеры строк таблицы: energy_charts 92 МБ (было 78), openmeteo 111 МБ (было 110).
+- HTML вместо данных нет, файлов размером до 2 КБ нет (кроме логов). Все CSV имеют заголовки и числа.
+- SMARD: 5 файлов по 59 160 строк, 2020-01-01 .. 2026-09-30 23:00 UTC. Энергинет: 118 318 строк (DK1, DK2), от 2019-12-31T23 до 2026-09-30T21. ODRE: 4 файла, региональный def 1,40 млн строк, поле nature есть. energy-charts: 30 файлов, от 2019-12-31T23 до 2026-10-01T21:45. Open-Meteo: по 43 файла в `archive/` и `histfc/`, `histfc` начинается 2022-01-01.
+- `europe3`: форма 59 158 x 18, период 2020-01-01 .. 2026-09-30 21:00 UTC, пропусков и значений не больше нуля нет. `europe_ext`: 59 158 x 42 (24 страны и 18 зон). Заявленные числа сходятся.
+- Средние нагрузки в наборе: сумма зон Германии 54,2 ГВт, Франции 50,9 ГВт (в тексте 50,1 ГВт взято из energy-charts), Дании 4,3 ГВт (energy-charts 4,1). Это согласуется с описанной разницей источников.
+- `temp_forecast` имеет пропуски только до 2022-01-01 (315 792 значения для europe3 = 18 листьев x 17 544 часа).
+- Содержательные заявления о сумме зон (таблица раздела 7) заново не пересчитаны. Файл `hierarchy_check.json` на месте, периоды в нём совпадают с таблицей.
+
+Вердикт. Данные настоящие и соответствуют описанию. Ссылки существуют. Исправлены размеры, телеметрия Moirai-2, авторы, статус ProEnFo.

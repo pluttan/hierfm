@@ -1,6 +1,6 @@
 """Shared helpers of the smoke tests: synthetic hourly series, timing, device choice.
 
-Run every script as:  OMP_NUM_THREADS=4 nice -n 10 <venv>/bin/python -u script.py [--device cpu|mps]
+Run every script as:  OMP_NUM_THREADS=4 nice -n 10 <venv>/bin/python -u script.py [--device cpu|mps|cuda]
 """
 
 import argparse
@@ -31,7 +31,7 @@ def synth(n_series=N_SERIES, length=CONTEXT + HORIZON, seed=0):
 
 def parse():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--device", default="cpu", choices=["cpu", "mps"])
+    ap.add_argument("--device", default="cpu", choices=["cpu", "mps", "cuda"])
     ap.add_argument("--repeats", type=int, default=3)
     ap.add_argument("--repo", default=None, help="HF id or local directory with weights")
     return ap.parse_args()

@@ -20,7 +20,7 @@
 - Наш разведочный опыт на публичных данных ENTSO-E (через OPSD) показал слабую связь ошибок операторов разных стран: средняя корреляция 0,03. Внутри страны она выше: 0,11 для Германии, 0,14 для Швеции.
 - Угроза для статьи: если ошибки предобученных моделей тоже почти не связаны между узлами, структурный априор даст малый выигрыш над диагональным MinT. Нужно измерить это раньше, чем строить метод.
 - Предложены три априорные матрицы для ЕЭС: блочная (ОЭС и часовой пояс), ядерная (расстояние), температурная (общая погодная ошибка). Дополнительно описан приём разложения ошибки на согласованную и несогласованную части (раздел 5.4).
-- Скачаны 18 статей по теме и пакет данных OPSD (130 МБ). Пути в разделе 9.
+- Скачаны 18 статей по теме (сейчас недоступны, остались на маке; не проверено) и пакет данных OPSD (130 МБ, проверен на pcomp). Пути в разделе 9.
 
 ## 2. Постановка задачи
 
@@ -130,7 +130,7 @@ W_post = ( k·Σ0 + n·S ) / ( k + n ) = λ·Σ0 + (1 − λ)·S,    λ = k / (k
 
 Идея: штрафовать L1-нормой элементы обратной матрицы. Нулевой элемент означает условную независимость узлов при остальных. Для ЕЭС это подходит: соседние ОЭС связаны, далёкие почти нет. Ограничение: при очень малом n результат нестабилен. Параметр α выбирают перекрёстной проверкой. Для структурного априора возможна версия со своим штрафом на каждую пару: меньший штраф для пар из одной ОЭС. Поддержку матричного штрафа в `scikit-learn` автор документа не проверял. В R-пакете glasso она есть (из памяти).
 
-По выдаче поиска, в бенчмарке нагрузки распределительной сети (Nespoli и др., arXiv:1910.03976) MinT с graphical lasso дал лучший результат, а MinT с сжатой ковариацией дал худший. Текст работы не открыт, цифры не проверены. Включите graphical lasso в наши опыты как конкурента.
+По выдаче поиска, в бенчмарке нагрузки распределительной сети (Nespoli и др., arXiv:1910.03976) MinT с graphical lasso дал лучший результат, а MinT с сжатой ковариацией дал худший (проверено по тексту arXiv: сравнивались только Ledoit–Wolf и graphical lasso из scikit-learn, оба взяты оттуда; цифры не сверены). Сжатие там означает Ledoit–Wolf к единичной цели, а не MinT(Shrink). Включите graphical lasso в наши опыты как конкурента.
 
 ### 3.7. Структурные цели
 
@@ -144,7 +144,7 @@ W_post = ( k·Σ0 + n·S ) / ( k + n ) = λ·Σ0 + (1 − λ)·S,    λ = k / (k
 | Температурная связь | чувствительности β_i и ковариация погоды | да | раздел 5.7 |
 
 Модель условной авторегрессии (CAR) введена Besag (1974), JRSS B 36(2), 192–236 (из памяти). Книга Rue, Held (2005), Gaussian Markov Random Fields, Chapman & Hall/CRC (из памяти). Lindgren, Rue, Lindström (2011) связывают поля Матерна и сеточные модели (по аннотации).
-Egilmez, Pavez, Ortega (arXiv:1611.05181) и Kalofolias (AISTATS 2016, arXiv:1601.02513) оценивают лапласиан графа по данным (по аннотации). Журнал для Egilmez: IEEE JSTSP, 2017, по памяти.
+Egilmez, Pavez, Ortega, "Graph Learning from Data under Structural and Laplacian Constraints" (arXiv:1611.05181) и Kalofolias (AISTATS 2016, arXiv:1601.02513) оценивают лапласиан графа по данным (по аннотации). Журнал для Egilmez: IEEE JSTSP, 2017, по памяти (не проверено: поиск подтвердил только arXiv).
 
 ## 4. Как выбирать вес сжатия
 
@@ -229,8 +229,8 @@ Egilmez, Pavez, Ortega (arXiv:1611.05181) и Kalofolias (AISTATS 2016, arXiv:160
 
 | Источник | Что даёт | Ограничения |
 |---|---|---|
-| Open-Meteo Historical Weather API (ERA5) | Температура на сетке 0,25° с 1940 года, ERA5-Land 0,1° с 1950 года | Бесплатно для некоммерческого использования, лицензия CC BY 4.0, 600 запросов в минуту, 10 000 в день. Пробный запрос для Москвы выполнен, ответ получен |
-| Open-Meteo Historical Forecast API | Архив прогнозов погоды: для ECMWF IFS с 2017 года, для большинства моделей с 2021–2022 годов | Нужен для оценки именно ошибки прогноза температуры. История короче, чем у ERA5 |
+| Open-Meteo Historical Weather API (ERA5) | Температура на сетке 0,25° с 1940 года, ERA5-Land 0,1° с 1950 года | Бесплатный API для некоммерческого использования, данные под CC BY 4.0 (нужна ссылка на источник), лимит 600 запросов в минуту, 5 000 в час, 10 000 в день (проверено 2026-10-19). Пробный запрос для Москвы выполнен, ответ получен |
+| Open-Meteo Historical Forecast API | Архив прогнозов погоды: IFS HRES 9 км с 2017-01-01, IFS 0,4° с 2022-11-07, для большинства моделей с 2021–2022 годов (проверено 2026-10-19) | Нужен для оценки именно ошибки прогноза температуры. История короче, чем у ERA5 |
 
 ### 5.4. Разложение ошибки на согласованную и несогласованную части
 
@@ -315,7 +315,7 @@ D_eps: диагональ остаточных дисперсий
 
 Базы для сравнения: диагональ (WLS), постоянная корреляция (цель F), MinT(Shrink) из Wickramasuriya и др., сжатие LW, OAS, нелинейное сжатие, graphical lasso, t-Rec (Carrara).
 
-## 6. Малые вычислительные опыты (проведены на маке)
+## 6. Малые вычислительные опыты (проведены на маке до его отключения)
 
 Окружение: Python 3.12, numpy 2.5.4, scipy 1.18.1, scikit-learn 1.9.1, pandas, non-linear-shrinkage 1.0.0. Среда лежит в `/tmp/cov05venv` на маке и может исчезнуть. Скрипты лежат в `scripts/cov05/` проекта.
 Нагрузка: `nice`, `OMP_NUM_THREADS=4`, каждый запуск менее 20 секунд.
@@ -443,7 +443,7 @@ D_eps: диагональ остаточных дисперсий
 | Скрипты опытов | `scripts/cov05/` | малый | `sim.py`, `opsd_err.py`, `opsd_corr.py`, `opsd_sub.py` |
 | Среда Python | `/tmp/cov05venv` на маке | временная | numpy, scipy, scikit-learn, pandas, non-linear-shrinkage |
 
-Пути выше относятся к общему каталогу `/Volumes/pr/bmstu/papers/soglasovanie-prognozov` (на vpnvm: `/home/pluttan/mnt/pr/bmstu/papers/soglasovanie-prognozov`). Эти файлы записаны до того, как сессия оказалась привязана к worktree `gpus-visible`. Сам документ записан в каталог этого worktree: `.claude/worktrees/gpus-visible/docs/research/05-covariance.md`. Перенесите его в общий `docs/research/`.
+Состояние на 2026-10-19: мак недоступен, общий каталог `/Volumes/pr/...` не используется. Рабочая копия проекта лежит в `/home/pluttan/dev/hierfm`, там же этот документ и скрипты `scripts/cov05/`. PDF статей и среда `/tmp/cov05venv` остались на маке. Их нет ни на vpnvm, ни на pcomp. Файл OPSD есть на pcomp: `/data/hierfm/data/raw/opsd/time_series_60min_singleindex_2020-10-06.csv` (125 МБ). Скрипты опытов из раздела 6 можно перезапустить на pcomp, но numpy там не проверялся. В этом проходе их не перезапускали, числа раздела 6 взяты из прогона на маке.
 
 Замечание о файле `2023_wind_multihier_arxiv2308.03472.pdf`. Это не статья Hansen и др. Это другая работа об иерархиях ветровой генерации (arXiv:2308.03472, название по выдаче: "Improving the Forecast Accuracy of Wind Power by Leveraging Multiple Hierarchical Structure"). Статья Hansen и др. 2023 в Wind Energy на arXiv не найдена, PDF не скачан.
 
@@ -459,14 +459,59 @@ D_eps: диагональ остаточных дисперсий
 - Таблицу целей A–F в статье Schäfer–Strimmer: страница статьи не открылась, список взят из документации пакетов и памяти.
 - Первичные источники доли погодной ошибки в ошибке нагрузки (17–60%).
 - Доступность почасового плана и факта потребления по ОЭС и субъектам на сайте Системного оператора и АТС. Поиск не дал страниц с данными. Это вопрос к разделу о данных.
-- Цифры Nespoli и др. о graphical lasso в MinT: только пересказ выдачи поиска.
+- Цифры Nespoli и др. о graphical lasso в MinT: качественный вывод проверен, количественные значения не сверены.
 - Статьи Hansen и др. (2023), Nystrup и др. (2020), Ben Taieb и др. (2021) и MISO "Temperature-load sensitivity study" прочитаны только по аннотациям или записям каталога. Авторов последней работы установить не удалось.
 - Вывод проекционной формулы MinT (раздел 2.1) и апостериорного среднего (раздел 3.5): выведены самим автором, не сверены со статьями.
 - Новизну разложения ошибки в разделе 5.4.
 - Поддержку матричного штрафа в graphical lasso для Python.
 - Журнал и год публикации Egilmez и др. (IEEE JSTSP 2017): поиск не подтвердил, указан по памяти.
 
-## 11. Список литературы
+## 11. Сверка с реализацией hierfm/covariance.py
+
+Сверены файлы `hierfm/covariance.py`, `hierfm/reconcile.py` (методы `mint_shrink`, `prior_shrink`, `prior_only`) и `hierfm/evaluate.py` (сборка `prior_R`). Расхождения с обзором перечислены по убыванию важности.
+
+### 11.1. Что совпадает с обзором
+
+- Сжатие идёт на шкале корреляции: дисперсии оцениваются отдельно, корреляция тянется к цели. Это совпадает с MinT(Shrink) Wickramasuriya и др. (2019) и с Schäfer–Strimmer (2005).
+- Формула дисперсии выборочной корреляции в `shrink_weight` совпадает с разделом 3.3: n/(n−1)^3 · сумма квадратов отклонений w. Проверено по тексту кода.
+- Вес считается по внедиагональным парам и обрезается отрезком [0, 1].
+- Выпуклая смесь двух корреляционных матриц остаётся неотрицательно определённой. Диагональ приводится к единице.
+- Цель `identity` даёт MinT(Shrink), цель `prior_R` даёт метод A.
+
+### 11.2. Расхождения
+
+1. Длина выборки. В `shrink_weight` число строк N равно числу часовых ошибок окна. Раздел 4.3 требует n_eff. Короткая проверка 2026-10-19 (p = 30, истинная корреляция 0,3, цель `np.eye`): при окне 7 суток вес λ равен 0,05–0,07 по часовым строкам и 0,69 по одной строке в сутки. При окне 28 суток он равен 0,02 и 0,33–0,39. Вес по часовым строкам почти не меняется при росте автокорреляции (0,07 против 0,05). Формула Schäfer–Strimmer не видит зависимость строк. Оценка корреляции по часовым строкам опирается на 168 зависимых значений, а вес ведёт себя как при 168 независимых. Вывод: метод A при короткой истории почти не опирается на априор, а это противоречит замыслу.
+   Что сделать: считать вес по суточным векторам (24 часа как вектор) или по блочному бутстрепу. Либо заменить вес на λ = k/(k + n_eff), как в разделе 1. Параметр k подбирать по длинной истории (проверка D5).
+2. Нет формы λ(n) = k/(k + n_eff). Код оценивает λ заново по каждому окну по данным окна. Раздел 8 называет закон от длины окна возможной новизной. В коде его нет.
+3. Нет нижнего предела λ. Раздел 6.1 показал, что λ = 1 при удачной цели. Тогда `prior_only` и `prior_shrink` совпадают, и выборочная информация теряется. Нужен параметр `lam_min` и сравнение с `prior_only`.
+4. Дисперсии не сжимаются. Код берёт sd из окна (ddof=1). В Schäfer–Strimmer дисперсии тянутся к медиане отдельным весом. При окне 7 суток и 90 узлах оценка дисперсии шумная, но общий вес на дисперсии не нужен. Допустимо оставить, если проверка D6 не покажет потерь.
+5. Центрирование. `_standardise` вычитает среднее окна. В MinT ошибки обычно берут без центрирования, смещение входит в W. Для суточных прогнозов со смещением по часам суток это меняет W. Нужна проверка на данных.
+6. Целевая матрица для агрегатов. `full_prior` строит корреляцию как S·D·R·D·S', затем смешивает с единичной матрицей долей `own`. Параметр `own` (по умолчанию 0,2) задан вручную и не оценивается. В разделе 5.4 ошибка агрегата не равна сумме ошибок узлов, потому что базовые прогнозы несогласованы. Доля `own` должна расти с уровнем. Проверка D10 даст оценку.
+7. Масштаб `bottom_sd`. По умолчанию в `prior_corr` вектор из единиц. В `evaluate.py` передаётся sd окна, то есть шумная оценка. Для агрегата корреляция зависит от весов узлов, поэтому лучше брать sd из длинной истории.
+8. Априор `temp` задан корреляцией аномалий температуры (разность с шагом 24 часа). Раздел 5.7 предупреждает, что такая связь завышена против связи ошибок нагрузки. Код не масштабирует её. Смесь `temp_block` берёт веса 0,5 и 0,5 без оценки. Нужен множитель γ в [0, 1] на внедиагональные элементы, оцениваемый по длинной истории.
+9. Нет вариантов П1 (часовой пояс, три ρ) и П2 (ядро по расстоянию) из разделов 5.5 и 5.6. Есть только `block` с одним ρ по уровню 1 и `temp`. Часовой пояс и координаты есть в `hierarchy.json` (атрибуты `tz`, `lat`, `lon`) и в `data/meta/weather_points.csv`, поэтому П1 и П2 строятся без новых данных.
+10. Строки с пропусками температуры отбрасываются целиком (`T[~np.isnan(T).any(1)]`). При пропуске в одном узле теряются все часы. Лучше считать попарные корреляции или заполнить пропуск.
+11. Окно разности `season=24` для аномалий оставляет суточный цикл в ошибках модели погоды. Допустимо, но дневные и ночные часы стоит оценивать раздельно.
+12. Нет сравнений с LW, OAS, нелинейным сжатием и graphical lasso. В `reconcile.method_matrix` есть только `mint_sample`, `mint_shrink`, `prior_shrink`, `prior_only`. Базы раздела 5.8 не реализованы.
+13. Тест `tests/test_core.py` проверяет только убывание λ с n для единичной цели (3 узла, n = 10, 100, 3000). Для сильной цели и автокоррелированных строк теста нет.
+
+### 11.3. Три варианта априора для ЕЭС и порядок проверки
+
+| Вариант | Определение | Параметры | Чем проверить |
+|---|---|---|---|
+| П1 | R0 по ОЭС и часовому поясу (раздел 5.5) | ρ_in, ρ_tz, ρ_out | Ранговая корреляция R0 с длинной корреляцией ошибок; контроль с перемешанными метками ОЭС (D4) |
+| П2 | (1 − a)·I + a·exp(−d/ℓ) (раздел 5.6) | a, ℓ | График корреляции по корзинам расстояния; та же метрика, что у П1 |
+| П3 | B·C_T·B + D_eps (раздел 5.7), в коде `temp` | β_i, γ, C_T | Сравнение C_T по прогнозным ошибкам температуры и по аномалиям ERA5 |
+
+Общий порядок проверки: взять длинный ряд ошибок базовой модели (1–2 года), построить по нему эталонную корреляцию, затем по окнам 7, 28, 91 суток измерить ошибку Фробениуса и логарифмическое правдоподобие отложенной недели для каждого априора и для баз раздела 5.8. Этот порядок совпадает с шагами D1, D3, D4, D6 раздела 7.
+
+### 11.4. Что остаётся неисследованным
+
+- Ошибки предобученных моделей для ЕЭС не посчитаны: данные АТС на pcomp лежат в виде старых xls (формат BIFF, подписано d0cf11e0) и xlsx (`data/raw/so_ups/ats`, на 2026-10-19: 507 МБ, 9546 файлов), данные СО ЕЭС лежат в `data/raw/so_ups/br` (json). `data/processed` на pcomp содержит каталоги `synthetic`, `europe3`, `europe_ext`; российских данных там нет. Без них шаги D1–D10 не выполнены, и вывод о ценности априора остаётся гипотезой.
+- Числа разделов 6.1 и 6.2 не перепроверены после отключения мака. Короткая проверка раздела 11.2 пункта 1 выполнена только на синтетике, 20 повторов.
+- Вклад n_eff (пункт 1) в качество согласования не измерен: показан только сам вес.
+
+## 12. Список литературы
 
 Статус: П = проверено (страница открыта), А = по аннотации или записи каталога, М = из памяти.
 
@@ -491,7 +536,7 @@ D_eps: диагональ остаточных дисперсий
 19. Rue H., Held L. Gaussian Markov Random Fields: Theory and Applications. Chapman & Hall/CRC, 2005. М.
 20. Besag J. Spatial interaction and the statistical analysis of lattice systems. J. R. Stat. Soc. B 36(2), 192–236, 1974. М.
 21. Kalofolias V. How to learn a graph from smooth signals. AISTATS 2016. https://arxiv.org/abs/1601.02513. А.
-22. Egilmez H., Pavez E., Ortega A. Graph learning from data under structural and Laplacian constraints. arXiv:1611.05181, 2016 (позже IEEE JSTSP, по памяти). А.
+22. Egilmez H., Pavez E., Ortega A. Graph learning from data under structural and Laplacian constraints. arXiv:1611.05181, 2016 (журнальная версия IEEE JSTSP 2017: не проверено). А.
 23. Gneiting T. Strictly and non-strictly positive definite functions on spheres. Bernoulli 19(4), 1327–1349, 2013. DOI 10.3150/12-BEJSP06. https://arxiv.org/abs/1111.7077. А.
 24. Newey W., West K. A simple, positive semi-definite, heteroskedasticity and autocorrelation consistent covariance matrix. Econometrica 55(3), 703–708, 1987. https://www.jstor.org/stable/1913610. П (каталог).
 25. Wickramasuriya S., Athanasopoulos G., Hyndman R. Optimal forecast reconciliation for hierarchical and grouped time series through trace minimization. J. Amer. Statist. Assoc. 114(526), 804–819, 2019. DOI 10.1080/01621459.2018.1448825. А.
@@ -499,11 +544,11 @@ D_eps: диагональ остаточных дисперсий
 27. Wickramasuriya S. Probabilistic forecast reconciliation under the Gaussian framework. J. Bus. Econ. Stat. 42(1), 272–285, 2024. DOI 10.1080/07350015.2023.2181176. https://arxiv.org/abs/2103.11128. А.
 28. Panagiotelis A., Gamakumara P., Athanasopoulos G., Hyndman R. Probabilistic forecast reconciliation: properties, evaluation and score optimisation. Eur. J. Oper. Res. 306(2), 693–706, 2023. А.
 29. Girolimetto D., Athanasopoulos G., Di Fonzo T., Hyndman R. Cross-temporal probabilistic forecast reconciliation: methodological and practical issues. Int. J. Forecasting 40(3), 1134–1151, 2024. DOI 10.1016/j.ijforecast.2023.10.003. https://arxiv.org/abs/2303.17277. А.
-30. Carrara C., Azzimonti D., Corani G., Zambon L. Modeling the uncertainty on the covariance matrix for probabilistic forecast reconciliation. arXiv:2506.19554, 2025. https://arxiv.org/abs/2506.19554. П.
+30. Carrara C., Azzimonti D., Corani G., Zambon L. Modeling uncertainty in the covariance matrix for probabilistic forecast reconciliation. arXiv:2506.19554, 2025 (v1 от 24.06.2025, v5 от 03.09.2026). https://arxiv.org/abs/2506.19554. П.
 31. Møller J., Nystrup P., Hjorth P., Madsen H. Optimal forecast reconciliation with uncertainty quantification. arXiv:2402.06480, 2024. https://arxiv.org/abs/2402.06480. П (файл 04).
 32. Steinmeister L., Pauly M. Iterative trace minimization for the reconciliation of very short hierarchical time series. arXiv:2409.18550, 2024. https://arxiv.org/abs/2409.18550. П (файл 04).
 33. Li X., Chen Z., Taylor J., Mao X. A forecast combination framework for hierarchical and grouped time series reconciliation. arXiv:2608.13886, 2026. https://arxiv.org/abs/2608.13886. П (аннотация).
-34. Nespoli L., Medici V., Lopatichki K., Sossan F. Hierarchical demand forecasting benchmark for the distribution grid. arXiv:1910.03976, 2019. https://arxiv.org/abs/1910.03976. П (аннотация, цифры не проверены).
+34. Nespoli L., Medici V., Lopatichki K., Sossan F. Hierarchical demand forecasting benchmark for the distribution grid. arXiv:1910.03976, 2019 (v2 апрель 2020). https://arxiv.org/abs/1910.03976. П (аннотация, цифры не проверены).
 35. Hansen M., Nystrup P., Møller J., Madsen H. Reconciliation of wind power forecasts in spatial hierarchies. Wind Energy 26(6), 615–632, 2023. DOI 10.1002/we.2819. А.
 36. Nystrup P., Lindström E., Pinson P., Madsen H. Temporal hierarchies with autocorrelation for load forecasting. Eur. J. Oper. Res. 280(3), 876–888, 2020. А.
 37. Ben Taieb S., Taylor J., Hyndman R. Hierarchical probabilistic forecasting of electricity demand with smart meter data. J. Amer. Statist. Assoc. 116(533), 27–43, 2021. DOI 10.1080/01621459.2020.1736081. А.
@@ -512,6 +557,47 @@ D_eps: диагональ остаточных дисперсий
 40. Hong T., Wang P., White L. Weather station selection for electric load forecasting. Int. J. Forecasting 31(2), 286–295, 2015. DOI 10.1016/j.ijforecast.2014.07.001. А.
 41. Hong T., Fan S. Probabilistic electric load forecasting: a tutorial review. Int. J. Forecasting 32(3), 914–938, 2016. DOI 10.1016/j.ijforecast.2015.11.011. А.
 42. Hong T., Pinson P., Fan S., Zareipour H., Troccoli A., Hyndman R. Probabilistic energy forecasting: Global Energy Forecasting Competition 2014 and beyond. Int. J. Forecasting 32(3), 896–913, 2016. А.
-43. Makarov Y. и др. Wind and load forecast error model for multiple geographically distributed forecasts. 9th Int. Workshop on Large-Scale Integration of Wind Power, Québec, 2010. https://www.pnnl.gov/publications/wind-and-load-forecast-error-model-multiple-geographically-distributed-forecasts. А (авторы по выдаче: Makarov, Reyes Spindola, Samaan, Diao, Hafen).
+43. Makarov Y. и др. Wind and load forecast error model for multiple geographically distributed forecasts. 9th Int. Workshop on Large-Scale Integration of Wind Power, Québec, 2010 (докл. w151, PNNL-SA-74487). https://www.pnnl.gov/publications/wind-and-load-forecast-error-model-multiple-geographically-distributed-forecasts. А (авторы по выдаче: Makarov, Reyes Spindola, Samaan, Diao, Hafen).
 44. Open Power System Data. Time series, версия 2020-10-06. https://data.open-power-system-data.org/time_series/. Файл скачан.
 45. Open-Meteo. Historical Weather API и Historical Forecast API. https://open-meteo.com/en/docs/historical-forecast-api. Условия: https://open-meteo.com/en/pricing. П.
+
+## 13. Проверка
+
+Проверка выполнена 2026-10-19 веб-поиском и открытием страниц arXiv. Данные проверены на pcomp.
+
+### 13.1. Ссылки
+
+Проверено по странице arXiv или записи издателя (авторы, год, название, место):
+
+- Carrara и др. (arXiv:2506.19554). Авторы и год верны. Название исправлено: "Modeling uncertainty in the covariance matrix for probabilistic forecast reconciliation". Метод (обратное распределение Уишарта, t-распределение) совпадает с описанием.
+- Møller и др. (arXiv:2402.06480). Верно. Wishart, сжатие через априоры, пример нагрузки Швеции.
+- Steinmeister, Pauly (arXiv:2409.18550). Верно.
+- Li, Chen, Taylor, Mao (arXiv:2608.13886, v2 от 17.08.2026). Верно. Аннотация говорит о сжатии ковариации в рамках штрафной комбинации прогнозов.
+- Nespoli и др. (arXiv:1910.03976). Верно. Утверждение о graphical lasso подтверждено текстом. Уточнено: "сжатая ковариация" там означает Ledoit–Wolf из scikit-learn.
+- Jang, Matteson (arXiv:2111.11381). Верно: 111 городов США, максимум температуры.
+- Hansen и др. (Wind Energy 26(6), 615–632, DOI 10.1002/we.2819). Существует. 407 подстанций, снижение RMSE на 20,5% и 4,7% подтверждены.
+- Nystrup и др. (EJOR 280(3), 876–888, 2020, DOI 10.1016/j.ejor.2019.07.061). Верно. Четыре ценовые зоны Швеции.
+- Ben Taieb, Taylor, Hyndman (JASA 116(533), 27–43). Верно, DOI совпал.
+- Fay, Ringwood (IEEE TPWRS 25(3), 1751–1758, 2010). Верно. Вывод об обучении комбинатора на прогнозной погоде подтверждён.
+- Lancewicki, Aladjem (IEEE TSP 62(24), 6380–6390, 2014). Верно.
+- Wickramasuriya (JBES 42(1), 272–285, 2024). Верно.
+- Gneiting (Bernoulli 19(4), 1327–1349, 2013, DOI 10.3150/12-BEJSP06). Верно.
+- Makarov и др. (Québec, 2010). Верно, авторы и конференция подтверждены.
+- Egilmez, Pavez, Ortega. Существует как arXiv:1611.05181. Журнал JSTSP 2017 не подтверждён (не проверено).
+
+Выходные данные остальных работ (Ledoit–Wolf, Schäfer–Strimmer, Chen и др., Touloumis, Bickel–Levina, Fan и др., Friedman и др., Warton, Daniels–Kass, Lindgren и др., Newey–West, Wickramasuriya и др. 2019, Hyndman и др. 2011, Panagiotelis и др., Girolimetto и др., Hong и др.) совпадают с известными записями. В этом проходе их страницы повторно не открывали (не проверено поиском). Rue, Held (2005), Besag (1974), Meinshausen, Bühlmann (2006) цитируются по памяти (не проверено).
+
+Придуманных работ не найдено. Одно исправление: название Carrara и др.
+
+### 13.2. Данные
+
+- OPSD: `/data/hierfm/data/raw/opsd/time_series_60min_singleindex_2020-10-06.csv`, 130 339 665 байт (около 124 МиБ, в разделе 9 указано 125 МБ, это одно значение). Это CSV, не HTML. Период 2014-12-31 23:00 UTC по 2020-09-30 23:00 UTC, 50 401 строка. Столбцов фактической нагрузки ENTSO-E 57, прогнозной 57. Заявление "2015–2020" верно. Числа раздела 6.2 (28 узлов, корреляции) не пересчитывали: нет numpy на pcomp.
+- Данные АТС: xls в формате BIFF (подпись d0cf11e0), не пустые. Объём на 2026-10-19 507 МБ, 9546 файлов. Прежнее значение 80 МБ в разделе 11.4 устарело и исправлено.
+- Статьи PDF (18 файлов) на pcomp и vpnvm отсутствуют, проверить нельзя.
+
+### 13.3. Числа и условия
+
+- Open-Meteo: лимиты 600 в минуту, 5 000 в час, 10 000 в день; бесплатный API только для некоммерческого использования; данные CC BY 4.0. Исправлено: добавлен часовой лимит и оговорка о некоммерческом использовании.
+- Open-Meteo Historical Forecast: IFS HRES с 2017-01-01 подтверждено.
+- Числа раздела 6.1 получены нашим кодом на маке и повторно не проверялись. Пакет `non-linear-shrinkage` (имя импорта `nonlinshrink`) в этом проходе не проверяли: страница PyPI не открылась (не проверено).
+- Утверждение "17–60% ошибки нагрузки объясняет погода" остаётся без первичного источника (не использовать).
