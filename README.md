@@ -12,7 +12,7 @@
 Нужны Linux, python 3.13 и NVIDIA GPU.
 
 ```
-git clone git@github.com:pluttan/hierfm.git && cd hierfm
+git clone https://github.com/pluttan/hierfm.git && cd hierfm
 make install install-models     # venv на python3.13, torch, Chronos-2, Chronos-Bolt, TimesFM 2.5 и 3.0
 make install-moirai             # по желанию: Moirai-2, см. «Ограничения»
 make cpuinfo GPU=0              # проверка: сокет, ядра, процессы, GPU и их привязка к сокетам
