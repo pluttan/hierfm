@@ -8,9 +8,9 @@ docs/research/06-08); this module fixes the choices the experiments rely on:
     ru      ATS subjects + RES_<IPS> residuals under 7 IPS and the UES, 2017..2026; weekends and
             holidays (ATS does not publish them) filled from earlier days only (causal), the
             measured cells marked in observed.parquet so that scores skip the fill
-    europe  France 12 regions, Germany 4 TSO zones, Denmark DK1-DK2 (22 nodes); the temperature
-            "forecast" of the Historical Forecast API is dropped: it is stitched from the first
-            hours of every run, close to the truth, and would flatter the weather models
+    europe  France 12 regions, Germany 4 TSO zones, Denmark DK1-DK2 (22 nodes); temperature
+            from the same weather points as ru, not from the Historical Forecast API: that one
+            is stitched from the first hours of every run and would flatter the weather models
 
 Temperature is written only when it covers the last two years of the load; otherwise the
 dataset goes without it and the runs say so. Every step prints what it wrote.
@@ -139,8 +139,10 @@ def build_ru(raw, out):
 @builder("europe")
 def build_europe(raw, out):
     _src("build_europe").build(raw / "europe", out)
-    (out / "temp_forecast.parquet").unlink(missing_ok=True)
     collapse_single_children(out)
+    # the same sources as ru: NASA POWER fact and issued IFS forecasts replace the Historical
+    # Forecast API series that build_europe writes
+    weather(out, "eu", raw / "weather")
 
 
 def check(out):
