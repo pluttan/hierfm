@@ -94,10 +94,12 @@ def fetch(url):
                 time.sleep(10 * (attempt + 1))
             else:
                 raise RuntimeError(reason)
-        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
-            log("network error", e, "- sleep", 10 * (attempt + 1))
+        except (urllib.error.URLError, TimeoutError, ConnectionError, json.JSONDecodeError) as e:
+            # an HTML error page or a cut body instead of JSON is a transient failure, like a drop
+            log("network or body error", repr(e)[:120], "- sleep", 10 * (attempt + 1))
             time.sleep(10 * (attempt + 1))
-    raise RuntimeError("too many retries: " + url)
+    # the same exit as the daily limit (code 75): finished files stay, the next run continues
+    raise DailyLimit("too many retries, stopping for now: " + url)
 
 
 def stage_range(kind, year, model):
