@@ -38,7 +38,7 @@ JOBS   ?= $(shell echo $(CORES) | awk '{print ($$1 > 3) ? $$1 - 2 : 1}')
 MODELS ?=
 
 .PHONY: all install install-models install-moirai data forecast evaluate report run suite experiment \
-        smoke smoke-suite cpuinfo test clean clean-runs
+        smoke smoke-gpu smoke-suite cpuinfo test clean clean-runs
 
 all: install install-models data experiment
 
@@ -107,6 +107,19 @@ smoke:
 	$(PY) -m hierfm forecast --config configs/smoke.yaml
 	$(PY) -m hierfm evaluate --config configs/smoke.yaml --jobs $(JOBS)
 	$(PY) -m hierfm report --config configs/smoke.yaml
+
+# every pretrained wrapper on a GPU, one model at a time so a broken one does not stop the rest
+SMOKE_GPU_MODELS := snaive chronos2 chronos2_temp chronos2_joint bolt_small timesfm25 timesfm3 timesfm3_joint moirai2
+smoke-gpu:
+	$(PY) -m hierfm synth --config configs/smoke.yaml
+	@for m in $(SMOKE_GPU_MODELS); do \
+		if $(PY) -m hierfm forecast --config configs/smoke-gpu.yaml --models $$m > runs-smoke-gpu-$$m.log 2>&1; \
+		then if grep -q "] skip" runs-smoke-gpu-$$m.log; then echo "skip  $$m  (package not installed)"; \
+		else echo "ok    $$m"; fi; \
+		else echo "FAIL  $$m  (runs-smoke-gpu-$$m.log)"; tail -3 runs-smoke-gpu-$$m.log; fi; \
+	done
+	$(PY) -m hierfm evaluate --config configs/smoke-gpu.yaml --jobs $(JOBS)
+	$(PY) -m hierfm report --config configs/smoke-gpu.yaml
 
 smoke-suite:
 	$(MAKE) suite SUITE=configs/suites/smoke.yaml

@@ -1,0 +1,19 @@
+# Real pretrained models on the synthetic grid: checks every wrapper on a GPU before real data.
+# `make smoke-gpu GPU=0`; a failing model is reported and the others still run.
+base: configs/smoke.yaml
+name: smoke-gpu
+runs: runs/smoke-gpu
+test_start: "2025-11-01"
+test_end: "2025-11-30"
+windows: [7, 28]
+dependence: [independent, schaake_hist, gauss_copula]
+models:
+  - {name: snaive, params: {season: 168}}
+  - {name: chronos2, params: {}}
+  - {name: chronos2, label: chronos2_temp, params: {temp: true}}
+  - {name: chronos2, label: chronos2_joint, params: {joint: true}}
+  - {name: chronos_bolt, label: bolt_small, params: {repo: amazon/chronos-bolt-small}}
+  - {name: timesfm25, params: {batch: 256}}
+  - {name: timesfm3, params: {}}
+  - {name: timesfm3, label: timesfm3_joint, params: {joint: true}}
+  - {name: moirai2, params: {}}

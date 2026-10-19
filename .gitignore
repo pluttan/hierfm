@@ -10,3 +10,4 @@ __pycache__/
 .DS_Store
 *.tmp.npz
 /weights/
+/runs-smoke-gpu-*.log

@@ -46,27 +46,31 @@ def run(cfg, only_models=None, chunk=8):
           flush=True)
 
     for spec in specs:
-        for h in cfg.horizons:
-            todo = [o for o in origins if not out_path(cfg, spec.key, h, o).exists()]
-            mine = todo[rank::world]
-            if not mine:
-                continue
-            try:
-                model = models.make(spec, device)
-                if hasattr(model, "predict_at"):
-                    model.params.update(h=h, temp_source=cfg.temp_source)
-                    if cfg.history_days:
-                        model.params["train_days"] = cfg.history_days
-                    model.fit(ds, ds.pos(origins[0]))
-            except ImportError as exc:
-                print(f"[rank {rank}] skip {spec.key}: {exc}", flush=True)
-                break
-            t0 = time.time()
-            for i in range(0, len(mine), chunk):
-                _predict_chunk(cfg, ds, model, spec.key, h, mine[i:i + chunk])
-                done = min(i + chunk, len(mine))
-                rate = done / max(time.time() - t0, 1e-9)
-                print(f"[rank {rank}] {spec.key} h{h} {done}/{len(mine)} · {rate:.2f} origins/s", flush=True)
+        try:
+            _run_model(cfg, ds, origins, spec, device, rank, world, chunk)
+        except ImportError as exc:
+            # packages are imported lazily, at the first prediction: a missing one drops this model only
+            print(f"[rank {rank}] skip {spec.key}: {exc}", flush=True)
+
+
+def _run_model(cfg, ds, origins, spec, device, rank, world, chunk):
+    for h in cfg.horizons:
+        todo = [o for o in origins if not out_path(cfg, spec.key, h, o).exists()]
+        mine = todo[rank::world]
+        if not mine:
+            continue
+        model = models.make(spec, device)
+        if hasattr(model, "predict_at"):
+            model.params.update(h=h, temp_source=cfg.temp_source)
+            if cfg.history_days:
+                model.params["train_days"] = cfg.history_days
+            model.fit(ds, ds.pos(origins[0]))
+        t0 = time.time()
+        for i in range(0, len(mine), chunk):
+            _predict_chunk(cfg, ds, model, spec.key, h, mine[i:i + chunk])
+            done = min(i + chunk, len(mine))
+            rate = done / max(time.time() - t0, 1e-9)
+            print(f"[rank {rank}] {spec.key} h{h} {done}/{len(mine)} · {rate:.2f} origins/s", flush=True)
 
 
 def _context(cfg):
