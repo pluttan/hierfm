@@ -1,0 +1,789 @@
+{
+ "levels": [
+  "UES",
+  "IPS",
+  "region"
+ ],
+ "nodes": [
+  {
+   "id": "UES",
+   "parent": null,
+   "attrs": {
+    "name": "ЕЭС России"
+   }
+  },
+  {
+   "id": "IPS_CENTER",
+   "parent": "UES",
+   "attrs": {
+    "name": "ОЭС Центра"
+   }
+  },
+  {
+   "id": "IPS_NORTHWEST",
+   "parent": "UES",
+   "attrs": {
+    "name": "ОЭС Северо-Запада"
+   }
+  },
+  {
+   "id": "IPS_VOLGA",
+   "parent": "UES",
+   "attrs": {
+    "name": "ОЭС Средней Волги"
+   }
+  },
+  {
+   "id": "IPS_SOUTH",
+   "parent": "UES",
+   "attrs": {
+    "name": "ОЭС Юга"
+   }
+  },
+  {
+   "id": "IPS_URAL",
+   "parent": "UES",
+   "attrs": {
+    "name": "ОЭС Урала"
+   }
+  },
+  {
+   "id": "IPS_SIBERIA",
+   "parent": "UES",
+   "attrs": {
+    "name": "ОЭС Сибири"
+   }
+  },
+  {
+   "id": "IPS_EAST",
+   "parent": "UES",
+   "attrs": {
+    "name": "ОЭС Востока"
+   }
+  },
+  {
+   "id": "R14",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Белгородская область",
+    "ats_code": 14,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R15",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Брянская область",
+    "ats_code": 15,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R17",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Владимирская область",
+    "ats_code": 17,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R19",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Вологодская область",
+    "ats_code": 19,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R20",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Воронежская область",
+    "ats_code": 20,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R24",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Ивановская область",
+    "ats_code": 24,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R28",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Тверская область",
+    "ats_code": 28,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R29",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Калужская область",
+    "ats_code": 29,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R34",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Костромская область",
+    "ats_code": 34,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R38",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Курская область",
+    "ats_code": 38,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R42",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Липецкая область",
+    "ats_code": 42,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R46",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Московская область (с г. Москвой)",
+    "ats_code": 46,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R54",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Орловская область",
+    "ats_code": 54,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R61",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Рязанская область",
+    "ats_code": 61,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R66",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Смоленская область",
+    "ats_code": 66,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R68",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Тамбовская область",
+    "ats_code": 68,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R70",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Тульская область",
+    "ats_code": 70,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R78",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Ярославская область",
+    "ats_code": 78,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R41",
+   "parent": "IPS_NORTHWEST",
+   "attrs": {
+    "name": "Ленинградская область (с г. Санкт-Петербургом)",
+    "ats_code": 41,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R47",
+   "parent": "IPS_NORTHWEST",
+   "attrs": {
+    "name": "Мурманская область",
+    "ats_code": 47,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R49",
+   "parent": "IPS_NORTHWEST",
+   "attrs": {
+    "name": "Новгородская область",
+    "ats_code": 49,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R58",
+   "parent": "IPS_NORTHWEST",
+   "attrs": {
+    "name": "Псковская область",
+    "ats_code": 58,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R86",
+   "parent": "IPS_NORTHWEST",
+   "attrs": {
+    "name": "Республика Карелия",
+    "ats_code": 86,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R22",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Нижегородская область",
+    "ats_code": 22,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R36",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Самарская область",
+    "ats_code": 36,
+    "tz": 4,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R56",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Пензенская область",
+    "ats_code": 56,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R63",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Саратовская область",
+    "ats_code": 63,
+    "tz": 4,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R73",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Ульяновская область",
+    "ats_code": 73,
+    "tz": 4,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R88",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Республика Марий Эл",
+    "ats_code": 88,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R89",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Республика Мордовия",
+    "ats_code": 89,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R92",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Республика Татарстан",
+    "ats_code": 92,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R97",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Чувашская Республика",
+    "ats_code": 97,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R3",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Краснодарский край (с Республикой Адыгея)",
+    "ats_code": 3,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R7",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Ставропольский край",
+    "ats_code": 7,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R12",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Астраханская область",
+    "ats_code": 12,
+    "tz": 4,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R18",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Волгоградская область",
+    "ats_code": 18,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R26",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Республика Ингушетия",
+    "ats_code": 26,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R35",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Республика Крым",
+    "ats_code": 35,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R60",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Ростовская область",
+    "ats_code": 60,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R67",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Город Севастополь",
+    "ats_code": 67,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R82",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Республика Дагестан",
+    "ats_code": 82,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R83",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Кабардино-Балкарская Республика",
+    "ats_code": 83,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R85",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Республика Калмыкия",
+    "ats_code": 85,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R90",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Республика Северная Осетия-Алания",
+    "ats_code": 90,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R91",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Карачаево-Черкесская Республика",
+    "ats_code": 91,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R96",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Чеченская Республика",
+    "ats_code": 96,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R33",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Кировская область",
+    "ats_code": 33,
+    "tz": 3,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R37",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Курганская область",
+    "ats_code": 37,
+    "tz": 5,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R53",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Оренбургская область",
+    "ats_code": 53,
+    "tz": 5,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R57",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Пермский край",
+    "ats_code": 57,
+    "tz": 5,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R65",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Свердловская область",
+    "ats_code": 65,
+    "tz": 5,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R71",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Тюменская область (с ХМАО и ЯНАО)",
+    "ats_code": 71,
+    "tz": 5,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R75",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Челябинская область",
+    "ats_code": 75,
+    "tz": 5,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R80",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Республика Башкортостан",
+    "ats_code": 80,
+    "tz": 5,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R94",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Удмуртская Республика",
+    "ats_code": 94,
+    "tz": 4,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R1",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Алтайский край",
+    "ats_code": 1,
+    "tz": 7,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R4",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Красноярский край",
+    "ats_code": 4,
+    "tz": 7,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R25",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Иркутская область",
+    "ats_code": 25,
+    "tz": 8,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R32",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Кемеровская область - Кузбасс",
+    "ats_code": 32,
+    "tz": 7,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R50",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Новосибирская область",
+    "ats_code": 50,
+    "tz": 7,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R52",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Омская область",
+    "ats_code": 52,
+    "tz": 6,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R69",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Томская область",
+    "ats_code": 69,
+    "tz": 7,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R81",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Республика Бурятия",
+    "ats_code": 81,
+    "tz": 8,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R84",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Республика Алтай",
+    "ats_code": 84,
+    "tz": 7,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R93",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Республика Тыва",
+    "ats_code": 93,
+    "tz": 7,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R95",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Республика Хакасия",
+    "ats_code": 95,
+    "tz": 7,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "R76200",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Забайкальский край",
+    "ats_code": 76200,
+    "tz": 9,
+    "kind": "subject"
+   }
+  },
+  {
+   "id": "RES_CENTER",
+   "parent": "IPS_CENTER",
+   "attrs": {
+    "name": "Остаток ОЭС Центра: факт СО минус сумма субъектов АТС",
+    "tz": 3,
+    "kind": "residual"
+   }
+  },
+  {
+   "id": "RES_NORTHWEST",
+   "parent": "IPS_NORTHWEST",
+   "attrs": {
+    "name": "Остаток ОЭС Северо-Запада: факт СО минус сумма субъектов АТС",
+    "tz": 3,
+    "kind": "residual"
+   }
+  },
+  {
+   "id": "RES_VOLGA",
+   "parent": "IPS_VOLGA",
+   "attrs": {
+    "name": "Остаток ОЭС Средней Волги: факт СО минус сумма субъектов АТС",
+    "tz": 3,
+    "kind": "residual"
+   }
+  },
+  {
+   "id": "RES_SOUTH",
+   "parent": "IPS_SOUTH",
+   "attrs": {
+    "name": "Остаток ОЭС Юга: факт СО минус сумма субъектов АТС",
+    "tz": 3,
+    "kind": "residual"
+   }
+  },
+  {
+   "id": "RES_URAL",
+   "parent": "IPS_URAL",
+   "attrs": {
+    "name": "Остаток ОЭС Урала: факт СО минус сумма субъектов АТС",
+    "tz": 3,
+    "kind": "residual"
+   }
+  },
+  {
+   "id": "RES_SIBERIA",
+   "parent": "IPS_SIBERIA",
+   "attrs": {
+    "name": "Остаток ОЭС Сибири: факт СО минус сумма субъектов АТС",
+    "tz": 3,
+    "kind": "residual"
+   }
+  }
+ ]
+}

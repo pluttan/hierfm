@@ -40,7 +40,8 @@ MODELS ?=
 .PHONY: all install install-models install-moirai download data forecast evaluate report run suite experiment \
         smoke smoke-gpu smoke-suite cpuinfo test clean clean-runs
 
-all: install install-models download data experiment
+# data/processed/{ru,europe} come with the clone; the download and data targets rebuild them
+all: install install-models experiment
 
 # ==========================
 # ===  Environment       ===

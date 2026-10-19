@@ -1,0 +1,36 @@
+{
+ "extended": false,
+ "n_nodes": 22,
+ "n_bottom": 18,
+ "levels": [
+  "europe",
+  "country",
+  "zone"
+ ],
+ "first": "2020-01-01 00:00:00+00:00",
+ "last": "2026-09-30 21:00:00+00:00",
+ "hours": 59158,
+ "interpolated_hours_per_leaf": {
+  "FR_ARA": 7,
+  "FR_BFC": 7,
+  "FR_BRE": 7,
+  "FR_CVL": 7,
+  "FR_GES": 7,
+  "FR_HDF": 7,
+  "FR_NOR": 7,
+  "FR_NAQ": 7,
+  "FR_OCC": 7,
+  "FR_PDL": 7,
+  "FR_PAC": 7,
+  "FR_IDF": 7,
+  "DE_50Hertz": 1,
+  "DE_Amprion": 1,
+  "DE_TenneT": 1,
+  "DE_TransnetBW": 1,
+  "DK_DK1": 2,
+  "DK_DK2": 2
+ },
+ "temp_leaves": 18,
+ "temp_forecast_leaves": 18,
+ "temp_forecast_first": "2022-01-01 00:00:00+00:00"
+}

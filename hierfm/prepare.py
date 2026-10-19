@@ -165,7 +165,16 @@ def main(argv):
         out = PROCESSED / n
         out.mkdir(parents=True, exist_ok=True)
         BUILDERS[n](RAW, out)
+        pack(out)
         check(out)
+
+
+def pack(out):
+    """Rewrite every table with zstd: the processed sets travel in git, so a clone is ready to run."""
+    for p in sorted(out.glob("*.parquet")):
+        pd.read_parquet(p).to_parquet(p, compression="zstd", compression_level=19)
+    size = sum(p.stat().st_size for p in out.glob("*.parquet")) / 2**20
+    print(f"prepare: {out.name} packed with zstd, {size:.0f} MB", flush=True)
 
 
 if __name__ == "__main__":

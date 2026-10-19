@@ -1,0 +1,38 @@
+{
+ "built": "2026-10-19",
+ "fill": "share",
+ "include_late": false,
+ "residual": true,
+ "first_utc": "2017-01-08 21:00:00+00:00",
+ "last_utc": "2026-09-30 20:00:00+00:00",
+ "hours": 85248,
+ "n_subjects": 67,
+ "n_bottom": 74,
+ "share_observed_subject_cells": 0.6725056446371744,
+ "nan_cells_after_fill": 0,
+ "clean": true,
+ "causal": true,
+ "cells_dropped_by_clean": {
+  "R20": 1931,
+  "R24": 74,
+  "R34": 2,
+  "R38": 554,
+  "R85": 518,
+  "R35": 134,
+  "R67": 365,
+  "R26": 48,
+  "R96": 1,
+  "R93": 6,
+  "R95": 1
+ },
+ "late_subjects_excluded": [
+  5,
+  8,
+  10,
+  11,
+  87,
+  98,
+  99
+ ],
+ "note": "observed.parquet marks real ATS cells; RES_* is observed when all subjects of the IPS are"
+}

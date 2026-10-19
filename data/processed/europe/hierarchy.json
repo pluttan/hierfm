@@ -1,0 +1,179 @@
+{
+ "levels": [
+  "europe",
+  "country",
+  "zone"
+ ],
+ "nodes": [
+  {
+   "id": "EUROPE",
+   "parent": null,
+   "attrs": {}
+  },
+  {
+   "id": "FR",
+   "parent": "EUROPE",
+   "attrs": {
+    "tz": 1
+   }
+  },
+  {
+   "id": "DE",
+   "parent": "EUROPE",
+   "attrs": {
+    "tz": 1
+   }
+  },
+  {
+   "id": "DK",
+   "parent": "EUROPE",
+   "attrs": {
+    "tz": 1
+   }
+  },
+  {
+   "id": "FR_ARA",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_BFC",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_BRE",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_CVL",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_GES",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_HDF",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_NOR",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_NAQ",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_OCC",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_PDL",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_PAC",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "FR_IDF",
+   "parent": "FR",
+   "attrs": {
+    "tz": 1,
+    "source": "ODRE"
+   }
+  },
+  {
+   "id": "DE_50Hertz",
+   "parent": "DE",
+   "attrs": {
+    "tz": 1,
+    "source": "SMARD"
+   }
+  },
+  {
+   "id": "DE_Amprion",
+   "parent": "DE",
+   "attrs": {
+    "tz": 1,
+    "source": "SMARD"
+   }
+  },
+  {
+   "id": "DE_TenneT",
+   "parent": "DE",
+   "attrs": {
+    "tz": 1,
+    "source": "SMARD"
+   }
+  },
+  {
+   "id": "DE_TransnetBW",
+   "parent": "DE",
+   "attrs": {
+    "tz": 1,
+    "source": "SMARD"
+   }
+  },
+  {
+   "id": "DK_DK1",
+   "parent": "DK",
+   "attrs": {
+    "tz": 1,
+    "source": "Energinet"
+   }
+  },
+  {
+   "id": "DK_DK2",
+   "parent": "DK",
+   "attrs": {
+    "tz": 1,
+    "source": "Energinet"
+   }
+  }
+ ]
+}
