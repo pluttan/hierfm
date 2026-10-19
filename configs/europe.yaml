@@ -14,10 +14,14 @@ models:
   - {name: snaive, params: {season: 168}}
   - {name: gbm, params: {trees: 400, train_days: 730}}
   - {name: chronos2, params: {}}
+  - {name: chronos2, label: chronos2_temp, params: {temp: true}}
   - {name: chronos2, label: chronos2_joint, params: {joint: true}}
   - {name: timesfm25, params: {batch: 256}}
   - {name: timesfm3, params: {}}
+  - {name: timesfm3, label: timesfm3_temp, params: {temp: true}}
   - {name: timesfm3, label: timesfm3_joint, params: {joint: true}}
   - {name: moirai2, params: {}}
 methods: [base, bu, ols, wls_struct, wls_var, mint_shrink, prior_shrink, prior_only]
 dependence: [independent, schaake_hist, schaake_temp, schaake_err, gauss_copula]
+# common holidays of most of the region, scored as a separate stratum
+holidays: ["01-01", "05-01", "12-24", "12-25", "12-26", "12-31"]

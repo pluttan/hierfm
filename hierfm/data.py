@@ -67,6 +67,16 @@ def load(folder):
     return Dataset(h, bottom.index, y, temp, temp_fc)
 
 
+def future_temp(ds, source):
+    """Temperature a model may use for the forecast hours: issued forecast, the truth (an upper
+    bound on what weather can give), or nothing."""
+    if source == "none" or ds.temp is None:
+        return None
+    if source == "actual":
+        return ds.temp
+    return ds.temp_fc if ds.temp_fc is not None else ds.temp
+
+
 def origins(ds, cfg):
     """Forecast origins inside the test period, plus enough earlier ones to fill the longest window."""
     idx = ds.index

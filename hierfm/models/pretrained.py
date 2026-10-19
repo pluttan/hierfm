@@ -70,6 +70,25 @@ class Chronos2(Model):
         return np.asarray(levels), to_levels(self.NATIVE, q, levels)
 
 
+class ChronosBolt(Model):
+    """Chronos-Bolt tiny/mini/small/base (9M..205M): the model-size axis of the experiments."""
+    name = "chronos_bolt"
+    NATIVE = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+
+    def predict(self, ctx, h, levels, temp_past=None, temp_future=None, node_ids=None):
+        import torch
+        if not hasattr(self, "pipe"):
+            from chronos import BaseChronosPipeline
+            self.pipe = BaseChronosPipeline.from_pretrained(self.params.get("repo", "amazon/chronos-bolt-small"),
+                                                            device_map=self.device, torch_dtype=torch.float32)
+        qs = []
+        for sl in _batches(len(ctx), int(self.params.get("batch", 512))):
+            q, _ = self.pipe.predict_quantiles(torch.tensor(ctx[sl], dtype=torch.float32),
+                                               prediction_length=h, quantile_levels=self.NATIVE)
+            qs.append(q.cpu().numpy())
+        return np.asarray(levels), to_levels(self.NATIVE, np.concatenate(qs), levels)
+
+
 # ==========================
 # ===  TimesFM 2.5 / 3.0 ===
 # ==========================

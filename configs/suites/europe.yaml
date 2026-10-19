@@ -1,0 +1,32 @@
+# Generality check on the European hierarchy: main programme, cold start, ensemble, prior.
+name: europe
+base: configs/europe.yaml
+experiments:
+  main: {}
+  cold_start:
+    set:
+      horizons: [24]
+      models:
+        - {name: snaive, params: {season: 168}}
+        - {name: chronos2, params: {}}
+        - {name: timesfm25, params: {batch: 256}}
+        - {name: timesfm3, params: {}}
+    cases:
+      - {history_days: 7, windows: [7]}
+      - {history_days: 28, windows: [7, 14, 28]}
+      - {history_days: 91, windows: [7, 28, 91]}
+  ensemble:
+    share_forecasts: main
+    set:
+      models:
+        - {name: ensemble, label: ens_fm, params: {members: [chronos2, timesfm25, timesfm3]}}
+  prior:
+    share_forecasts: main
+    set:
+      models: [{name: chronos2, params: {}}]
+      methods: [mint_shrink, prior_shrink, prior_only]
+      dependence: [independent, gauss_copula]
+    cases:
+      - {prior.kind: identity}
+      - {prior.kind: block, prior.rho: 0.3}
+      - {prior.shuffle: true}

@@ -1,9 +1,9 @@
 """Model registry: config name -> class."""
 
 from .classic import Boosting, SeasonalNaive
-from .pretrained import Chronos2, Moirai2, TimesFM3, TimesFM25
+from .pretrained import Chronos2, ChronosBolt, Moirai2, TimesFM3, TimesFM25
 
-REGISTRY = {m.name: m for m in (SeasonalNaive, Boosting, Chronos2, TimesFM25, TimesFM3, Moirai2)}
+REGISTRY = {m.name: m for m in (SeasonalNaive, Boosting, Chronos2, ChronosBolt, TimesFM25, TimesFM3, Moirai2)}
 
 
 def make(spec, device):

@@ -4,12 +4,23 @@ PY     := $(VENV)/bin/python
 PIP    := $(VENV)/bin/pip
 
 CONFIG ?= configs/ru.yaml
-GPUS   ?= $(shell nvidia-smi -L 2>/dev/null | wc -l | awk '{print ($$1 > 0) ? $$1 : 1}')
+SUITE  ?= configs/suites/ru.yaml
+
+# GPU=3 (or GPU=0,1) pins the run to those cards; without it every visible card is used
+GPU    ?=
+ifneq ($(GPU),)
+export CUDA_VISIBLE_DEVICES := $(GPU)
+endif
+
+# GPUs this job may use: the CUDA_VISIBLE_DEVICES list when a scheduler set it (nvidia-smi
+# still lists every card of the node), otherwise all cards, otherwise one CPU process
+comma  := ,
+GPUS   ?= $(if $(CUDA_VISIBLE_DEVICES),$(words $(subst $(comma), ,$(CUDA_VISIBLE_DEVICES))),$(shell nvidia-smi -L 2>/dev/null | wc -l | awk '{print ($$1 > 0) ? $$1 : 1}'))
 JOBS   ?= $(shell $(PYTHON) -c "import os; print(max(1, (os.cpu_count() or 2) - 2))")
 MODELS ?=
 
-.PHONY: all install install-models install-moirai data forecast evaluate report experiment \
-        smoke test clean clean-runs
+.PHONY: all install install-models install-moirai data forecast evaluate report run suite experiment \
+        smoke smoke-suite test clean clean-runs
 
 all: install install-models data experiment
 
@@ -35,9 +46,11 @@ install-moirai: install-models
 data:
 	$(PY) -m hierfm.prepare all
 
+# one card or none: a plain process; several: torchrun, one rank per card
+LAUNCH = $(if $(filter 1,$(GPUS)),$(PY),$(VENV)/bin/torchrun --standalone --nproc_per_node=$(GPUS))
+
 forecast:
-	$(VENV)/bin/torchrun --standalone --nproc_per_node=$(GPUS) -m hierfm forecast --config $(CONFIG) \
-		$(if $(MODELS),--models $(MODELS))
+	$(LAUNCH) -m hierfm forecast --config $(CONFIG) $(if $(MODELS),--models $(MODELS))
 
 evaluate:
 	$(PY) -m hierfm evaluate --config $(CONFIG) --jobs $(JOBS) $(if $(MODELS),--models $(MODELS))
@@ -45,9 +58,20 @@ evaluate:
 report:
 	$(PY) -m hierfm report --config $(CONFIG)
 
+run: forecast evaluate report
+
+# every case of a suite in turn, then one table of all scores (runs/<suite>/summary.md)
+suite:
+	@set -e; for c in $$($(PY) -m hierfm suite $(SUITE)); do \
+		echo "=== $$c"; $(MAKE) --no-print-directory run CONFIG=$$c; \
+	done
+	$(PY) -m hierfm collect $(SUITE)
+
+# the whole programme: Russia, Europe, the synthetic Monte Carlo study
 experiment:
-	$(MAKE) forecast evaluate report CONFIG=configs/ru.yaml
-	$(MAKE) forecast evaluate report CONFIG=configs/europe.yaml
+	$(MAKE) suite SUITE=configs/suites/ru.yaml
+	$(MAKE) suite SUITE=configs/suites/europe.yaml
+	$(MAKE) suite SUITE=configs/suites/synthetic.yaml
 
 # ==========================
 # ===  Checks            ===
@@ -58,6 +82,9 @@ smoke:
 	$(PY) -m hierfm forecast --config configs/smoke.yaml
 	$(PY) -m hierfm evaluate --config configs/smoke.yaml --jobs $(JOBS)
 	$(PY) -m hierfm report --config configs/smoke.yaml
+
+smoke-suite:
+	$(MAKE) suite SUITE=configs/suites/smoke.yaml
 
 test:
 	$(PY) -m pytest -q tests

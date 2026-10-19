@@ -1,0 +1,16 @@
+# Checks the suite mechanics in a minute on CPU: two grids, a shared-forecast re-score, a cold start.
+name: smoke-suite
+base: configs/smoke.yaml
+experiments:
+  main:
+    set: {synthetic: {days: 730}}
+  prior:
+    share_forecasts: main
+    set: {synthetic: {days: 730}, methods: [mint_shrink, prior_shrink], dependence: [independent]}
+    cases: [{prior.kind: identity}, {prior.shuffle: true}]
+  cold_start:
+    set: {synthetic: {days: 730}, models: [{name: snaive, params: {season: 168}}]}
+    cases: [{history_days: 14, windows: [7, 14]}]
+  ensemble:
+    share_forecasts: main
+    set: {synthetic: {days: 730}, models: [{name: ensemble, label: ens, params: {members: [snaive, gbm]}}]}

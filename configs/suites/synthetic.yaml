@@ -1,0 +1,20 @@
+# Monte Carlo study on synthetic grids, CPU only: when does a weather prior beat MinT-shrink?
+# common/regional weather strength x grid size x replicate = 81 grids, each fully re-run.
+name: synthetic
+base: configs/smoke.yaml
+experiments:
+  study:
+    set:
+      test_start: "2025-07-01"
+      test_end: "2025-12-20"
+      windows: [7, 14, 28, 91]
+      samples: 200
+      models: [{name: snaive, params: {season: 168}}, {name: gbm, params: {trees: 150, train_days: 300}}]
+      methods: [base, bu, ols, wls_var, mint_shrink, prior_shrink, prior_only]
+      dependence: [independent, schaake_hist, gauss_copula]
+      synthetic: {days: 730}
+    grid:
+      synthetic.common_sd: [0.0, 0.35, 0.8]
+      synthetic.regional_sd: [0.0, 0.4, 0.9]
+      synthetic.regions: [3, 6, 10]
+      synthetic.seed: [0, 1, 2]

@@ -12,19 +12,49 @@
 Нужны Linux, python 3.13 и NVIDIA GPU.
 
 ```
-git clone <repo> hierfm && cd hierfm
-make install install-models     # venv на python3.13, torch, Chronos-2, TimesFM 2.5 и 3.0
+git clone git@github.com:pluttan/hierfm.git && cd hierfm
+make install install-models     # venv на python3.13, torch, Chronos-2, Chronos-Bolt, TimesFM 2.5 и 3.0
 make install-moirai             # по желанию: Moirai-2, см. «Ограничения»
 make data                       # сырые данные -> data/processed/{ru,europe}
-make experiment                 # прогноз на всех GPU, согласование, таблицы
+make experiment GPU=0           # вся программа опытов на карте 0
 ```
 
-`make forecast` запускает `torchrun` с одним процессом на каждый GPU. Число GPU команда берёт из `nvidia-smi`. Задайте другое число так: `make forecast GPUS=4`. Каждый процесс берёт свою долю точек прогноза. Готовые файлы команда пропускает, поэтому прерванный прогон продолжается с места остановки.
+## Выбор GPU
 
-Стадии можно запускать по отдельности:
+- `GPU=3` запускает работу на карте 3. Makefile ставит `CUDA_VISIBLE_DEVICES=3`, прогноз идёт одним процессом.
+- `GPU=0,1` запускает работу на двух картах. Тогда прогноз идёт через `torchrun`, по процессу на карту.
+- Если `GPU` не задан, Makefile берёт карты из `CUDA_VISIBLE_DEVICES`, а если его нет, то из `nvidia-smi`.
+
+Каждый процесс берёт свою долю точек прогноза. Готовые файлы команда пропускает, поэтому прерванный прогон продолжается с места остановки. Для статьи хватит одного GPU: прогноз занимает меньше часа на A100 (оценка).
+
+## Программа опытов
+
+`make experiment` по очереди прогоняет три набора опытов. Набор описан файлом в `configs/suites/`. Каждый случай набора получает свой каталог `runs/<набор>/<опыт>/<случай>/`. После набора команда собирает все оценки в `runs/<набор>/all_scores.parquet` и `summary.md`.
+
+Набор `ru` (ЕЭС России):
+
+1. `main`: все модели, все методы согласования, все варианты связи сценариев, окна от недели до года, горизонты сутки и неделя.
+2. `cold_start`: у узла есть только 7, 14, 28 или 91 день истории. Ограничение действует на вход модели и на окно ковариации.
+3. `context`: длина входа модели от 256 до 8192 часов.
+4. `model_size`: Chronos-Bolt tiny, mini, small и base.
+5. `joint_scope`: совместный прогноз Chronos-2 и TimesFM 3.0 по группам ОЭС.
+6. `weather`: модели с температурой без погоды и с фактической температурой вместо прогноза.
+7. `ensemble`: усреднение квантилей нескольких моделей, затем согласование.
+8. `prior`: вид априорной матрицы метода A, доля собственной ошибки узла и заведомо неверная матрица.
+9. `samples`: от 50 до 1000 сценариев.
+10. `seeds`: те же прогнозы с другими зёрнами случайных чисел.
+
+Опыты 7–10 берут прогнозы из `main` и считаются только на CPU. Каждый опыт делит оценки на обычные дни, праздники и самые холодные дни.
+
+Набор `europe` повторяет опыты 1, 2, 7 и 8 на европейской иерархии.
+
+Набор `synthetic` выполняет исследование Монте-Карло на 81 синтетической сети. Набор меняет силу общей погоды, силу погоды региона, число регионов и зерно. Набор идёт только на CPU.
+
+Один набор или одну стадию можно запустить отдельно:
 
 ```
-make forecast CONFIG=configs/ru.yaml MODELS=chronos2,timesfm25
+make suite SUITE=configs/suites/ru.yaml GPU=0
+make forecast CONFIG=configs/ru.yaml MODELS=chronos2,timesfm25 GPU=0
 make evaluate CONFIG=configs/ru.yaml JOBS=32
 make report   CONFIG=configs/ru.yaml
 ```
@@ -36,7 +66,8 @@ make report   CONFIG=configs/ru.yaml
 ```
 make install
 make test       # согласованность сумм, вес сжатия, CRPS, перестановка Шааке, механизм узких интервалов
-make smoke      # вся цепочка на синтетической сети из 13 узлов, около 20 секунд на CPU
+make smoke        # вся цепочка на синтетической сети из 13 узлов, около 20 секунд на CPU
+make smoke-suite  # механика наборов: общий прогноз, холодный старт, ансамбль, около 2 минут
 ```
 
 ## Стадии
@@ -44,7 +75,7 @@ make smoke      # вся цепочка на синтетической сети
 | Стадия | Модуль | Где идёт | Результат |
 |---|---|---|---|
 | данные | `hierfm/prepare.py` | CPU | `data/processed/<name>/` |
-| прогноз | `hierfm/forecast.py` | GPU, `torchrun` | `runs/<name>/forecasts/<model>/h<H>/<origin>.npz`: квантили по всем узлам |
+| прогноз | `hierfm/forecast.py` | GPU | `runs/<name>/forecasts/<model>/h<H>/<origin>.npz`: квантили по всем узлам |
 | оценка | `hierfm/evaluate.py` | CPU, пул процессов | `runs/<name>/scores/<model>_h<H>.parquet` |
 | отчёт | `hierfm/report.py` | CPU | `runs/<name>/report/*.md`, `*.csv` |
 
@@ -60,10 +91,11 @@ make smoke      # вся цепочка на синтетической сети
 
 - `hierarchy.py`: дерево узлов и матрица суммирования S.
 - `data.py`: набор данных на часовой сетке UTC. Верхние уровни команда всегда считает как сумму нижнего уровня.
-- `models/`: Chronos-2, TimesFM 2.5, TimesFM 3.0, Moirai-2, сезонный наивный прогноз, градиентный бустинг на погоде.
+- `models/`: Chronos-2, Chronos-Bolt, TimesFM 2.5, TimesFM 3.0, Moirai-2, сезонный наивный прогноз, градиентный бустинг на погоде.
 - `covariance.py`: метод A. Априорная корреляция берётся из корреляции аномалий температуры или из блоков ОЭС. Вес сжатия считается по Schäfer & Strimmer (2005).
 - `dependence.py`: метод B. Есть варианты `independent`, `schaake_hist`, `schaake_temp`, `schaake_err`, `gauss_copula`.
 - `reconcile.py`: варианты `base`, `bu`, `ols`, `wls_struct`, `wls_var`, `mint_sample`, `mint_shrink`, `prior_shrink`, `prior_only`.
+- `suite.py`: развёртка наборов опытов и сбор оценок.
 - `metrics.py` и `stats.py`: метрики, тест Диболда–Мариано с поправкой HLN, MCB.
 
 ## Ограничения

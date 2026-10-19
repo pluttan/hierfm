@@ -6,6 +6,7 @@ same footing as pretrained models in the probabilistic comparison.
 
 import numpy as np
 
+from ..data import future_temp
 from .base import Model
 
 
@@ -39,7 +40,7 @@ class Boosting(Model):
         h = int(self.params.get("h", 24))
         start = max(24 * 7 + 24, train_end - 24 * int(self.params.get("train_days", 730)))
         origins = np.arange(start, train_end - h, 24)
-        temp = ds.temp_fc if ds.temp_fc is not None else ds.temp
+        temp = future_temp(ds, self.params.get("temp_source", "forecast"))
         def new():
             return HistGradientBoostingRegressor(max_iter=int(self.params.get("trees", 400)), learning_rate=0.05,
                                                  max_leaf_nodes=31, min_samples_leaf=50, categorical_features=[0, 1])
@@ -69,7 +70,7 @@ class Boosting(Model):
     def predict_at(self, origin_pos, h, levels):
         """Boosting needs absolute positions (calendar, weather), so it is called per origin."""
         ds = self.ds
-        temp = ds.temp_fc if ds.temp_fc is not None else ds.temp
+        temp = future_temp(ds, self.params.get("temp_source", "forecast"))
         q = np.empty((ds.h.n, h, len(levels)))
         for i in range(ds.h.n):
             X, _ = self._features(ds, i, [origin_pos], h, temp)

@@ -1,0 +1,104 @@
+# Full experiment programme on the UES of Russia. `make suite SUITE=configs/suites/ru.yaml`.
+# Experiments with share_forecasts only re-score the main forecasts on CPU.
+name: ru
+base: configs/ru.yaml
+experiments:
+  # 1. all models, all methods, all dependence variants, windows from a week to a year
+  main: {}
+
+  # 2. cold start: a node with only N days of history, for the model input and the covariance window
+  cold_start:
+    set:
+      horizons: [24]
+      models:
+        - {name: snaive, params: {season: 168}}
+        - {name: gbm, params: {trees: 400}}
+        - {name: chronos2, params: {}}
+        - {name: timesfm25, params: {batch: 256}}
+        - {name: timesfm3, params: {}}
+    cases:
+      - {history_days: 7, windows: [7]}
+      - {history_days: 14, windows: [7, 14]}
+      - {history_days: 28, windows: [7, 14, 28]}
+      - {history_days: 91, windows: [7, 28, 91]}
+
+  # 3. model input length
+  context:
+    set:
+      horizons: [24]
+      windows: [7, 28]
+      dependence: [independent, schaake_hist, gauss_copula]
+      models:
+        - {name: chronos2, params: {}}
+        - {name: timesfm25, params: {batch: 256}}
+    grid: {context: [256, 512, 1024, 4096, 8192]}
+
+  # 4. model size: does reconciliation help a weak model more than a strong one
+  model_size:
+    set:
+      horizons: [24]
+      windows: [7, 28, 91]
+      models:
+        - {name: chronos_bolt, label: bolt_tiny, params: {repo: amazon/chronos-bolt-tiny}}
+        - {name: chronos_bolt, label: bolt_mini, params: {repo: amazon/chronos-bolt-mini}}
+        - {name: chronos_bolt, label: bolt_small, params: {repo: amazon/chronos-bolt-small}}
+        - {name: chronos_bolt, label: bolt_base, params: {repo: amazon/chronos-bolt-base}}
+
+  # 5. joint forecasting scope: all nodes together vs one group per IPS
+  joint_scope:
+    set:
+      horizons: [24]
+      windows: [7, 28, 91]
+      models:
+        - {name: chronos2, label: chronos2_joint_ips, params: {joint: true, group_level: 1}}
+        - {name: timesfm3, label: timesfm3_joint_ips, params: {joint: true, group_level: 1}}
+
+  # 6. weather: none, issued forecast (main), the truth as an upper bound
+  weather:
+    set:
+      horizons: [24, 168]
+      windows: [7, 28, 91]
+      models:
+        - {name: gbm, params: {trees: 400}}
+        - {name: chronos2, label: chronos2_temp, params: {temp: true}}
+        - {name: timesfm3, label: timesfm3_temp, params: {temp: true}}
+    grid: {temp_source: [none, actual]}
+
+  # 7. ensemble of pretrained models, re-scored from main forecasts
+  ensemble:
+    share_forecasts: main
+    set:
+      models:
+        - {name: ensemble, label: ens_fm, params: {members: [chronos2, timesfm25, timesfm3]}}
+        - {name: ensemble, label: ens_all, params: {members: [chronos2, chronos2_temp, timesfm25, timesfm3, gbm]}}
+
+  # 8. prior of method A: kind, own error share, and a deliberately wrong prior
+  prior:
+    share_forecasts: main
+    set:
+      models: [{name: chronos2, params: {}}, {name: timesfm25, params: {batch: 256}}]
+      methods: [mint_shrink, prior_shrink, prior_only]
+      dependence: [independent, gauss_copula]
+    cases:
+      - {prior.kind: identity}
+      - {prior.kind: block, prior.rho: 0.2}
+      - {prior.kind: block, prior.rho: 0.5}
+      - {prior.kind: temp_block, prior.mix: 0.5}
+      - {prior.own: 0.05}
+      - {prior.own: 0.5}
+      - {prior.shuffle: true}
+
+  # 9. number of sample paths
+  samples:
+    share_forecasts: main
+    set:
+      models: [{name: chronos2, params: {}}]
+      dependence: [independent, schaake_hist, gauss_copula]
+    grid: {samples: [50, 100, 500, 1000]}
+
+  # 10. sampling noise: the same forecasts under other seeds
+  seeds:
+    share_forecasts: main
+    set:
+      models: [{name: chronos2, params: {}}, {name: timesfm3, params: {}}]
+    grid: {seed: [1, 2, 3, 4]}

@@ -1,18 +1,21 @@
-"""A small synthetic grid for the smoke test: 1 system, 3 regions, 9 subregions, two years hourly.
+"""A synthetic grid: 1 system, R regions, R*K subregions, hourly; the smoke test and the Monte Carlo study.
 
 Load follows daily and weekly cycles plus a temperature response; temperature shares a
 regional weather factor, so errors of neighbours are correlated the way the paper assumes.
+The strength of the common and regional factors against the local one is what the Monte Carlo
+suite varies: it decides how much a weather prior can know about error correlation.
 """
 
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy.signal import lfilter
 
 from . import hierarchy as hier
 
 
-def make(folder, days=730, seed=0):
+def make(folder, days=730, seed=0, regions=3, per_region=3, common_sd=0.35, regional_sd=0.4, local_sd=0.3):
     rng = np.random.default_rng(seed)
     folder = Path(folder)
     folder.mkdir(parents=True, exist_ok=True)
@@ -21,29 +24,25 @@ def make(folder, days=730, seed=0):
     hour, dow, doy = idx.hour.to_numpy(), idx.dayofweek.to_numpy(), idx.dayofyear.to_numpy()
 
     recs = [{"id": "SYS", "parent": None, "attrs": {}}]
-    regions = ["R1", "R2", "R3"]
+    regions = [f"R{i + 1}" for i in range(regions)]
     bottom = []
     for r_i, r in enumerate(regions):
         recs.append({"id": r, "parent": "SYS", "attrs": {"tz": 3 + 2 * r_i}})
-        for j in range(3):
+        for j in range(per_region):
             b = f"{r}_{j + 1}"
             bottom.append(b)
             recs.append({"id": b, "parent": r, "attrs": {"tz": 3 + 2 * r_i}})
 
     def ar1(n, phi, sd):
-        x = np.zeros(n)
-        e = rng.normal(0, sd, n)
-        for t in range(1, n):
-            x[t] = phi * x[t - 1] + e[t]
-        return x
+        return lfilter([1.0], [1.0, -phi], rng.normal(0, sd, n))
 
     seasonal = -12 * np.cos(2 * np.pi * doy / 365.25) + 4 * np.sin(2 * np.pi * (hour - 9) / 24)
-    common = ar1(T, 0.995, 0.35)
-    regional = {r: ar1(T, 0.99, 0.4) for r in regions}
+    common = ar1(T, 0.995, common_sd)
+    regional = {r: ar1(T, 0.99, regional_sd) for r in regions}
     load, temp = {}, {}
     for b in bottom:
         r = b.split("_")[0]
-        t = 5 + seasonal + common + regional[r] + ar1(T, 0.9, 0.3)
+        t = 5 + seasonal + common + regional[r] + ar1(T, 0.9, local_sd)
         base = rng.uniform(800, 3000)
         daily = 1 + 0.18 * np.sin(2 * np.pi * (hour - 7) / 24) + 0.06 * np.sin(4 * np.pi * (hour - 3) / 24)
         weekly = np.where(dow >= 5, 0.9, 1.0)
