@@ -153,6 +153,23 @@ def main():
         t1 = dt.datetime.strptime(c[-1], "%Y-%m-%dT%H")
         total = int((t1 - t0).total_seconds() // 3600) + 1
         rep["bottom18_common"]["missing_share_in_window"] = 1 - len(c) / total
+    # 5. Расширенная иерархия: страны energy-charts как листья уровня 1
+    ec = {k[3:]: v for k, v in s.items() if k.startswith("EC_")}
+    ext = {}
+    for c, d in sorted(ec.items()):
+        k = sorted(d)
+        t0 = dt.datetime.strptime(k[0], "%Y-%m-%dT%H")
+        t1 = dt.datetime.strptime(k[-1], "%Y-%m-%dT%H")
+        n_all = int((t1 - t0).total_seconds() // 3600) + 1
+        vals = [d[h] for h in k]
+        ext[c] = {"hours": len(k), "missing_share": round(1 - len(k) / n_all, 5),
+                  "mean_gw": round(sum(vals) / len(vals) / 1000, 3),
+                  "min_mw": min(vals), "zero_or_neg": sum(1 for v in vals if v <= 0)}
+    rep["ec_countries"] = ext
+    if ec:
+        common_ec = set.intersection(*[set(d) for d in ec.values()])
+        rep["ec_all_common_hours"] = len(common_ec)
+        rep["ec_n_countries"] = len(ec)
     # матрица суммирования EU-3: 22 узла x 18 листьев
     leaves = [f"FR_{n}" for n in FR_REG.values()] + [f"DE_{z}" for z in DE_ZONES] + ["DK_DK1", "DK_DK2"]
     nodes = [("TOTAL", leaves), ("FR", leaves[:12]), ("DE", leaves[12:16]), ("DK", leaves[16:])] + [(l, [l]) for l in leaves]

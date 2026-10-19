@@ -8,9 +8,11 @@ args = parse()
 data = synth()
 past, truth = data[:, :CONTEXT], data[:, CONTEXT:]
 torch.set_float32_matmul_precision("high")
-model = timesfm.TimesFM_2p5_200M_torch.from_pretrained("google/timesfm-2.5-200m-pytorch")
+model = timesfm.TimesFM_2p5_200M_torch.from_pretrained(args.repo or "google/timesfm-2.5-200m-pytorch")
 if args.device == "mps":
-    model.model.to("mps")      # the package picks cuda/cpu itself; try to move manually
+    # the package picks cuda or cpu itself; move the module and the device attribute by hand
+    model.model.to("mps")
+    model.model.device = torch.device("mps")
 model.compile(timesfm.ForecastConfig(max_context=2048, max_horizon=256, normalize_inputs=True,
               use_continuous_quantile_head=True, force_flip_invariance=True, infer_is_positive=True,
               fix_quantile_crossing=True))

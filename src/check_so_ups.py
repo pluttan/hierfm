@@ -86,7 +86,25 @@ def ats():
     yr = w.groupby(w.index.year)
     print(pd.DataFrame({"hours": yr.size(), "subjects": yr.apply(lambda x: x.notna().any().sum()),
                         "share_present": yr.apply(lambda x: x.notna().mean().mean())}).round(3))
+    days = d.assign(day=d["ts"].dt.normalize()).groupby("day")["code"].nunique()
+    print("\n== days present in ATS files (any subject):", len(days), "from", days.index.min().date(), "to", days.index.max().date())
+    print("by weekday (0=Mon):", days.groupby(days.index.dayofweek).size().to_dict())
+    print("days per year:", days.groupby(days.index.year).size().to_dict())
+    allwd = pd.bdate_range(days.index.min(), days.index.max())
+    miss = allwd.difference(days.index)
+    print("Mon-Fri days not present:", len(miss), " per year:", pd.Series(miss.year).value_counts().sort_index().to_dict())
+    print("hours per day (min, max):", d.groupby(["code", d["ts"].dt.normalize()]).size().agg(["min", "max"]).to_dict())
+    print("longest run of consecutive absent calendar days, per year:")
+    cal = pd.date_range(days.index.min(), days.index.max())
+    absent = pd.Series(~cal.isin(days.index), index=cal)
+    runs = (absent != absent.shift()).cumsum()
+    ln = absent.groupby(runs).agg(["first", "size"])
+    ln["start"] = absent.index.to_series().groupby(runs).first().values
+    ln = ln[ln["first"]]
+    print(ln.groupby(ln["start"].dt.year)["size"].max().to_dict())
     print("\nnegative or zero values:", int((d["mw"] <= 0).sum()))
+    bad = d[d["mw"] <= 0]
+    print(bad.groupby(["code", "region"]).size().sort_values(ascending=False).head(10).to_dict())
     print("annual total, GW mean (sum over subjects present):")
     print((w.groupby(w.index.year).sum(min_count=1).sum(axis=1) / w.groupby(w.index.year).size() / 1000).round(1))
 

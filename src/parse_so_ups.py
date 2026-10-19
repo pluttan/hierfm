@@ -112,9 +112,13 @@ def parse_plan():
                 for r in lst or []:
                     if not isinstance(r, list) or len(r) < 25:
                         continue
-                    code = int(r[25]) if len(r) > 25 and r[25] is not None else -1
+                    # zone 1 row: [name, h0..h23, code]; zone 2 row: [code, name, h0..h23]
+                    if zone == "Z1":
+                        code, name, vals = int(r[25]), r[0], r[1:25]
+                    else:
+                        code, name, vals = int(r[0]), r[1], r[2:26]
                     for h in range(24):
-                        rows.append((zone, code, r[0], f"{day} {h:02d}:00", r[1 + h]))
+                        rows.append((zone, code, name, f"{day} {h:02d}:00", vals[h]))
     df = pd.DataFrame(rows, columns=["zone", "code", "region", "ts", "mw"])
     df["ts"] = pd.to_datetime(df["ts"])
     return df
