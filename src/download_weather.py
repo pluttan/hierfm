@@ -52,6 +52,9 @@ ARCHIVE_LAG = 7          # дней: ERA5-Land отстаёт примерно �
 PREV_MODEL = "ecmwf_ifs025"
 PREV_START = {"ecmwf_ifs025": dt.date(2024, 3, 1), "gfs_global": dt.date(2021, 5, 1),
               "icon_global": dt.date(2024, 3, 1)}
+# the test starts 2025-10-01 and analogue days look 365 days back; earlier forecast history
+# is replaced by the fact in prepare.py, so it is not worth a day of the Open-Meteo quota
+PREV_FROM = dt.date(2024, 10, 1)
 SEC_PER_UNIT = 0.12      # пауза на один условный вызов: около 500 в минуту
 DEFAULT_PLAN = "power:0;prev:2026,2025,2024"
 
