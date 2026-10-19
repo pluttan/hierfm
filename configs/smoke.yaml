@@ -1,0 +1,15 @@
+# End-to-end check on a synthetic grid, CPU, a few minutes. `make smoke`.
+name: smoke
+processed: data/processed/synthetic
+runs: runs/smoke
+horizons: [24]
+context: 1024
+test_start: "2025-11-01"
+test_end: "2025-12-20"
+windows: [7, 28]
+samples: 100
+models:
+  - {name: snaive, params: {season: 168}}
+  - {name: gbm, params: {trees: 150, train_days: 300}}
+methods: [base, bu, ols, wls_struct, wls_var, mint_shrink, prior_shrink, prior_only]
+dependence: [independent, schaake_hist, schaake_err, gauss_copula]

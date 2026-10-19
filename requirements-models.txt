@@ -1,0 +1,5 @@
+# GPU torch comes from PyPI with CUDA 12 wheels on Linux; on a Mac it is the MPS build
+torch>=2.5
+chronos-forecasting>=2.2
+timesfm[torch]>=3.0
+huggingface_hub>=0.28

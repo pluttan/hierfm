@@ -1,0 +1,12 @@
+/venv/
+/.venv*/
+/data/
+/runs/
+/docs/papers/*.pdf
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.DS_Store
+*.tmp.npz
+/weights/
