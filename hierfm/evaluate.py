@@ -21,6 +21,10 @@ _G = {}   # read-only state of a worker, set by _init (macOS spawns workers, not
 
 
 def _init(state):
+    # one BLAS thread per worker: with a worker per core, BLAS threads on top would oversubscribe
+    # the machine many times over (64 workers x 64 threads on a 64-core node)
+    from threadpoolctl import threadpool_limits
+    threadpool_limits(1)
     _G.update(state)
 
 

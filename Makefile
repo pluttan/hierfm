@@ -16,7 +16,9 @@ endif
 # still lists every card of the node), otherwise all cards, otherwise one CPU process
 comma  := ,
 GPUS   ?= $(if $(CUDA_VISIBLE_DEVICES),$(words $(subst $(comma), ,$(CUDA_VISIBLE_DEVICES))),$(shell nvidia-smi -L 2>/dev/null | wc -l | awk '{print ($$1 > 0) ? $$1 : 1}'))
-JOBS   ?= $(shell $(PYTHON) -c "import os; print(max(1, (os.cpu_count() or 2) - 2))")
+# evaluation workers: one per physical core (SMT siblings add little to numpy work), two left free
+CORES  := $(shell sysctl -n hw.physicalcpu 2>/dev/null || lscpu -p=core 2>/dev/null | grep -v '^[[:punct:]]' | sort -u | wc -l)
+JOBS   ?= $(shell echo $(CORES) | awk '{print ($$1 > 3) ? $$1 - 2 : 1}')
 MODELS ?=
 
 .PHONY: all install install-models install-moirai data forecast evaluate report run suite experiment \

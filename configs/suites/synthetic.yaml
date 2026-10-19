@@ -1,5 +1,5 @@
 # Monte Carlo study on synthetic grids, CPU only: when does a weather prior beat MinT-shrink?
-# common/regional weather strength x grid size x replicate = 81 grids, each fully re-run.
+# common/regional weather strength x grid size x replicate = 135 grids, each fully re-run.
 name: synthetic
 base: configs/smoke.yaml
 experiments:
@@ -17,4 +17,4 @@ experiments:
       synthetic.common_sd: [0.0, 0.35, 0.8]
       synthetic.regional_sd: [0.0, 0.4, 0.9]
       synthetic.regions: [3, 6, 10]
-      synthetic.seed: [0, 1, 2]
+      synthetic.seed: [0, 1, 2, 3, 4]
