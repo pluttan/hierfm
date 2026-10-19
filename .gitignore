@@ -1,6 +1,7 @@
 /venv/
 /.venv*/
-/data/
+/data/*
+!/data/meta/
 /runs/
 /docs/papers/*.pdf
 __pycache__/

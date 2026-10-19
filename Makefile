@@ -37,10 +37,10 @@ PY     := $(PIN) $(VENV)/bin/python
 JOBS   ?= $(shell echo $(CORES) | awk '{print ($$1 > 3) ? $$1 - 2 : 1}')
 MODELS ?=
 
-.PHONY: all install install-models install-moirai data forecast evaluate report run suite experiment \
+.PHONY: all install install-models install-moirai download data forecast evaluate report run suite experiment \
         smoke smoke-gpu smoke-suite cpuinfo test clean clean-runs
 
-all: install install-models data experiment
+all: install install-models download data experiment
 
 # ==========================
 # ===  Environment       ===
@@ -60,6 +60,15 @@ install-moirai: install-models
 # ==========================
 # ===  Pipeline          ===
 # ==========================
+
+# raw data from open sources, no keys; every script skips finished files, so rerun after a break.
+# Open-Meteo allows about 10 000 calls a day: the weather script then exits with code 75,
+# which is not an error here; run `make download` again the next day to continue.
+download:
+	$(PY) -u src/download_so_ups.py dict genconsum subrf subrf_z2 forecast_ips ats --start 2015
+	$(PY) -u src/download_europe.py --out data/raw/europe
+	@test -s data/meta/weather_points.csv || $(PY) -u src/build_weather_points.py
+	$(PY) -u src/download_weather.py --out data/raw/weather || test $$? -eq 75
 
 data:
 	$(PY) -m hierfm.prepare all

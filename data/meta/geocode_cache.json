@@ -1,0 +1,1746 @@
+{
+ "Belgorod|50.6|36.59": {
+  "found": true,
+  "lat": 50.603,
+  "lon": 36.581,
+  "pop": 345289,
+  "geoname": 578072,
+  "admin1": "Belgorod Oblast"
+ },
+ "Stary Oskol|51.3|37.84": {
+  "found": true,
+  "lat": 51.303,
+  "lon": 37.846,
+  "pop": 226977,
+  "geoname": 487928,
+  "admin1": "Belgorod Oblast"
+ },
+ "Bryansk|53.25|34.37": {
+  "found": true,
+  "lat": 53.271,
+  "lon": 34.321,
+  "pop": 427236,
+  "geoname": 571476,
+  "admin1": "Bryansk Oblast"
+ },
+ "Vladimir|56.13|40.41": {
+  "found": true,
+  "lat": 56.139,
+  "lon": 40.4,
+  "pop": 357024,
+  "geoname": 473247,
+  "admin1": "Vladimir Oblast"
+ },
+ "Kovrov|56.36|41.32": {
+  "found": true,
+  "lat": 56.358,
+  "lon": 41.319,
+  "pop": 154224,
+  "geoname": 543460,
+  "admin1": "Vladimir Oblast"
+ },
+ "Vologda|59.22|39.89": {
+  "found": true,
+  "lat": 59.224,
+  "lon": 39.884,
+  "pop": 312420,
+  "geoname": 472459,
+  "admin1": "Vologda Oblast"
+ },
+ "Cherepovets|59.13|37.9": {
+  "found": true,
+  "lat": 59.133,
+  "lon": 37.9,
+  "pop": 315738,
+  "geoname": 569223,
+  "admin1": "Vologda Oblast"
+ },
+ "Voronezh|51.66|39.2": {
+  "found": true,
+  "lat": 51.668,
+  "lon": 39.192,
+  "pop": 1047549,
+  "geoname": 472045,
+  "admin1": "Voronezh Oblast"
+ },
+ "Ivanovo|57.0|40.97": {
+  "found": true,
+  "lat": 57.0,
+  "lon": 40.973,
+  "pop": 406113,
+  "geoname": 555312,
+  "admin1": "Ivanovo Oblast"
+ },
+ "Kaluga|54.51|36.26": {
+  "found": true,
+  "lat": 54.531,
+  "lon": 36.27,
+  "pop": 340851,
+  "geoname": 553915,
+  "admin1": "Kaluga Oblast"
+ },
+ "Obninsk|55.1|36.61": {
+  "found": true,
+  "lat": 55.11,
+  "lon": 36.612,
+  "pop": 107392,
+  "geoname": 516436,
+  "admin1": "Kaluga Oblast"
+ },
+ "Kostroma|57.77|40.93": {
+  "found": true,
+  "lat": 57.766,
+  "lon": 40.928,
+  "pop": 277280,
+  "geoname": 543878,
+  "admin1": "Kostroma Oblast"
+ },
+ "Kursk|51.73|36.19": {
+  "found": true,
+  "lat": 51.727,
+  "lon": 36.185,
+  "pop": 448733,
+  "geoname": 538560,
+  "admin1": "Kursk Oblast"
+ },
+ "Lipetsk|52.61|39.6": {
+  "found": true,
+  "lat": 52.588,
+  "lon": 39.552,
+  "pop": 509735,
+  "geoname": 535121,
+  "admin1": "Lipetsk Oblast"
+ },
+ "Yelets|52.62|38.5": {
+  "found": true,
+  "lat": 52.614,
+  "lon": 38.509,
+  "pop": 115688,
+  "geoname": 467978,
+  "admin1": "Lipetsk Oblast"
+ },
+ "Moscow|55.75|37.62": {
+  "found": true,
+  "lat": 55.752,
+  "lon": 37.618,
+  "pop": 10381222,
+  "geoname": 524901,
+  "admin1": "Moscow"
+ },
+ "Balashikha|55.8|37.94": {
+  "found": true,
+  "lat": 55.795,
+  "lon": 37.948,
+  "pop": 150103,
+  "geoname": 579464,
+  "admin1": "Moscow Oblast"
+ },
+ "Podolsk|55.43|37.54": {
+  "found": true,
+  "lat": 55.424,
+  "lon": 37.555,
+  "pop": 179400,
+  "geoname": 508101,
+  "admin1": "Moscow Oblast"
+ },
+ "Oryol|52.97|36.07": {
+  "found": true,
+  "lat": 52.969,
+  "lon": 36.079,
+  "pop": 303696,
+  "geoname": 515012,
+  "admin1": "Oryol oblast"
+ },
+ "Ryazan|54.63|39.74": {
+  "found": true,
+  "lat": 54.627,
+  "lon": 39.704,
+  "pop": 538962,
+  "geoname": 500096,
+  "admin1": "Ryazan Oblast"
+ },
+ "Smolensk|54.78|32.04": {
+  "found": true,
+  "lat": 54.778,
+  "lon": 32.051,
+  "pop": 330025,
+  "geoname": 491687,
+  "admin1": "Smolensk Oblast"
+ },
+ "Tambov|52.72|41.45": {
+  "found": true,
+  "lat": 52.736,
+  "lon": 41.441,
+  "pop": 293661,
+  "geoname": 484646,
+  "admin1": "Tambov Oblast"
+ },
+ "Tver|56.86|35.9": {
+  "found": true,
+  "lat": 56.858,
+  "lon": 35.901,
+  "pop": 420065,
+  "geoname": 480060,
+  "admin1": "Tver Oblast"
+ },
+ "Tula|54.19|37.62": {
+  "found": true,
+  "lat": 54.196,
+  "lon": 37.618,
+  "pop": 482873,
+  "geoname": 480562,
+  "admin1": "Tula Oblast"
+ },
+ "Yaroslavl|57.63|39.87": {
+  "found": true,
+  "lat": 57.63,
+  "lon": 39.874,
+  "pop": 608722,
+  "geoname": 468902,
+  "admin1": "Yaroslavl Oblast"
+ },
+ "Rybinsk|58.05|38.84": {
+  "found": true,
+  "lat": 58.046,
+  "lon": 38.838,
+  "pop": 216724,
+  "geoname": 500004,
+  "admin1": "Yaroslavl Oblast"
+ },
+ "Astrakhan|46.35|48.04": {
+  "found": true,
+  "lat": 46.35,
+  "lon": 48.041,
+  "pop": 533925,
+  "geoname": 580497,
+  "admin1": "Astrakhan Oblast"
+ },
+ "Volgograd|48.71|44.51": {
+  "found": true,
+  "lat": 48.714,
+  "lon": 44.498,
+  "pop": 1013533,
+  "geoname": 472757,
+  "admin1": "Volgograd Oblast"
+ },
+ "Volzhskiy|48.79|44.78": {
+  "found": false,
+  "lat": 48.79,
+  "lon": 44.78,
+  "pop": 0,
+  "geoname": null,
+  "admin1": ""
+ },
+ "Makhachkala|42.98|47.5": {
+  "found": true,
+  "lat": 42.978,
+  "lon": 47.5,
+  "pop": 596356,
+  "geoname": 532096,
+  "admin1": "Dagestan"
+ },
+ "Derbent|42.06|48.29": {
+  "found": true,
+  "lat": 42.066,
+  "lon": 48.288,
+  "pop": 105965,
+  "geoname": 566532,
+  "admin1": "Dagestan"
+ },
+ "Elista|46.31|44.26": {
+  "found": true,
+  "lat": 46.308,
+  "lon": 44.255,
+  "pop": 106971,
+  "geoname": 563514,
+  "admin1": "Kalmykiya Republic"
+ },
+ "Cherkessk|44.22|42.06": {
+  "found": true,
+  "lat": 44.224,
+  "lon": 42.046,
+  "pop": 122395,
+  "geoname": 569154,
+  "admin1": "Karachayevo-Cherkesiya Republic"
+ },
+ "Nalchik|43.49|43.62": {
+  "found": true,
+  "lat": 43.498,
+  "lon": 43.619,
+  "pop": 239300,
+  "geoname": 523523,
+  "admin1": "Kabardino-Balkariya Republic"
+ },
+ "Simferopol|44.95|34.1": {
+  "found": true,
+  "lat": 44.957,
+  "lon": 34.111,
+  "pop": 336460,
+  "geoname": 693805,
+  "admin1": "Crimea"
+ },
+ "Kerch|45.36|36.47": {
+  "found": true,
+  "lat": 45.357,
+  "lon": 36.475,
+  "pop": 148932,
+  "geoname": 706524,
+  "admin1": "Crimea"
+ },
+ "Sevastopol|44.62|33.52": {
+  "found": true,
+  "lat": 44.608,
+  "lon": 33.521,
+  "pop": 547820,
+  "geoname": 694423,
+  "admin1": "Sevastopol City"
+ },
+ "Krasnodar|45.04|38.98": {
+  "found": true,
+  "lat": 45.045,
+  "lon": 38.982,
+  "pop": 899541,
+  "geoname": 542420,
+  "admin1": "Krasnodar Krai"
+ },
+ "Sochi|43.6|39.73": {
+  "found": true,
+  "lat": 43.597,
+  "lon": 39.725,
+  "pop": 327608,
+  "geoname": 491422,
+  "admin1": "Krasnodar Krai"
+ },
+ "Novorossiysk|44.72|37.77": {
+  "found": true,
+  "lat": 44.732,
+  "lon": 37.762,
+  "pop": 241856,
+  "geoname": 518255,
+  "admin1": "Krasnodar Krai"
+ },
+ "Rostov-on-Don|47.23|39.72": {
+  "found": true,
+  "lat": 47.22,
+  "lon": 39.708,
+  "pop": 1130305,
+  "geoname": 501175,
+  "admin1": "Rostov Oblast"
+ },
+ "Taganrog|47.21|38.94": {
+  "found": true,
+  "lat": 47.236,
+  "lon": 38.905,
+  "pop": 279056,
+  "geoname": 484907,
+  "admin1": "Rostov Oblast"
+ },
+ "Vladikavkaz|43.02|44.68": {
+  "found": true,
+  "lat": 43.041,
+  "lon": 44.67,
+  "pop": 306258,
+  "geoname": 473249,
+  "admin1": "North Ossetia–Alania"
+ },
+ "Stavropol|45.04|41.97": {
+  "found": true,
+  "lat": 45.034,
+  "lon": 41.964,
+  "pop": 433931,
+  "geoname": 487846,
+  "admin1": "Stavropol Kray"
+ },
+ "Pyatigorsk|44.04|43.06": {
+  "found": true,
+  "lat": 44.05,
+  "lon": 43.05,
+  "pop": 142865,
+  "geoname": 503550,
+  "admin1": "Stavropol Kray"
+ },
+ "Grozny|43.32|45.69": {
+  "found": true,
+  "lat": 43.312,
+  "lon": 45.689,
+  "pop": 297137,
+  "geoname": 558418,
+  "admin1": "Chechnya"
+ },
+ "Nazran|43.23|44.77": {
+  "found": true,
+  "lat": 43.226,
+  "lon": 44.773,
+  "pop": 164131,
+  "geoname": 523064,
+  "admin1": "Ingushetiya Republic"
+ },
+ "Saint Petersburg|59.94|30.31": {
+  "found": true,
+  "lat": 59.939,
+  "lon": 30.314,
+  "pop": 5351935,
+  "geoname": 498817,
+  "admin1": "St.-Petersburg"
+ },
+ "Gatchina|59.57|30.13": {
+  "found": true,
+  "lat": 59.576,
+  "lon": 30.128,
+  "pop": 89761,
+  "geoname": 561887,
+  "admin1": "Leningradskaya Oblast'"
+ },
+ "Murmansk|68.97|33.09": {
+  "found": true,
+  "lat": 68.968,
+  "lon": 33.099,
+  "pop": 295374,
+  "geoname": 524305,
+  "admin1": "Murmansk"
+ },
+ "Veliky Novgorod|58.52|31.27": {
+  "found": false,
+  "lat": 58.52,
+  "lon": 31.27,
+  "pop": 0,
+  "geoname": null,
+  "admin1": ""
+ },
+ "Pskov|57.82|28.33": {
+  "found": true,
+  "lat": 57.819,
+  "lon": 28.332,
+  "pop": 210501,
+  "geoname": 504341,
+  "admin1": "Pskov Oblast"
+ },
+ "Petrozavodsk|61.79|34.39": {
+  "found": true,
+  "lat": 61.785,
+  "lon": 34.347,
+  "pop": 279190,
+  "geoname": 509820,
+  "admin1": "Republic of Karelia"
+ },
+ "Arkhangelsk|64.54|40.54": {
+  "found": true,
+  "lat": 64.546,
+  "lon": 40.552,
+  "pop": 349742,
+  "geoname": 581049,
+  "admin1": "Arkhangelskaya oblast"
+ },
+ "Severodvinsk|64.56|39.83": {
+  "found": true,
+  "lat": 64.558,
+  "lon": 39.83,
+  "pop": 194292,
+  "geoname": 496285,
+  "admin1": "Arkhangelskaya oblast"
+ },
+ "Syktyvkar|61.67|50.81": {
+  "found": true,
+  "lat": 61.664,
+  "lon": 50.816,
+  "pop": 245083,
+  "geoname": 485239,
+  "admin1": "Komi"
+ },
+ "Ukhta|63.56|53.68": {
+  "found": true,
+  "lat": 63.569,
+  "lon": 53.691,
+  "pop": 102187,
+  "geoname": 479411,
+  "admin1": "Komi"
+ },
+ "Kaliningrad|54.71|20.51": {
+  "found": true,
+  "lat": 54.706,
+  "lon": 20.511,
+  "pop": 475056,
+  "geoname": 554234,
+  "admin1": "Kaliningrad Oblast"
+ },
+ "Nizhniy Novgorod|56.33|44.0": {
+  "found": true,
+  "lat": 56.329,
+  "lon": 44.002,
+  "pop": 1259013,
+  "geoname": 520555,
+  "admin1": "Nizhny Novgorod Oblast"
+ },
+ "Dzerzhinsk|56.24|43.46": {
+  "found": true,
+  "lat": 56.244,
+  "lon": 43.455,
+  "pop": 233126,
+  "geoname": 563708,
+  "admin1": "Nizhny Novgorod Oblast"
+ },
+ "Yoshkar-Ola|56.63|47.89": {
+  "found": true,
+  "lat": 56.639,
+  "lon": 47.891,
+  "pop": 268272,
+  "geoname": 466806,
+  "admin1": "Mariy-El Republic"
+ },
+ "Saransk|54.18|45.18": {
+  "found": true,
+  "lat": 54.185,
+  "lon": 45.172,
+  "pop": 318841,
+  "geoname": 498698,
+  "admin1": "Mordoviya Republic"
+ },
+ "Penza|53.2|45.0": {
+  "found": true,
+  "lat": 53.196,
+  "lon": 45.011,
+  "pop": 523553,
+  "geoname": 511565,
+  "admin1": "Penza Oblast"
+ },
+ "Samara|53.2|50.15": {
+  "found": true,
+  "lat": 53.208,
+  "lon": 50.136,
+  "pop": 1163399,
+  "geoname": 499099,
+  "admin1": "Samara Oblast"
+ },
+ "Tolyatti|53.51|49.42": {
+  "found": true,
+  "lat": 53.53,
+  "lon": 49.346,
+  "pop": 702879,
+  "geoname": 482283,
+  "admin1": "Samara Oblast"
+ },
+ "Saratov|51.54|46.01": {
+  "found": true,
+  "lat": 51.54,
+  "lon": 45.99,
+  "pop": 844858,
+  "geoname": 498677,
+  "admin1": "Saratov Oblast"
+ },
+ "Engels|51.48|46.12": {
+  "found": true,
+  "lat": 51.484,
+  "lon": 46.105,
+  "pop": 196011,
+  "geoname": 563464,
+  "admin1": "Saratov Oblast"
+ },
+ "Kazan|55.79|49.12": {
+  "found": true,
+  "lat": 55.789,
+  "lon": 49.122,
+  "pop": 1243500,
+  "geoname": 551487,
+  "admin1": "Tatarstan Republic"
+ },
+ "Naberezhnyye Chelny|55.74|52.41": {
+  "found": true,
+  "lat": 55.737,
+  "lon": 52.42,
+  "pop": 509870,
+  "geoname": 523750,
+  "admin1": "Tatarstan Republic"
+ },
+ "Ulyanovsk|54.32|48.39": {
+  "found": true,
+  "lat": 54.328,
+  "lon": 48.387,
+  "pop": 626540,
+  "geoname": 479123,
+  "admin1": "Ulyanovsk Oblast"
+ },
+ "Cheboksary|56.13|47.25": {
+  "found": true,
+  "lat": 56.132,
+  "lon": 47.246,
+  "pop": 492331,
+  "geoname": 569696,
+  "admin1": "Chuvash Republic"
+ },
+ "Ufa|54.74|55.97": {
+  "found": true,
+  "lat": 54.743,
+  "lon": 55.968,
+  "pop": 1120547,
+  "geoname": 479561,
+  "admin1": "Bashkortostan Republic"
+ },
+ "Sterlitamak|53.63|55.95": {
+  "found": true,
+  "lat": 53.638,
+  "lon": 55.953,
+  "pop": 267231,
+  "geoname": 487495,
+  "admin1": "Bashkortostan Republic"
+ },
+ "Kirov|58.6|49.66": {
+  "found": true,
+  "lat": 58.598,
+  "lon": 49.658,
+  "pop": 507155,
+  "geoname": 548408,
+  "admin1": "Kirov Oblast"
+ },
+ "Kurgan|55.44|65.34": {
+  "found": true,
+  "lat": 55.449,
+  "lon": 65.343,
+  "pop": 309285,
+  "geoname": 1501321,
+  "admin1": "Kurgan Oblast"
+ },
+ "Orenburg|51.77|55.1": {
+  "found": true,
+  "lat": 51.767,
+  "lon": 55.099,
+  "pop": 564773,
+  "geoname": 515003,
+  "admin1": "Orenburg Oblast"
+ },
+ "Orsk|51.2|58.57": {
+  "found": true,
+  "lat": 51.232,
+  "lon": 58.488,
+  "pop": 246836,
+  "geoname": 514734,
+  "admin1": "Orenburg Oblast"
+ },
+ "Perm|58.01|56.25": {
+  "found": true,
+  "lat": 58.01,
+  "lon": 56.25,
+  "pop": 982419,
+  "geoname": 511196,
+  "admin1": "Perm Krai"
+ },
+ "Yekaterinburg|56.84|60.6": {
+  "found": true,
+  "lat": 56.857,
+  "lon": 60.615,
+  "pop": 1495066,
+  "geoname": 1486209,
+  "admin1": "Sverdlovsk Oblast"
+ },
+ "Nizhniy Tagil|57.92|59.96": {
+  "found": true,
+  "lat": 58.04,
+  "lon": 60.396,
+  "pop": 9508,
+  "geoname": 1538640,
+  "admin1": "Sverdlovsk Oblast"
+ },
+ "Tyumen|57.15|65.53": {
+  "found": true,
+  "lat": 57.152,
+  "lon": 65.527,
+  "pop": 768358,
+  "geoname": 1488754,
+  "admin1": "Tyumen Oblast"
+ },
+ "Surgut|61.25|73.4": {
+  "found": true,
+  "lat": 61.258,
+  "lon": 73.418,
+  "pop": 300367,
+  "geoname": 1490624,
+  "admin1": "Khanty-Mansia"
+ },
+ "Nizhnevartovsk|60.93|76.57": {
+  "found": true,
+  "lat": 60.934,
+  "lon": 76.553,
+  "pop": 244937,
+  "geoname": 1497543,
+  "admin1": "Khanty-Mansia"
+ },
+ "Izhevsk|56.85|53.2": {
+  "found": true,
+  "lat": 56.852,
+  "lon": 53.199,
+  "pop": 648213,
+  "geoname": 554840,
+  "admin1": "Udmurtiya Republic"
+ },
+ "Chelyabinsk|55.15|61.43": {
+  "found": true,
+  "lat": 55.161,
+  "lon": 61.429,
+  "pop": 1202371,
+  "geoname": 1508291,
+  "admin1": "Chelyabinsk Oblast"
+ },
+ "Magnitogorsk|53.42|59.05": {
+  "found": true,
+  "lat": 53.398,
+  "lon": 59.007,
+  "pop": 413351,
+  "geoname": 532288,
+  "admin1": "Chelyabinsk Oblast"
+ },
+ "Barnaul|53.36|83.76": {
+  "found": true,
+  "lat": 53.362,
+  "lon": 83.728,
+  "pop": 632372,
+  "geoname": 1510853,
+  "admin1": "Altai Krai"
+ },
+ "Biysk|52.54|85.21": {
+  "found": true,
+  "lat": 52.534,
+  "lon": 85.197,
+  "pop": 215430,
+  "geoname": 1510018,
+  "admin1": "Altai Krai"
+ },
+ "Gorno-Altaysk|51.96|85.96": {
+  "found": true,
+  "lat": 51.961,
+  "lon": 85.919,
+  "pop": 63214,
+  "geoname": 1506271,
+  "admin1": "Altai Republic"
+ },
+ "Ulan-Ude|51.83|107.61": {
+  "found": true,
+  "lat": 51.826,
+  "lon": 107.6,
+  "pop": 360278,
+  "geoname": 2014407,
+  "admin1": "Buryatiya Republic"
+ },
+ "Irkutsk|52.3|104.3": {
+  "found": true,
+  "lat": 52.296,
+  "lon": 104.291,
+  "pop": 623869,
+  "geoname": 2023469,
+  "admin1": "Irkutsk Oblast"
+ },
+ "Bratsk|56.15|101.63": {
+  "found": true,
+  "lat": 56.133,
+  "lon": 101.614,
+  "pop": 256600,
+  "geoname": 2051523,
+  "admin1": "Irkutsk Oblast"
+ },
+ "Angarsk|52.54|103.89": {
+  "found": true,
+  "lat": 52.56,
+  "lon": 103.914,
+  "pop": 243158,
+  "geoname": 2027667,
+  "admin1": "Irkutsk Oblast"
+ },
+ "Novokuznetsk|53.76|87.12": {
+  "found": true,
+  "lat": 53.758,
+  "lon": 87.136,
+  "pop": 539616,
+  "geoname": 1496990,
+  "admin1": "Kemerovo Oblast"
+ },
+ "Kemerovo|55.35|86.09": {
+  "found": true,
+  "lat": 55.354,
+  "lon": 86.104,
+  "pop": 558973,
+  "geoname": 1503901,
+  "admin1": "Kemerovo Oblast"
+ },
+ "Krasnoyarsk|56.01|92.85": {
+  "found": true,
+  "lat": 56.037,
+  "lon": 92.931,
+  "pop": 1090811,
+  "geoname": 1502026,
+  "admin1": "Krasnoyarsk Krai"
+ },
+ "Achinsk|56.27|90.5": {
+  "found": true,
+  "lat": 56.268,
+  "lon": 90.501,
+  "pop": 117634,
+  "geoname": 1512165,
+  "admin1": "Krasnoyarsk Krai"
+ },
+ "Novosibirsk|55.04|82.93": {
+  "found": true,
+  "lat": 55.023,
+  "lon": 82.932,
+  "pop": 1612833,
+  "geoname": 1496747,
+  "admin1": "Novosibirsk Oblast"
+ },
+ "Omsk|54.99|73.37": {
+  "found": true,
+  "lat": 54.992,
+  "lon": 73.369,
+  "pop": 1172070,
+  "geoname": 1496153,
+  "admin1": "Omsk Oblast"
+ },
+ "Tomsk|56.5|84.97": {
+  "found": true,
+  "lat": 56.5,
+  "lon": 84.982,
+  "pop": 574002,
+  "geoname": 1489425,
+  "admin1": "Tomsk Oblast"
+ },
+ "Kyzyl|51.72|94.43": {
+  "found": true,
+  "lat": 51.711,
+  "lon": 94.438,
+  "pop": 116983,
+  "geoname": 1500973,
+  "admin1": "Republic of Tyva"
+ },
+ "Abakan|53.72|91.43": {
+  "found": true,
+  "lat": 53.715,
+  "lon": 91.426,
+  "pop": 184168,
+  "geoname": 1512236,
+  "admin1": "Khakasiya Republic"
+ },
+ "Chita|52.03|113.5": {
+  "found": true,
+  "lat": 52.043,
+  "lon": 113.492,
+  "pop": 349005,
+  "geoname": 2025339,
+  "admin1": "Zabaykalskiy (Transbaikal) Kray"
+ },
+ "Blagoveshchensk|50.28|127.54": {
+  "found": true,
+  "lat": 50.276,
+  "lon": 127.526,
+  "pop": 225091,
+  "geoname": 2026609,
+  "admin1": "Amur Oblast"
+ },
+ "Vladivostok|43.12|131.89": {
+  "found": true,
+  "lat": 43.106,
+  "lon": 131.874,
+  "pop": 604901,
+  "geoname": 2013348,
+  "admin1": "Primorskiy (Maritime) Kray"
+ },
+ "Ussuriysk|43.8|131.95": {
+  "found": true,
+  "lat": 43.805,
+  "lon": 131.957,
+  "pop": 157068,
+  "geoname": 2014006,
+  "admin1": "Primorskiy (Maritime) Kray"
+ },
+ "Khabarovsk|48.48|135.08": {
+  "found": true,
+  "lat": 48.462,
+  "lon": 135.097,
+  "pop": 618150,
+  "geoname": 2022890,
+  "admin1": "Khabarovsk"
+ },
+ "Komsomolsk-on-Amur|50.55|137.0": {
+  "found": true,
+  "lat": 50.55,
+  "lon": 137.01,
+  "pop": 275908,
+  "geoname": 2021851,
+  "admin1": "Khabarovsk"
+ },
+ "Birobidzhan|48.79|132.92": {
+  "found": true,
+  "lat": 48.793,
+  "lon": 132.92,
+  "pop": 73623,
+  "geoname": 2026643,
+  "admin1": "Jewish Autonomous Oblast"
+ },
+ "Neryungri|56.66|124.72": {
+  "found": true,
+  "lat": 56.658,
+  "lon": 124.725,
+  "pop": 66320,
+  "geoname": 2019309,
+  "admin1": "Sakha"
+ },
+ "Vienna|48.21|16.37": {
+  "found": true,
+  "lat": 48.208,
+  "lon": 16.372,
+  "pop": 1691468,
+  "geoname": 2761369,
+  "admin1": "State of Vienna"
+ },
+ "Graz|47.07|15.44": {
+  "found": true,
+  "lat": 47.067,
+  "lon": 15.442,
+  "pop": 303270,
+  "geoname": 2778067,
+  "admin1": "Styria"
+ },
+ "Brussels|50.85|4.35": {
+  "found": true,
+  "lat": 50.85,
+  "lon": 4.349,
+  "pop": 1019022,
+  "geoname": 2800866,
+  "admin1": "Brussels Capital"
+ },
+ "Antwerp|51.22|4.4": {
+  "found": true,
+  "lat": 51.22,
+  "lon": 4.4,
+  "pop": 529247,
+  "geoname": 2803138,
+  "admin1": "Flanders"
+ },
+ "Sofia|42.7|23.32": {
+  "found": true,
+  "lat": 42.698,
+  "lon": 23.324,
+  "pop": 1152556,
+  "geoname": 727011,
+  "admin1": "Sofia-Capital"
+ },
+ "Plovdiv|42.14|24.75": {
+  "found": true,
+  "lat": 42.154,
+  "lon": 24.75,
+  "pop": 329489,
+  "geoname": 728193,
+  "admin1": "Plovdiv"
+ },
+ "Zurich|47.37|8.54": {
+  "found": true,
+  "lat": 47.367,
+  "lon": 8.55,
+  "pop": 415367,
+  "geoname": 2657896,
+  "admin1": "Canton of Zurich"
+ },
+ "Geneva|46.2|6.14": {
+  "found": true,
+  "lat": 46.202,
+  "lon": 6.146,
+  "pop": 201741,
+  "geoname": 2660646,
+  "admin1": "Canton of Geneva"
+ },
+ "Prague|50.08|14.44": {
+  "found": true,
+  "lat": 50.088,
+  "lon": 14.421,
+  "pop": 1165581,
+  "geoname": 3067696,
+  "admin1": "Prague"
+ },
+ "Brno|49.2|16.61": {
+  "found": true,
+  "lat": 49.195,
+  "lon": 16.608,
+  "pop": 404296,
+  "geoname": 3078610,
+  "admin1": "South Moravian"
+ },
+ "Berlin|52.52|13.4": {
+  "found": true,
+  "lat": 52.524,
+  "lon": 13.411,
+  "pop": 3426354,
+  "geoname": 2950159,
+  "admin1": "State of Berlin"
+ },
+ "Hamburg|53.55|9.99": {
+  "found": true,
+  "lat": 53.551,
+  "lon": 9.993,
+  "pop": 1973896,
+  "geoname": 2911298,
+  "admin1": "Free and Hanseatic City of Hamburg"
+ },
+ "Leipzig|51.34|12.37": {
+  "found": true,
+  "lat": 51.34,
+  "lon": 12.371,
+  "pop": 504971,
+  "geoname": 2879139,
+  "admin1": "Saxony"
+ },
+ "Cologne|50.94|6.96": {
+  "found": true,
+  "lat": 50.933,
+  "lon": 6.95,
+  "pop": 1024621,
+  "geoname": 2886242,
+  "admin1": "North Rhine-Westphalia"
+ },
+ "Dortmund|51.51|7.47": {
+  "found": true,
+  "lat": 51.515,
+  "lon": 7.466,
+  "pop": 588462,
+  "geoname": 2935517,
+  "admin1": "North Rhine-Westphalia"
+ },
+ "Dusseldorf|51.23|6.78": {
+  "found": true,
+  "lat": 51.223,
+  "lon": 6.779,
+  "pop": 618685,
+  "geoname": 2934246,
+  "admin1": "North Rhine-Westphalia"
+ },
+ "Munich|48.14|11.58": {
+  "found": true,
+  "lat": 48.137,
+  "lon": 11.575,
+  "pop": 1505005,
+  "geoname": 2867714,
+  "admin1": "Bavaria"
+ },
+ "Hannover|52.37|9.74": {
+  "found": true,
+  "lat": 52.371,
+  "lon": 9.733,
+  "pop": 515140,
+  "geoname": 2910831,
+  "admin1": "Lower Saxony"
+ },
+ "Nuremberg|49.45|11.08": {
+  "found": true,
+  "lat": 49.454,
+  "lon": 11.078,
+  "pop": 515543,
+  "geoname": 2861650,
+  "admin1": "Bavaria"
+ },
+ "Stuttgart|48.78|9.18": {
+  "found": true,
+  "lat": 48.782,
+  "lon": 9.177,
+  "pop": 612663,
+  "geoname": 2825297,
+  "admin1": "Baden-Wurttemberg"
+ },
+ "Karlsruhe|49.01|8.4": {
+  "found": true,
+  "lat": 49.009,
+  "lon": 8.404,
+  "pop": 283799,
+  "geoname": 2892794,
+  "admin1": "Baden-Wurttemberg"
+ },
+ "Aarhus|56.16|10.2": {
+  "found": true,
+  "lat": 56.157,
+  "lon": 10.211,
+  "pop": 285273,
+  "geoname": 2624652,
+  "admin1": "Central Jutland"
+ },
+ "Aalborg|57.05|9.92": {
+  "found": true,
+  "lat": 57.048,
+  "lon": 9.919,
+  "pop": 142937,
+  "geoname": 2624886,
+  "admin1": "North Denmark"
+ },
+ "Odense|55.4|10.39": {
+  "found": true,
+  "lat": 55.396,
+  "lon": 10.388,
+  "pop": 180863,
+  "geoname": 2615876,
+  "admin1": "South Denmark"
+ },
+ "Copenhagen|55.68|12.57": {
+  "found": true,
+  "lat": 55.676,
+  "lon": 12.566,
+  "pop": 1153615,
+  "geoname": 2618425,
+  "admin1": "Capital Region"
+ },
+ "Roskilde|55.64|12.08": {
+  "found": true,
+  "lat": 55.642,
+  "lon": 12.08,
+  "pop": 51916,
+  "geoname": 2614481,
+  "admin1": "Zealand"
+ },
+ "Tallinn|59.44|24.75": {
+  "found": true,
+  "lat": 59.437,
+  "lon": 24.754,
+  "pop": 394024,
+  "geoname": 588409,
+  "admin1": "Harju"
+ },
+ "Madrid|40.42|-3.7": {
+  "found": true,
+  "lat": 40.416,
+  "lon": -3.703,
+  "pop": 3255944,
+  "geoname": 3117735,
+  "admin1": "Madrid"
+ },
+ "Barcelona|41.39|2.16": {
+  "found": true,
+  "lat": 41.389,
+  "lon": 2.159,
+  "pop": 1686208,
+  "geoname": 3128760,
+  "admin1": "Catalonia"
+ },
+ "Valencia|39.47|-0.38": {
+  "found": true,
+  "lat": 39.474,
+  "lon": -0.38,
+  "pop": 824340,
+  "geoname": 2509954,
+  "admin1": "Valencia"
+ },
+ "Helsinki|60.17|24.94": {
+  "found": true,
+  "lat": 60.17,
+  "lon": 24.935,
+  "pop": 658864,
+  "geoname": 658225,
+  "admin1": "Uusimaa"
+ },
+ "Tampere|61.5|23.76": {
+  "found": true,
+  "lat": 61.499,
+  "lon": 23.787,
+  "pop": 260646,
+  "geoname": 634963,
+  "admin1": "Pirkanmaa"
+ },
+ "Lyon|45.76|4.84": {
+  "found": true,
+  "lat": 45.749,
+  "lon": 4.848,
+  "pop": 520774,
+  "geoname": 2996944,
+  "admin1": "Auvergne-Rhône-Alpes"
+ },
+ "Grenoble|45.19|5.72": {
+  "found": true,
+  "lat": 45.179,
+  "lon": 5.715,
+  "pop": 158552,
+  "geoname": 3014728,
+  "admin1": "Auvergne-Rhône-Alpes"
+ },
+ "Dijon|47.32|5.04": {
+  "found": true,
+  "lat": 47.313,
+  "lon": 5.014,
+  "pop": 159941,
+  "geoname": 3021372,
+  "admin1": "Bourgogne-Franche-Comté"
+ },
+ "Besancon|47.24|6.02": {
+  "found": true,
+  "lat": 47.249,
+  "lon": 6.018,
+  "pop": 128426,
+  "geoname": 3033123,
+  "admin1": "Bourgogne-Franche-Comté"
+ },
+ "Rennes|48.11|-1.68": {
+  "found": true,
+  "lat": 48.111,
+  "lon": -1.674,
+  "pop": 227830,
+  "geoname": 2983990,
+  "admin1": "Brittany Region"
+ },
+ "Brest|48.39|-4.49": {
+  "found": true,
+  "lat": 48.39,
+  "lon": -4.486,
+  "pop": 144899,
+  "geoname": 3030300,
+  "admin1": "Brittany Region"
+ },
+ "Orleans|47.9|1.91": {
+  "found": true,
+  "lat": 47.902,
+  "lon": 1.904,
+  "pop": 116344,
+  "geoname": 2989317,
+  "admin1": "Centre-Val de Loire"
+ },
+ "Tours|47.39|0.69": {
+  "found": true,
+  "lat": 47.395,
+  "lon": 0.704,
+  "pop": 141621,
+  "geoname": 2972191,
+  "admin1": "Centre-Val de Loire"
+ },
+ "Strasbourg|48.58|7.75": {
+  "found": true,
+  "lat": 48.584,
+  "lon": 7.746,
+  "pop": 274845,
+  "geoname": 2973783,
+  "admin1": "Grand Est"
+ },
+ "Reims|49.26|4.03": {
+  "found": true,
+  "lat": 49.265,
+  "lon": 4.029,
+  "pop": 196565,
+  "geoname": 2984114,
+  "admin1": "Grand Est"
+ },
+ "Metz|49.12|6.18": {
+  "found": true,
+  "lat": 49.119,
+  "lon": 6.173,
+  "pop": 123914,
+  "geoname": 2994160,
+  "admin1": "Grand Est"
+ },
+ "Lille|50.63|3.06": {
+  "found": true,
+  "lat": 50.634,
+  "lon": 3.055,
+  "pop": 238695,
+  "geoname": 2998324,
+  "admin1": "Hauts-de-France"
+ },
+ "Amiens|49.89|2.3": {
+  "found": true,
+  "lat": 49.9,
+  "lon": 2.3,
+  "pop": 143086,
+  "geoname": 3037854,
+  "admin1": "Hauts-de-France"
+ },
+ "Rouen|49.44|1.1": {
+  "found": true,
+  "lat": 49.443,
+  "lon": 1.099,
+  "pop": 116331,
+  "geoname": 2982652,
+  "admin1": "Normandy"
+ },
+ "Caen|49.18|-0.37": {
+  "found": true,
+  "lat": 49.186,
+  "lon": -0.359,
+  "pop": 110624,
+  "geoname": 3029241,
+  "admin1": "Normandy"
+ },
+ "Bordeaux|44.84|-0.58": {
+  "found": true,
+  "lat": 44.841,
+  "lon": -0.58,
+  "pop": 265328,
+  "geoname": 3031582,
+  "admin1": "New Aquitaine"
+ },
+ "Limoges|45.83|1.26": {
+  "found": true,
+  "lat": 45.834,
+  "lon": 1.248,
+  "pop": 141176,
+  "geoname": 2998286,
+  "admin1": "New Aquitaine"
+ },
+ "Toulouse|43.6|1.44": {
+  "found": true,
+  "lat": 43.604,
+  "lon": 1.444,
+  "pop": 511684,
+  "geoname": 2972315,
+  "admin1": "Occitanie"
+ },
+ "Montpellier|43.61|3.88": {
+  "found": true,
+  "lat": 43.611,
+  "lon": 3.876,
+  "pop": 248252,
+  "geoname": 2992166,
+  "admin1": "Occitanie"
+ },
+ "Nantes|47.22|-1.55": {
+  "found": true,
+  "lat": 47.217,
+  "lon": -1.553,
+  "pop": 325070,
+  "geoname": 2990969,
+  "admin1": "Pays de la Loire Region"
+ },
+ "Angers|47.47|-0.55": {
+  "found": true,
+  "lat": 47.472,
+  "lon": -0.552,
+  "pop": 168279,
+  "geoname": 3037656,
+  "admin1": "Pays de la Loire Region"
+ },
+ "Marseille|43.3|5.37": {
+  "found": true,
+  "lat": 43.297,
+  "lon": 5.381,
+  "pop": 877215,
+  "geoname": 2995469,
+  "admin1": "Provence-Alpes-Côte d'Azur"
+ },
+ "Nice|43.7|7.27": {
+  "found": true,
+  "lat": 43.703,
+  "lon": 7.266,
+  "pop": 342669,
+  "geoname": 2990440,
+  "admin1": "Provence-Alpes-Côte d'Azur"
+ },
+ "Paris|48.86|2.35": {
+  "found": true,
+  "lat": 48.853,
+  "lon": 2.349,
+  "pop": 2138551,
+  "geoname": 2988507,
+  "admin1": "Île-de-France Region"
+ },
+ "Athens|37.98|23.73": {
+  "found": true,
+  "lat": 37.984,
+  "lon": 23.728,
+  "pop": 664046,
+  "geoname": 264371,
+  "admin1": "Attica"
+ },
+ "Thessaloniki|40.64|22.94": {
+  "found": true,
+  "lat": 40.641,
+  "lon": 22.935,
+  "pop": 317778,
+  "geoname": 734077,
+  "admin1": "Central Macedonia"
+ },
+ "Zagreb|45.81|15.98": {
+  "found": true,
+  "lat": 45.814,
+  "lon": 15.978,
+  "pop": 663592,
+  "geoname": 3186886,
+  "admin1": "City of Zagreb"
+ },
+ "Budapest|47.5|19.04": {
+  "found": true,
+  "lat": 47.498,
+  "lon": 19.04,
+  "pop": 1741041,
+  "geoname": 3054643,
+  "admin1": "Budapest"
+ },
+ "Dublin|53.35|-6.26": {
+  "found": true,
+  "lat": 53.333,
+  "lon": -6.249,
+  "pop": 1024027,
+  "geoname": 2964574,
+  "admin1": "Leinster"
+ },
+ "Milan|45.46|9.19": {
+  "found": true,
+  "lat": 45.464,
+  "lon": 9.19,
+  "pop": 1371498,
+  "geoname": 3173435,
+  "admin1": "Lombardy"
+ },
+ "Turin|45.07|7.69": {
+  "found": true,
+  "lat": 45.07,
+  "lon": 7.687,
+  "pop": 847287,
+  "geoname": 3165524,
+  "admin1": "Piedmont"
+ },
+ "Bologna|44.49|11.34": {
+  "found": true,
+  "lat": 44.494,
+  "lon": 11.339,
+  "pop": 394843,
+  "geoname": 3181928,
+  "admin1": "Emilia-Romagna"
+ },
+ "Florence|43.77|11.25": {
+  "found": true,
+  "lat": 43.779,
+  "lon": 11.246,
+  "pop": 367150,
+  "geoname": 3176959,
+  "admin1": "Tuscany"
+ },
+ "Ancona|43.62|13.52": {
+  "found": true,
+  "lat": 43.607,
+  "lon": 13.51,
+  "pop": 89994,
+  "geoname": 3183089,
+  "admin1": "The Marches"
+ },
+ "Rome|41.9|12.5": {
+  "found": true,
+  "lat": 41.892,
+  "lon": 12.511,
+  "pop": 2318895,
+  "geoname": 3169070,
+  "admin1": "Lazio"
+ },
+ "Naples|40.85|14.27": {
+  "found": true,
+  "lat": 40.852,
+  "lon": 14.268,
+  "pop": 909048,
+  "geoname": 3172394,
+  "admin1": "Campania"
+ },
+ "Bari|41.12|16.87": {
+  "found": true,
+  "lat": 41.121,
+  "lon": 16.87,
+  "pop": 316491,
+  "geoname": 3182351,
+  "admin1": "Apulia"
+ },
+ "Palermo|38.12|13.36": {
+  "found": true,
+  "lat": 38.117,
+  "lon": 13.364,
+  "pop": 648260,
+  "geoname": 2523920,
+  "admin1": "Sicily"
+ },
+ "Catania|37.5|15.09": {
+  "found": true,
+  "lat": 37.492,
+  "lon": 15.07,
+  "pop": 311584,
+  "geoname": 2525068,
+  "admin1": "Sicily"
+ },
+ "Cagliari|39.22|9.12": {
+  "found": true,
+  "lat": 39.231,
+  "lon": 9.119,
+  "pop": 149257,
+  "geoname": 2525473,
+  "admin1": "Sardinia"
+ },
+ "Vilnius|54.69|25.28": {
+  "found": true,
+  "lat": 54.689,
+  "lon": 25.28,
+  "pop": 542366,
+  "geoname": 593116,
+  "admin1": "Vilnius"
+ },
+ "Kaunas|54.9|23.89": {
+  "found": true,
+  "lat": 54.902,
+  "lon": 23.909,
+  "pop": 289380,
+  "geoname": 598316,
+  "admin1": "Kaunas"
+ },
+ "Luxembourg|49.61|6.13": {
+  "found": true,
+  "lat": 49.75,
+  "lon": 6.167,
+  "pop": 686970,
+  "geoname": 2960313,
+  "admin1": ""
+ },
+ "Riga|56.95|24.11": {
+  "found": true,
+  "lat": 56.946,
+  "lon": 24.106,
+  "pop": 742572,
+  "geoname": 456172,
+  "admin1": "Riga"
+ },
+ "Podgorica|42.44|19.26": {
+  "found": true,
+  "lat": 42.441,
+  "lon": 19.263,
+  "pop": 236852,
+  "geoname": 3193044,
+  "admin1": "Podgorica"
+ },
+ "Skopje|42.0|21.43": {
+  "found": true,
+  "lat": 41.996,
+  "lon": 21.431,
+  "pop": 474889,
+  "geoname": 785842,
+  "admin1": "Grad Skopje"
+ },
+ "Amsterdam|52.37|4.9": {
+  "found": true,
+  "lat": 52.374,
+  "lon": 4.89,
+  "pop": 741636,
+  "geoname": 2759794,
+  "admin1": "North Holland"
+ },
+ "Rotterdam|51.92|4.48": {
+  "found": true,
+  "lat": 51.922,
+  "lon": 4.479,
+  "pop": 868135,
+  "geoname": 2747891,
+  "admin1": "South Holland"
+ },
+ "Oslo|59.91|10.75": {
+  "found": true,
+  "lat": 59.913,
+  "lon": 10.746,
+  "pop": 1082575,
+  "geoname": 3143244,
+  "admin1": "Oslo"
+ },
+ "Drammen|59.74|10.2": {
+  "found": true,
+  "lat": 59.744,
+  "lon": 10.204,
+  "pop": 106013,
+  "geoname": 3159016,
+  "admin1": "Buskerud"
+ },
+ "Kristiansand|58.15|8.0": {
+  "found": true,
+  "lat": 58.147,
+  "lon": 7.996,
+  "pop": 117237,
+  "geoname": 3149318,
+  "admin1": "Agder"
+ },
+ "Stavanger|58.97|5.73": {
+  "found": true,
+  "lat": 58.97,
+  "lon": 5.733,
+  "pop": 151669,
+  "geoname": 3137115,
+  "admin1": "Rogaland"
+ },
+ "Trondheim|63.43|10.39": {
+  "found": true,
+  "lat": 63.43,
+  "lon": 10.395,
+  "pop": 216518,
+  "geoname": 3133880,
+  "admin1": "Trøndelag"
+ },
+ "Tromso|69.65|18.96": {
+  "found": true,
+  "lat": 69.649,
+  "lon": 18.955,
+  "pop": 41915,
+  "geoname": 3133895,
+  "admin1": "Troms"
+ },
+ "Bergen|60.39|5.32": {
+  "found": true,
+  "lat": 60.393,
+  "lon": 5.324,
+  "pop": 294029,
+  "geoname": 3161732,
+  "admin1": "Vestland"
+ },
+ "Warsaw|52.23|21.01": {
+  "found": true,
+  "lat": 52.23,
+  "lon": 21.012,
+  "pop": 1702139,
+  "geoname": 756135,
+  "admin1": "Mazovia"
+ },
+ "Krakow|50.06|19.94": {
+  "found": true,
+  "lat": 50.061,
+  "lon": 19.937,
+  "pop": 816614,
+  "geoname": 3094802,
+  "admin1": "Lesser Poland"
+ },
+ "Lodz|51.76|19.46": {
+  "found": true,
+  "lat": 51.771,
+  "lon": 19.474,
+  "pop": 639890,
+  "geoname": 3093133,
+  "admin1": "Łódź Voivodeship"
+ },
+ "Lisbon|38.72|-9.14": {
+  "found": true,
+  "lat": 38.725,
+  "lon": -9.15,
+  "pop": 517802,
+  "geoname": 2267057,
+  "admin1": "Lisbon District"
+ },
+ "Porto|41.15|-8.61": {
+  "found": true,
+  "lat": 41.148,
+  "lon": -8.611,
+  "pop": 252687,
+  "geoname": 2735943,
+  "admin1": "Porto District"
+ },
+ "Bucharest|44.43|26.1": {
+  "found": true,
+  "lat": 44.432,
+  "lon": 26.106,
+  "pop": 1877155,
+  "geoname": 683506,
+  "admin1": "Bucharest"
+ },
+ "Cluj-Napoca|46.77|23.59": {
+  "found": true,
+  "lat": 46.767,
+  "lon": 23.6,
+  "pop": 286598,
+  "geoname": 681290,
+  "admin1": "Cluj County"
+ },
+ "Belgrade|44.79|20.45": {
+  "found": true,
+  "lat": 44.804,
+  "lon": 20.465,
+  "pop": 1273651,
+  "geoname": 792680,
+  "admin1": "Central Serbia"
+ },
+ "Novi Sad|45.25|19.84": {
+  "found": true,
+  "lat": 45.252,
+  "lon": 19.837,
+  "pop": 215400,
+  "geoname": 3194360,
+  "admin1": "Vojvodina"
+ },
+ "Lulea|65.58|22.15": {
+  "found": true,
+  "lat": 65.584,
+  "lon": 22.155,
+  "pop": 77832,
+  "geoname": 604490,
+  "admin1": "Norrbotten County"
+ },
+ "Sundsvall|62.39|17.31": {
+  "found": true,
+  "lat": 62.391,
+  "lon": 17.306,
+  "pop": 57606,
+  "geoname": 2670781,
+  "admin1": "Västernorrland County"
+ },
+ "Ostersund|63.18|14.64": {
+  "found": true,
+  "lat": 63.179,
+  "lon": 14.636,
+  "pop": 49806,
+  "geoname": 2685750,
+  "admin1": "Jämtland County"
+ },
+ "Stockholm|59.33|18.07": {
+  "found": true,
+  "lat": 59.329,
+  "lon": 18.069,
+  "pop": 1515017,
+  "geoname": 2673730,
+  "admin1": "Stockholm County"
+ },
+ "Gothenburg|57.71|11.97": {
+  "found": true,
+  "lat": 57.707,
+  "lon": 11.967,
+  "pop": 608462,
+  "geoname": 2711537,
+  "admin1": "Västra Götaland County"
+ },
+ "Malmo|55.61|13.0": {
+  "found": true,
+  "lat": 55.606,
+  "lon": 13.001,
+  "pop": 362133,
+  "geoname": 2692969,
+  "admin1": "Skåne County"
+ },
+ "Ljubljana|46.06|14.51": {
+  "found": true,
+  "lat": 46.051,
+  "lon": 14.505,
+  "pop": 272220,
+  "geoname": 3196359,
+  "admin1": "Ljubljana"
+ },
+ "Bratislava|48.15|17.11": {
+  "found": true,
+  "lat": 48.148,
+  "lon": 17.107,
+  "pop": 423737,
+  "geoname": 3060972,
+  "admin1": "Bratislava Region"
+ },
+ "Kosice|48.72|21.26": {
+  "found": true,
+  "lat": 48.714,
+  "lon": 21.258,
+  "pop": 225044,
+  "geoname": 724443,
+  "admin1": "Košice Region"
+ },
+ "Volzhsky|48.79|44.78": {
+  "found": true,
+  "lat": 48.786,
+  "lon": 44.78,
+  "pop": 323293,
+  "geoname": 472231,
+  "admin1": "Volgograd Oblast"
+ },
+ "Velikiy Novgorod|58.52|31.27": {
+  "found": true,
+  "lat": 58.521,
+  "lon": 31.271,
+  "pop": 222868,
+  "geoname": 519336,
+  "admin1": "Novgorod Oblast"
+ },
+ "Nizhny Tagil|57.92|59.96": {
+  "found": true,
+  "lat": 57.919,
+  "lon": 59.965,
+  "pop": 381116,
+  "geoname": 520494,
+  "admin1": "Sverdlovsk Oblast"
+ }
+}
