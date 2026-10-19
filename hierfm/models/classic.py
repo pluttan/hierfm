@@ -56,24 +56,34 @@ class Boosting(Model):
 
     @staticmethod
     def _features(ds, i, origins, h, temp):
-        rows, ys = [], []
-        for o in origins:
-            day_mean = ds.y[o - 24:o, i].mean()
-            for k in range(h):
-                t = o + k
-                lag = ds.y[t - 168, i] if t - 168 < o else ds.y[t - 336, i]
-                tt = temp[t, i] if temp is not None else 0.0
-                rows.append((ds.index[t].hour, ds.index[t].dayofweek, tt, lag, day_mean, k))
-                ys.append(ds.y[t, i])
-        return np.array(rows, float), np.array(ys, float)
+        """All rows of all origins at once (numpy), one row per origin and lead hour."""
+        o = np.asarray(origins, int)[:, None]
+        k = np.arange(h)[None, :]
+        t = o + k                                                    # (m, h) target positions
+        lag = np.where(t - 168 < o, t - 168, t - 336)                # a week back, never past the origin
+        y = ds.y[:, i]
+        cs = np.concatenate([[0.0], np.cumsum(y)])
+        day_mean = (cs[o] - cs[o - 24]) / 24.0                       # mean of the day before the origin
+        hour = ds.index.hour.to_numpy()[t]
+        dow = ds.index.dayofweek.to_numpy()[t]
+        tt = temp[t, i] if temp is not None else np.zeros(t.shape)
+        X = np.stack([hour, dow, tt, y[lag], np.broadcast_to(day_mean, t.shape), np.broadcast_to(k, t.shape)],
+                     axis=-1).reshape(-1, 6).astype(float)
+        return X, y[t].reshape(-1)
 
     def predict_at(self, origin_pos, h, levels):
         """Boosting needs absolute positions (calendar, weather), so it is called per origin."""
+        return self.predict_many([origin_pos], h, levels)[0]
+
+    def predict_many(self, positions, h, levels):
+        """One model call per node for a whole batch of origins: per-origin calls spend their time
+        in OpenMP start-up, not in the trees (0.5 origins/s on 64 cores before this)."""
         ds = self.ds
         temp = future_temp(ds, self.params.get("temp_source", "forecast"))
-        q = np.empty((ds.h.n, h, len(levels)))
+        m = len(positions)
+        q = np.empty((m, ds.h.n, h, len(levels)))
         for i in range(ds.h.n):
-            X, _ = self._features(ds, i, [origin_pos], h, temp)
-            point = self.models[i].predict(X)
-            q[i] = point[:, None] + np.quantile(self.resid[i], levels)[None, :]
-        return np.asarray(levels), q
+            X, _ = self._features(ds, i, positions, h, temp)
+            point = self.models[i].predict(X).reshape(m, h)
+            q[:, i] = point[:, :, None] + np.quantile(self.resid[i], levels)[None, None, :]
+        return [(np.asarray(levels), q[j]) for j in range(m)]

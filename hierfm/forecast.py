@@ -66,9 +66,11 @@ def _run_model(cfg, ds, origins, spec, device, rank, world, chunk):
                 model.params["train_days"] = cfg.history_days
             model.fit(ds, ds.pos(origins[0]))
         t0 = time.time()
-        for i in range(0, len(mine), chunk):
-            _predict_chunk(cfg, ds, model, spec.key, h, mine[i:i + chunk])
-            done = min(i + chunk, len(mine))
+        # batch models (boosting) gain from big batches; GPU models keep the memory-safe chunk
+        step = 128 if hasattr(model, "predict_many") else chunk
+        for i in range(0, len(mine), step):
+            _predict_chunk(cfg, ds, model, spec.key, h, mine[i:i + step])
+            done = min(i + step, len(mine))
             rate = done / max(time.time() - t0, 1e-9)
             print(f"[rank {rank}] {spec.key} h{h} {done}/{len(mine)} · {rate:.2f} origins/s", flush=True)
 
@@ -94,7 +96,9 @@ def _predict_chunk(cfg, ds, model, name, h, chunk):
     """Several origins share one model call: their contexts are stacked into one batch."""
     n, L = ds.h.n, _context(cfg)
     pos = [ds.pos(o) for o in chunk]
-    if hasattr(model, "predict_at"):
+    if hasattr(model, "predict_many"):
+        results = model.predict_many(pos, h, cfg.quantiles)
+    elif hasattr(model, "predict_at"):
         results = [model.predict_at(p, h, cfg.quantiles) for p in pos]
     else:
         fut = data.future_temp(ds, cfg.temp_source)
