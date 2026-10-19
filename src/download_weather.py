@@ -32,6 +32,7 @@ import csv
 import datetime as dt
 import gzip
 import json
+import socket
 import sys
 import time
 import urllib.error
@@ -57,6 +58,22 @@ PREV_START = {"ecmwf_ifs025": dt.date(2024, 3, 1), "gfs_global": dt.date(2021, 5
 PREV_FROM = dt.date(2024, 10, 1)
 SEC_PER_UNIT = 0.12      # пауза на один условный вызов: около 500 в минуту
 DEFAULT_PLAN = "power:0;prev:2026,2025,2024"
+
+
+# pcomp's resolver hangs now and then (TCP to 9.9.9.9:53 stays in SYN-SENT), so each host
+# is resolved once and reused; the hosts here are a handful of API names
+_resolve = socket.getaddrinfo
+_resolved = {}
+
+
+def _cached_getaddrinfo(*args, **kw):
+    key = args + tuple(sorted(kw.items()))
+    if key not in _resolved:
+        _resolved[key] = _resolve(*args, **kw)
+    return _resolved[key]
+
+
+socket.getaddrinfo = _cached_getaddrinfo
 
 
 def log(*a):
