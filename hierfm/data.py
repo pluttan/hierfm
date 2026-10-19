@@ -5,6 +5,8 @@ A processed folder holds:
     hierarchy.json         see hierarchy.py
     temp.parquet           index ds, one column per node that has its own weather (optional)
     temp_forecast.parquet  same layout, day-ahead temperature forecast issued before each day (optional)
+    observed.parquet       index ds, bottom columns, True where the value was measured rather than
+                           filled (ATS skips weekends and holidays); missing file = all measured
 
 Aggregates are always rebuilt as sums of the bottom, so the truth is coherent by construction;
 the published upper-level series (with their own losses and metering) are kept by prepare
@@ -27,6 +29,7 @@ class Dataset:
     y: np.ndarray                  # (T, n) load of every node, top-down order
     temp: np.ndarray | None        # (T, n) temperature of every node or None
     temp_fc: np.ndarray | None     # (T, n) temperature forecast or None
+    obs: np.ndarray = None         # (T, n) True where the node value is measured; aggregates always are
 
     def pos(self, ts):
         return self.index.get_indexer([pd.Timestamp(ts)])[0]
@@ -56,6 +59,13 @@ def load(folder):
         bottom = bottom.interpolate(limit=6, limit_direction="both")
     y = h.aggregate(bottom.to_numpy())
 
+    obs = np.ones_like(y, dtype=bool)
+    if (folder / "observed.parquet").exists():
+        # aggregates come from the system operator's own metering, only the bottom has filled cells
+        o = pd.read_parquet(folder / "observed.parquet").reindex(bottom.index)[h.bottom].fillna(False)
+        cols = [h.nodes.index(b) for b in h.bottom]
+        obs[:, cols] = o.to_numpy(bool)
+
     mean_load = dict(zip(h.nodes, np.nanmean(y, 0)))
     temp = temp_fc = None
     if (folder / "temp.parquet").exists():
@@ -64,7 +74,7 @@ def load(folder):
     if (folder / "temp_forecast.parquet").exists():
         t = pd.read_parquet(folder / "temp_forecast.parquet").reindex(bottom.index)
         temp_fc = _node_frame(t, h, mean_load)
-    return Dataset(h, bottom.index, y, temp, temp_fc)
+    return Dataset(h, bottom.index, y, temp, temp_fc, obs)
 
 
 def future_temp(ds, source):
@@ -74,7 +84,13 @@ def future_temp(ds, source):
         return None
     if source == "actual":
         return ds.temp
-    return ds.temp_fc if ds.temp_fc is not None else ds.temp
+    if ds.temp_fc is None:
+        # the truth in place of a missing forecast would leak the future into the inputs
+        if not getattr(ds, "_warned_fc", False):
+            print("data: no temperature forecast in this dataset; models run without future weather", flush=True)
+            ds._warned_fc = True
+        return None
+    return ds.temp_fc
 
 
 def origins(ds, cfg):

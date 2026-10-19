@@ -9,8 +9,16 @@ from . import stats
 MAIN_WINDOW_DAYS = 28
 
 
+def table(df, fmt=".4f"):
+    """Markdown table; plain text when tabulate is missing (a small machine without the venv)."""
+    try:
+        return df.to_markdown(floatfmt=fmt)
+    except ImportError:
+        return "```\n" + df.to_string() + "\n```"
+
+
 def _md(df, path, title):
-    path.write_text(f"# {title}\n\n{df.to_markdown(floatfmt='.4f')}\n")
+    path.write_text(f"# {title}\n\n{table(df)}\n")
 
 
 def run(cfg, reference="mint_shrink", ours="prior_shrink"):
@@ -28,7 +36,8 @@ def run(cfg, reference="mint_shrink", ours="prior_shrink"):
     _md(acc.unstack("method")["mase"], out / "accuracy_by_level.md", f"MASE by level, window {window} d")
 
     # window length: the first claim of the paper, ours vs MinT-shrink at the top level
-    win = df[(df.dependence == "independent") & (df.method.isin([reference, ours, "wls_var", "bu"]))]
+    win = df[(df.dependence == "independent") & (df.method.isin([reference, ours, "wls_var", "bu",
+                                                                   "mint_shrink_neff", "prior_shrink_raw"]))]
     win = win.groupby(["model", "h", "level", "window", "method"])["mase"].mean().unstack("method")
     win.to_csv(out / "window_length.csv")
     _md(win, out / "window_length.md", "MASE by covariance window length")
@@ -44,7 +53,9 @@ def run(cfg, reference="mint_shrink", ours="prior_shrink"):
     for (model, h, lv, w), g in ind.groupby(["model", "h", "level", "window"]):
         p = g.pivot_table(index="origin", columns="method", values="crps_scaled")
         if ours in p and reference in p:
-            stat, pv = stats.diebold_mariano(p[ours], p[reference], h=max(1, h // 24))
+            # daily origins: loss differences stay autocorrelated for a few days even at h = 24,
+            # so the long-run variance takes at least 3 lags (docs/research/10-protocol.md)
+            stat, pv = stats.diebold_mariano(p[ours], p[reference], h=max(3, h // 24))
             rows.append({"model": model, "h": h, "level": lv, "window": w, "dm": stat, "p": pv,
                          "ours_better": p[ours].mean() < p[reference].mean()})
     dm = pd.DataFrame(rows)
@@ -57,6 +68,6 @@ def run(cfg, reference="mint_shrink", ours="prior_shrink"):
     for (model, h), g in ind[ind.level == 0].groupby(["model", "h"]):
         ranks, cd, ok = stats.mcb(g.pivot_table(index="origin", columns="method", values="crps_scaled"))
         lines.append(f"## {model} h{h}\n\ncritical distance {cd:.3f}; not worse than best: {', '.join(ok)}\n\n"
-                     f"{ranks.to_frame('mean rank').to_markdown(floatfmt='.3f')}\n")
+                     f"{table(ranks.to_frame('mean rank'), '.3f')}\n")
     (out / "mcb.md").write_text("# MCB, top level, CRPS\n\n" + "\n".join(lines))
     print(f"report: {out}", flush=True)

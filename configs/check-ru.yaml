@@ -1,0 +1,12 @@
+# Real-data check of the whole chain on a small machine: two weeks, seasonal naive only.
+base: configs/ru.yaml
+name: check-ru
+runs: runs/check-ru
+horizons: [24]
+test_start: "2025-10-01"
+test_end: "2025-10-14"
+windows: [7, 28]
+samples: 100
+models: [{name: snaive, params: {season: 168}}]
+methods: [base, bu, wls_var, mint_shrink, mint_shrink_neff, prior_shrink, prior_shrink_raw]
+dependence: [independent, schaake_hist, gauss_copula]

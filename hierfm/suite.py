@@ -27,6 +27,7 @@ import yaml
 
 from . import config
 from .config import ROOT
+from .report import table
 
 
 def _nest(flat):
@@ -103,7 +104,7 @@ def collect(path):
         t = g.groupby(["case", "model", "h", "level", "dependence", "method"])[["mase", "crps_scaled"] + cov_cols].mean()
         t.to_csv(root / f"summary_{exp}.csv")
         top = t.xs(0, level="level").sort_values("crps_scaled").head(15)
-        lines.append(f"## {exp}\n\nbest 15 at the top level by CRPS:\n\n{top.to_markdown(floatfmt='.4f')}\n")
+        lines.append(f"## {exp}\n\nbest 15 at the top level by CRPS:\n\n{table(top)}\n")
     (root / "summary.md").write_text("\n".join(lines))
     print(f"collect: {root / 'summary.md'}", flush=True)
 

@@ -77,7 +77,7 @@ experiments:
     share_forecasts: main
     set:
       models: [{name: chronos2, params: {}}, {name: timesfm25, params: {batch: 256}}]
-      methods: [mint_shrink, prior_shrink, prior_only]
+      methods: [mint_shrink, mint_shrink_neff, prior_shrink, prior_shrink_raw, prior_only]
       dependence: [independent, gauss_copula]
     cases:
       - {prior.kind: identity}

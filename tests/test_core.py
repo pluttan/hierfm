@@ -77,3 +77,30 @@ def test_independent_sum_is_too_narrow_and_copula_fixes_it():
         cov_ind += np.quantile(ind, .1) <= t <= np.quantile(ind, .9)
         cov_cop += np.quantile(cop, .1) <= t <= np.quantile(cop, .9)
     assert cov_ind / len(truth) < 0.72 < cov_cop / len(truth)
+
+
+def test_neff_restores_the_weight_of_autocorrelated_rows():
+    """Hourly rows of one day repeat its error: without n_eff the weight collapses toward zero."""
+    rng = np.random.default_rng(5)
+    days = rng.standard_normal((7, 4))
+    E = np.repeat(days, 24, 0) + 0.05 * rng.standard_normal((168, 4))
+    raw = cov.shrunk(E, np.eye(4))[1]
+    eff = cov.shrunk(E, np.eye(4), n_eff=7)[1]
+    assert raw < 0.1 < 0.3 < eff
+
+
+def test_collapse_single_child(tmp_path):
+    import json
+
+    import pandas as pd
+
+    from hierfm import prepare
+    nodes = [{"id": "T", "parent": None}, {"id": "A", "parent": "T"}, {"id": "A1", "parent": "A"},
+             {"id": "A2", "parent": "A"}, {"id": "B", "parent": "T"}, {"id": "B_RES", "parent": "B"}]
+    (tmp_path / "hierarchy.json").write_text(json.dumps({"levels": ["t", "m", "l"], "nodes": nodes}))
+    idx = pd.date_range("2025-01-01", periods=3, freq="h", tz="UTC")
+    pd.DataFrame({"A1": 1.0, "A2": 2.0, "B_RES": 3.0}, index=idx).to_parquet(tmp_path / "load.parquet")
+    prepare.collapse_single_children(tmp_path)
+    h = hier.load(tmp_path / "hierarchy.json")
+    assert set(h.bottom) == {"A1", "A2", "B"} and "B_RES" not in h.nodes
+    assert list(pd.read_parquet(tmp_path / "load.parquet").columns) == ["A1", "A2", "B"]

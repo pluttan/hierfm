@@ -20,8 +20,13 @@ def bottom_up(h):
     return G
 
 
-def method_matrix(method, h, E, prior_R=None):
-    """W (or G for bottom-up) for one method. E (N, n) are base forecast errors of the window.
+def method_matrix(method, h, E, prior_R=None, n_eff=None):
+    """W (or G for bottom-up) for one method. E (N, n) are base forecast errors of the window,
+    n_eff the number of forecast days behind them.
+
+    mint_shrink is the published estimator (rows taken as independent); prior_shrink is method A
+    (prior target and the n_eff correction). The two crossed variants separate the two effects:
+    mint_shrink_neff (only the correction) and prior_shrink_raw (only the prior).
 
     Returns (G or None for 'base', info dict with the shrink weight when there is one).
     """
@@ -39,11 +44,11 @@ def method_matrix(method, h, E, prior_R=None):
         return projection(S, np.diag(var)), {}
     if method == "mint_sample":
         return projection(S, np.cov(E.T) + 1e-6 * np.diag(var)), {}
-    if method == "mint_shrink":
-        W, lam = cov.shrunk(E, np.eye(h.n))
-        return projection(S, W), {"lambda": lam}
-    if method == "prior_shrink":
-        W, lam = cov.shrunk(E, prior_R)
+    shrink = {"mint_shrink": (np.eye(h.n), None), "mint_shrink_neff": (np.eye(h.n), n_eff),
+              "prior_shrink": (prior_R, n_eff), "prior_shrink_raw": (prior_R, None)}
+    if method in shrink:
+        target, ne = shrink[method]
+        W, lam = cov.shrunk(E, target, ne)
         return projection(S, W), {"lambda": lam}
     if method == "prior_only":
         sd = np.sqrt(var)

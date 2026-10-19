@@ -1,13 +1,12 @@
 # UES of Russia: UES -> 7 IPS -> regions (data/processed/ru is built by `make data`).
-# The test period is provisional until docs/research settles on leakage and data gaps.
 name: ru
 processed: data/processed/ru
 runs: runs/ru
 horizons: [24, 168]
 context: 2048
 origin_hour: 21          # 00:00 Moscow time in UTC
-test_start: "2025-07-01"
-test_end: "2026-06-30"
+test_start: "2025-10-01"   # after the release of Chronos-2 (docs/research/README.md, 5.3)
+test_end: "2026-09-22"     # the data end on 2026-09-30, the weekly horizon needs 7 days
 windows: [7, 14, 28, 91, 365]
 samples: 200
 models:
@@ -21,7 +20,7 @@ models:
   - {name: timesfm3, label: timesfm3_temp, params: {temp: true}}
   - {name: timesfm3, label: timesfm3_joint, params: {joint: true}}
   - {name: moirai2, params: {}}
-methods: [base, bu, ols, wls_struct, wls_var, mint_shrink, prior_shrink, prior_only]
+methods: [base, bu, ols, wls_struct, wls_var, mint_shrink, mint_shrink_neff, prior_shrink, prior_shrink_raw, prior_only]
 dependence: [independent, schaake_hist, schaake_temp, schaake_err, gauss_copula]
 # official non-working holidays of Russia, scored as a separate stratum
 holidays: ["01-01", "01-02", "01-03", "01-04", "01-05", "01-06", "01-07", "01-08",

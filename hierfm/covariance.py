@@ -22,23 +22,32 @@ def _standardise(E):
     return E / sd, sd
 
 
-def shrink_weight(Z, target):
-    """Optimal weight toward a fixed correlation target, Schäfer & Strimmer (2005), eq. for target D."""
+def shrink_weight(Z, target, n_eff=None):
+    """Optimal weight toward a fixed correlation target, Schäfer & Strimmer (2005), eq. for target D.
+
+    The formula assumes independent rows. Hourly errors of one forecast day are strongly
+    autocorrelated, so a week of 168 rows carries the information of about 7 rows: with N rows
+    the estimate of Var(r_ij) is too small by N / n_eff and the weight collapses (0.05 instead
+    of about 0.7 on a 7-day window). n_eff, the number of forecast days in the window, rescales it;
+    without it the function is the published estimator, kept as the MinT-shrink baseline.
+    """
     N = len(Z)
     mean_w = Z.T @ Z / N                                   # mean of products z_ki z_kj
     mean_w2 = (Z ** 2).T @ (Z ** 2) / N                    # mean of their squares, no (N, n, n) tensor
     R = mean_w * N / (N - 1)
     var_r = (mean_w2 - mean_w ** 2) * N ** 2 / (N - 1) ** 3
+    if n_eff:
+        var_r = var_r * N / max(min(n_eff, N), 2)
     off = ~np.eye(Z.shape[1], dtype=bool)
     denom = ((R - target) ** 2)[off].sum()
     lam = var_r[off].sum() / denom if denom > 0 else 1.0
     return float(np.clip(lam, 0.0, 1.0)), R
 
 
-def shrunk(E, target_corr):
+def shrunk(E, target_corr, n_eff=None):
     """E (N, n) errors -> covariance shrunk toward target_corr, and the weight used."""
     Z, sd = _standardise(E)
-    lam, R = shrink_weight(Z, target_corr)
+    lam, R = shrink_weight(Z, target_corr, n_eff)
     C = lam * target_corr + (1 - lam) * R
     np.fill_diagonal(C, 1.0)
     return C * np.outer(sd, sd), lam

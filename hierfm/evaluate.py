@@ -33,12 +33,27 @@ def _median_index(levels):
 
 
 def _window_errors(pos, h, w):
-    """Errors of the base median over origins whose targets are already observed at `pos`."""
+    """Errors of the base median over origins whose targets are already observed at `pos`,
+    and the number of forecast days behind them (the effective sample size of method A).
+
+    Hours where some node was not measured (filled weekends of ATS) would bring the smooth fill
+    into the covariance, so only fully measured hours are kept, unless that leaves too little.
+    """
     ds, med, opos = _G["ds"], _G["med"], _G["opos"]
     sel = np.where((opos + h <= pos) & (opos >= pos - 24 * w))[0]
     if len(sel) == 0:
-        return None
-    return np.concatenate([ds.y[opos[j]:opos[j] + h] - med[j].T for j in sel])     # (N, n)
+        return None, 0
+    E = np.concatenate([ds.y[opos[j]:opos[j] + h] - med[j].T for j in sel])     # (N, n)
+    ok = np.concatenate([ds.obs[opos[j]:opos[j] + h].all(1) for j in sel])
+    days = len({int(opos[j] + i) // 24 for j in sel for i in range(h) if ds.obs[opos[j] + i].all()})
+    if ok.sum() >= max(3, len(E) // 4):
+        return E[ok], days
+    return E, len(sel)
+
+
+def _masked_mean(x, m):
+    """Mean of x over cells where m is True; NaN when nothing is measured."""
+    return float(x[m].mean()) if m.any() else np.nan
 
 
 def members(spec):
@@ -76,15 +91,16 @@ def _score_origin(k, cfg, spec, h):
     bottom_cols = [hh.nodes.index(b) for b in hh.bottom]
     levels_idx = {lv: hh.level_index(lv) for lv in range(len(hh.levels))}
 
+    obs = ds.obs[pos:pos + h]                     # scores only on measured cells (ATS skips weekends)
     rows = []
     for w in cfg.windows:
-        E = _window_errors(pos, h, w)
+        E, n_eff = _window_errors(pos, h, w)
         if E is None or len(E) < 3:
             continue
         sd_b = E[:, bottom_cols].std(0, ddof=1) + 1e-9
         prior_R = cov.full_prior(hh, rb, sd_b, cfg.prior["own"])
-        mats = {m: rec.method_matrix(m, hh, E, prior_R) for m in cfg.methods}
-        corr_a = cov.to_corr(cov.shrunk(E, prior_R)[0])
+        mats = {m: rec.method_matrix(m, hh, E, prior_R, n_eff) for m in cfg.methods}
+        corr_a = cov.to_corr(cov.shrunk(E, prior_R, n_eff)[0])
 
         for di, dep in enumerate(cfg.dependence):
             rng = np.random.default_rng([rng_base, w, di])     # str hash is salted per process
@@ -99,19 +115,25 @@ def _score_origin(k, cfg, spec, h):
                 c = metrics.crps(s, y)
                 ae = np.abs(med - y)
                 for lv, idx in levels_idx.items():
+                    mk = obs[:, idx]
+                    if not mk.any():
+                        continue
                     row = {**cfg.tags, **strata, "origin": o, "window": w, "dependence": dep, "method": m,
                            "level": lv,
-                           "crps": c[:, idx].mean(), "mae": ae[:, idx].mean(),
-                           "mase": (ae[:, idx] / scale[idx]).mean(),
-                           "crps_scaled": (c[:, idx] / scale[idx]).mean(),
-                           "lambda": info.get("lambda", np.nan), "n_err": len(E)}
+                           "crps": _masked_mean(c[:, idx], mk), "mae": _masked_mean(ae[:, idx], mk),
+                           "mase": _masked_mean(ae[:, idx] / scale[idx], mk),
+                           "crps_scaled": _masked_mean(c[:, idx] / scale[idx], mk),
+                           "measured": float(mk.mean()),
+                           "lambda": info.get("lambda", np.nan), "n_err": len(E), "n_eff": n_eff}
                     for nominal in cfg.coverage:
-                        cv, width = metrics.coverage(s[..., idx], y[:, idx], nominal)
-                        row[f"cov{int(nominal * 100)}"] = cv.mean()
-                        row[f"width{int(nominal * 100)}"] = (width / scale[idx]).mean()
-                    if len(idx) > 1:
-                        row["energy"] = metrics.energy_score(s[..., idx] / scale[idx], y[:, idx] / scale[idx])
-                        row["variogram"] = metrics.variogram_score(s[..., idx] / scale[idx], y[:, idx] / scale[idx])
+                        hit, width = metrics.coverage_cells(s[..., idx], y[:, idx], nominal)
+                        row[f"cov{int(nominal * 100)}"] = _masked_mean(hit, mk)
+                        row[f"width{int(nominal * 100)}"] = _masked_mean(width / scale[idx], mk)
+                    full = mk.all(1)                       # joint scores need every node of the level
+                    if len(idx) > 1 and full.any():
+                        sv, yv = s[:, full][..., idx] / scale[idx], y[full][:, idx] / scale[idx]
+                        row["energy"] = metrics.energy_score(sv, yv)
+                        row["variogram"] = metrics.variogram_score(sv, yv)
                     rows.append(row)
     return rows
 
