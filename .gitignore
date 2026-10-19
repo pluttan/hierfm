@@ -11,3 +11,5 @@ __pycache__/
 *.tmp.npz
 /weights/
 /runs-smoke-gpu-*.log
+/src/__pycache__/
+/src/smoke/__pycache__/
