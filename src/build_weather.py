@@ -2,7 +2,8 @@
 """Температурные файлы temp.parquet и temp_forecast.parquet для папки data/processed/<имя>.
 
 Вход: узловые ряды из download_weather.py --aggregate (UTC, градусы Цельсия)
-  DIR/node_temperature_archive.csv.gz            факт ERA5-Land
+  DIR/node_temperature_power.csv.gz              факт NASA POWER (MERRA-2), основной
+  DIR/node_temperature_archive.csv.gz            факт ERA5-Land, если POWER нет
   DIR/node_temperature_prev_ecmwf_ifs025.csv.gz  прогноз IFS 0.25 за 24 часа до часа события
 Выход: PROCESSED/temp.parquet и PROCESSED/temp_forecast.parquet.
 Формат hierfm/data.py: индекс ds (UTC, шаг час), столбец на узел, значения в градусах Цельсия.
@@ -28,6 +29,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+POWER_FILE = "node_temperature_power.csv.gz"
 ARCHIVE_FILE = "node_temperature_archive.csv.gz"
 FORECAST_FILE = "node_temperature_prev_ecmwf_ifs025.csv.gz"
 
@@ -111,6 +113,11 @@ def build_frame(path, kind, hier_ids):
     return df.reindex(full)
 
 
+def fact_file(weather):
+    """POWER covers 2018..now in one pass; ERA5-Land stays as the fallback source."""
+    return POWER_FILE if (Path(weather) / POWER_FILE).exists() else ARCHIVE_FILE
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hier", required=True, help="hierarchy.json процессной папки")
@@ -123,7 +130,7 @@ def main():
     ids = {n["id"] for n in nodes}
     kids = {n["parent"] for n in nodes if n["parent"]}
     leaves = ids - kids
-    for fname, target in ((ARCHIVE_FILE, "temp.parquet"), (FORECAST_FILE, "temp_forecast.parquet")):
+    for fname, target in ((fact_file(a.weather), "temp.parquet"), (FORECAST_FILE, "temp_forecast.parquet")):
         p = Path(a.weather) / fname
         if not p.exists():
             print("нет файла", p, "- пропуск", target)

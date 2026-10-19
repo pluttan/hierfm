@@ -80,7 +80,7 @@ def collapse_single_children(out):
 
 def _aggregate_weather(wdir):
     """Node series from city points (download_weather.py --aggregate), for every source present."""
-    for src in ("archive", "prev_ecmwf_ifs025"):
+    for src in ("power", "archive", "prev_ecmwf_ifs025"):
         if (wdir / src).is_dir():
             subprocess.run([sys.executable, "-u", str(SRC / "download_weather.py"), "--out", str(wdir),
                             "--aggregate", src], check=True)
@@ -98,13 +98,23 @@ def weather(out, kind, wdir):
     _aggregate_weather(wdir)
     ids = {n["id"] for n in json.loads((out / "hierarchy.json").read_text())["nodes"]}
     index = pd.read_parquet(out / "load.parquet").index
-    for fname, target in ((bw.ARCHIVE_FILE, "temp.parquet"), (bw.FORECAST_FILE, "temp_forecast.parquet")):
+    fact = None
+    for fname, target in ((bw.fact_file(wdir), "temp.parquet"), (bw.FORECAST_FILE, "temp_forecast.parquet")):
         p = wdir / fname
         if not p.exists():
             print(f"prepare: {target} skipped, {p.name} not aggregated yet", flush=True)
             continue
         df = bw.build_frame(p, kind, ids)
         df.index = df.index.tz_localize("UTC") if df.index.tz is None else df.index
+        if target == "temp.parquet":
+            fact = df
+        elif fact is not None:
+            # issued forecasts start 2024-10 (download_weather.PREV_FROM); before that the fact
+            # stands in, which only touches training history and analogue days, never a test day
+            first = df.dropna(how="all").index.min()
+            hist = fact.reindex(fact.index[fact.index < first]).reindex(columns=df.columns)
+            df = pd.concat([hist, df[df.index >= first]])
+            print(f"prepare: temp forecast before {first:%Y-%m-%d} taken from the fact", flush=True)
         cov = _coverage(df, index)
         if cov < MIN_TEMP_COVERAGE:
             print(f"prepare: {target} skipped, covers {cov:.0%} of the last two years "

@@ -15,7 +15,7 @@
 git clone git@github.com:pluttan/hierfm.git && cd hierfm
 make install install-models     # venv на python3.13, torch, Chronos-2, Chronos-Bolt, TimesFM 2.5 и 3.0
 make install-moirai             # по желанию: Moirai-2, см. «Ограничения»
-make download                   # сырые данные из открытых источников, часы; погода до нескольких суток
+make download                   # сырые данные из открытых источников, часы; прогноз погоды до суток
 make data                       # сырые данные -> data/processed/{ru,europe}
 make cpuinfo GPU=0              # проверка: сокет, ядра, процессы, GPU и их привязка к сокетам
 make experiment GPU=0 CPU=0     # вся программа опытов на карте 0 и процессоре 0

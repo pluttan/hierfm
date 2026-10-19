@@ -62,7 +62,8 @@ install-moirai: install-models
 # ==========================
 
 # raw data from open sources, no keys; every script skips finished files, so rerun after a break.
-# Open-Meteo allows about 10 000 calls a day: the weather script then exits with code 75,
+# weather: the fact comes from NASA POWER in minutes; the issued forecast from Open-Meteo
+# (about 10 000 calls a day) needs about a day. On the limit the script exits with code 75,
 # which is not an error here; run `make download` again the next day to continue.
 download:
 	$(PY) -u src/download_so_ups.py dict genconsum subrf subrf_z2 forecast_ips ats --start 2015
