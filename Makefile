@@ -1,6 +1,5 @@
 PYTHON ?= python3.13
 VENV   := venv
-PY     := $(VENV)/bin/python
 PIP    := $(VENV)/bin/pip
 
 CONFIG ?= configs/ru.yaml
@@ -16,13 +15,30 @@ endif
 # still lists every card of the node), otherwise all cards, otherwise one CPU process
 comma  := ,
 GPUS   ?= $(if $(CUDA_VISIBLE_DEVICES),$(words $(subst $(comma), ,$(CUDA_VISIBLE_DEVICES))),$(shell nvidia-smi -L 2>/dev/null | wc -l | awk '{print ($$1 > 0) ? $$1 : 1}'))
-# evaluation workers: one per physical core (SMT siblings add little to numpy work), two left free
-CORES  := $(shell sysctl -n hw.physicalcpu 2>/dev/null || lscpu -p=core 2>/dev/null | grep -v '^[[:punct:]]' | sort -u | wc -l)
+# CPU=0 (or 1) keeps every stage on the logical CPUs of that socket of a two-socket node;
+# CPU=all lifts the limit. A Mac has one socket and no taskset, so nothing is pinned there.
+CPU    ?= 0
+ifeq ($(shell uname),Linux)
+ifeq ($(CPU),all)
+CORES  := $(shell lscpu -p=core | grep -v '^[[:punct:]]' | sort -u | wc -l)
+PIN    :=
+else
+CPULIST := $(shell lscpu -p=cpu,socket | grep -v '^[[:punct:]]' | awk -F, '$$2 == $(CPU) {print $$1}' | paste -sd, -)
+CORES  := $(shell lscpu -p=core,socket | grep -v '^[[:punct:]]' | awk -F, '$$2 == $(CPU) {print $$1}' | sort -u | wc -l)
+PIN    := $(if $(CPULIST),taskset -c $(CPULIST))
+endif
+else
+CORES  := $(shell sysctl -n hw.physicalcpu 2>/dev/null || echo 4)
+PIN    :=
+endif
+PY     := $(PIN) $(VENV)/bin/python
+
+# evaluation workers: one per physical core of the socket (SMT siblings add little to numpy), two left free
 JOBS   ?= $(shell echo $(CORES) | awk '{print ($$1 > 3) ? $$1 - 2 : 1}')
 MODELS ?=
 
 .PHONY: all install install-models install-moirai data forecast evaluate report run suite experiment \
-        smoke smoke-suite test clean clean-runs
+        smoke smoke-suite cpuinfo test clean clean-runs
 
 all: install install-models data experiment
 
@@ -49,7 +65,7 @@ data:
 	$(PY) -m hierfm.prepare all
 
 # one card or none: a plain process; several: torchrun, one rank per card
-LAUNCH = $(if $(filter 1,$(GPUS)),$(PY),$(VENV)/bin/torchrun --standalone --nproc_per_node=$(GPUS))
+LAUNCH = $(if $(filter 1,$(GPUS)),$(PY),$(PIN) $(VENV)/bin/torchrun --standalone --nproc_per_node=$(GPUS))
 
 forecast:
 	$(LAUNCH) -m hierfm forecast --config $(CONFIG) $(if $(MODELS),--models $(MODELS))
@@ -78,6 +94,13 @@ experiment:
 # ==========================
 # ===  Checks            ===
 # ==========================
+
+# what a run will use; pick a GPU whose "CPU Affinity" in the topology lies on the chosen socket
+cpuinfo:
+	@echo "socket CPU=$(CPU) · physical cores $(CORES) · evaluation workers JOBS=$(JOBS)"
+	@echo "pinned to: $(if $(PIN),$(PIN),nothing)"
+	@echo "GPUs: $(if $(CUDA_VISIBLE_DEVICES),CUDA_VISIBLE_DEVICES=$(CUDA_VISIBLE_DEVICES),all visible) · forecast processes $(GPUS)"
+	@nvidia-smi topo -m 2>/dev/null || true
 
 smoke:
 	$(PY) -m hierfm synth --config configs/smoke.yaml
