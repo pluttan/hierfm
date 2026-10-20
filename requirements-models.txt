@@ -1,4 +1,4 @@
-# GPU torch comes from PyPI with CUDA 12 wheels on Linux; on a Mac it is the MPS build
+# GPU torch is put in first by `make install-torch` for the driver's CUDA; on a Mac it is the MPS build
 # torch 2.6 is the first release where torch.compile works on Python 3.13 (TimesFM 2.5 compiles its forward)
 torch>=2.6
 chronos-forecasting>=2.2

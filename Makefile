@@ -37,7 +37,7 @@ PY     := $(PIN) $(VENV)/bin/python
 JOBS   ?= $(shell echo $(CORES) | awk '{print ($$1 > 3) ? $$1 - 2 : 1}')
 MODELS ?=
 
-.PHONY: all install install-models install-moirai download data forecast evaluate report run suite experiment \
+.PHONY: all install install-torch install-models install-moirai download data forecast evaluate report run suite experiment \
         smoke smoke-gpu smoke-suite cpuinfo test clean clean-runs
 
 # data/processed/{ru,europe} come with the clone; the download and data targets rebuild them
@@ -50,7 +50,20 @@ all: install install-models experiment
 install:
 	$(PYTHON) -m venv $(VENV) && $(PIP) install -U pip && $(PIP) install -r requirements.txt
 
-install-models: install
+# torch from PyPI is built for the newest CUDA; an older cluster driver then hides the GPUs and
+# every model silently runs on the CPU. The wheel is taken for the CUDA version of the driver
+# (nvidia-smi); TORCH_CUDA=cu124 sets it by hand.
+DRIVER_CUDA := $(shell nvidia-smi 2>/dev/null | grep -o 'CUDA Version: [0-9.]*' | grep -o '[0-9.]*$$')
+TORCH_CUDA  ?= $(shell echo "$(DRIVER_CUDA)" | awk -F. 'NF { v = $$1 * 100 + $$2; \
+	print (v >= 1208) ? "cu128" : (v >= 1206) ? "cu126" : (v >= 1204) ? "cu124" : (v >= 1108) ? "cu118" : "" }')
+
+install-torch: install
+ifneq ($(TORCH_CUDA),)
+	$(PIP) install --force-reinstall "torch>=2.6" --index-url https://download.pytorch.org/whl/$(TORCH_CUDA)
+endif
+	$(PY) -c "import torch; print('torch', torch.__version__, 'cuda', torch.version.cuda, 'gpu', torch.cuda.is_available())"
+
+install-models: install-torch
 	$(PIP) install -r requirements-models.txt
 
 # uni2ts pins numpy 1.26 and torch < 2.5: neither exists for Python 3.13, so its own pins are skipped
@@ -111,6 +124,8 @@ cpuinfo:
 	@echo "socket CPU=$(CPU) · physical cores $(CORES) · evaluation workers JOBS=$(JOBS)"
 	@echo "pinned to: $(if $(PIN),$(PIN),nothing)"
 	@echo "GPUs: $(if $(CUDA_VISIBLE_DEVICES),CUDA_VISIBLE_DEVICES=$(CUDA_VISIBLE_DEVICES),all visible) · forecast processes $(GPUS)"
+	@echo "driver CUDA $(DRIVER_CUDA) · torch wheel $(if $(TORCH_CUDA),$(TORCH_CUDA),from PyPI)"
+	@$(PY) -c "import torch; print('torch', torch.__version__, 'cuda', torch.version.cuda, 'gpu', torch.cuda.is_available())" 2>/dev/null || echo 'torch not installed'
 	@nvidia-smi topo -m 2>/dev/null || true
 
 smoke:

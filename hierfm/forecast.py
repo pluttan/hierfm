@@ -26,6 +26,11 @@ def pick_device(local_rank):
     if torch.cuda.is_available():
         torch.cuda.set_device(local_rank)
         return f"cuda:{local_rank}"
+    if os.environ.get("CUDA_VISIBLE_DEVICES"):
+        # a GPU was asked for: a CPU fallback would take days, so stop and say why
+        raise SystemExit(f"forecast: GPU {os.environ['CUDA_VISIBLE_DEVICES']} asked for, but torch "
+                         f"{torch.__version__} (CUDA {torch.version.cuda}) sees no GPU. Usually the "
+                         f"driver is older than the wheel: run `make install-torch`, then `make cpuinfo`.")
     if torch.backends.mps.is_available():
         return "mps"
     return "cpu"
