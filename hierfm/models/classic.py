@@ -15,10 +15,15 @@ class SeasonalNaive(Model):
 
     def predict(self, ctx, h, levels, temp_past=None, temp_future=None, node_ids=None):
         s = int(self.params.get("season", 168))
+        L = ctx.shape[1]
+        if L < s:
+            s = 24                    # a cold start shorter than the season: only the daily cycle is seen
         reps = int(np.ceil(h / s))
         point = np.tile(ctx[:, -s:], reps)[:, :h]
-        # errors of the same rule over the context give the spread
-        err = ctx[:, s:] - ctx[:, :-s]
+        # errors of the same rule over the context give the spread; a context of about one season
+        # (a 7-day cold start) has no such errors, then the day-ahead rule stands in for them
+        es = s if L - s >= 24 else 24
+        err = ctx[:, es:] - ctx[:, :-es] if L > es else np.zeros((len(ctx), 1))
         err = err[:, -int(self.params.get("err_window", 24 * 56)):]
         qe = np.quantile(err, levels, axis=1).T                     # (b, Q)
         return np.asarray(levels), point[:, :, None] + qe[:, None, :]

@@ -74,7 +74,9 @@ def _score_origin(k, cfg, spec, h):
     pos = ds.pos(o)
     levels, q = load_q(cfg, spec, h, o)
     y = ds.y[pos:pos + h]
-    scale = metrics.mase_scale(ds.y[pos - min(cfg.context, cfg.history_hours):pos], cfg.season)
+    # the scale only normalises scores and never reaches a model, so it takes the full window even in
+    # a cold start: a week of history has no week-ago differences, and every case shares one scale
+    scale = metrics.mase_scale(ds.y[pos - cfg.context:pos], cfg.season)
     rng_base = cfg.seed * 1_000_003 + k
     days_back = min(365, cfg.history_days or 365)
     # the origin is local midnight written in UTC (21:00 UTC for Moscow), so its UTC date is the day

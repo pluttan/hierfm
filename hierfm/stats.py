@@ -31,6 +31,8 @@ def mcb(losses, alpha=0.05):
     clean = losses.dropna()
     ranks = clean.rank(axis=1).mean()
     k, N = clean.shape[1], clean.shape[0]
+    if N == 0 or k < 2:
+        return ranks.sort_values(), float("nan"), []
     q = stats.studentized_range.ppf(1 - alpha, k, np.inf) / np.sqrt(2)
     cd = q * np.sqrt(k * (k + 1) / (6 * N))
     best = ranks.min()

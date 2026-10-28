@@ -104,3 +104,13 @@ def test_collapse_single_child(tmp_path):
     h = hier.load(tmp_path / "hierarchy.json")
     assert set(h.bottom) == {"A1", "A2", "B"} and "B_RES" not in h.nodes
     assert list(pd.read_parquet(tmp_path / "load.parquet").columns) == ["A1", "A2", "B"]
+
+
+def test_snaive_survives_a_one_week_cold_start():
+    from hierfm.models.classic import SeasonalNaive
+    rng = np.random.default_rng(0)
+    for L in (24, 100, 168, 200, 1000):
+        ctx = 100 + rng.standard_normal((3, L))
+        levels, q = SeasonalNaive(season=168).predict(ctx, 24, [0.1, 0.5, 0.9])
+        assert q.shape == (3, 24, 3) and np.isfinite(q).all()
+        assert (np.diff(q, axis=-1) >= 0).all()
