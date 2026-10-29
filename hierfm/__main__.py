@@ -35,6 +35,7 @@ def main():
     ap.add_argument("--models", default="", help="comma separated subset of the config models")
     ap.add_argument("--jobs", type=int, default=0)
     ap.add_argument("--chunk", type=int, default=8, help="origins per model call")
+    ap.add_argument("--force", action="store_true", help="evaluate: re-score files that already exist")
     a = ap.parse_args()
 
     if a.stage in ("suite", "collect"):
@@ -58,7 +59,7 @@ def main():
         forecast.run(cfg, only, a.chunk)
     elif a.stage == "evaluate":
         from . import evaluate
-        evaluate.run(cfg, a.jobs or None, only)
+        evaluate.run(cfg, a.jobs or None, only, a.force)
     else:
         from . import report
         report.run(cfg)

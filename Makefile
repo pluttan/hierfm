@@ -36,6 +36,8 @@ PY     := $(PIN) $(VENV)/bin/python
 # evaluation workers: one per physical core of the socket (SMT siblings add little to numpy), two left free
 JOBS   ?= $(shell echo $(CORES) | awk '{print ($$1 > 3) ? $$1 - 2 : 1}')
 MODELS ?=
+# finished score files are kept on a rerun; FORCE=1 re-scores them
+FORCE  ?=
 
 .PHONY: all install install-torch install-models install-moirai download data forecast evaluate report run suite experiment \
         smoke smoke-gpu smoke-suite cpuinfo test clean clean-runs
@@ -95,7 +97,7 @@ forecast:
 	$(LAUNCH) -m hierfm forecast --config $(CONFIG) $(if $(MODELS),--models $(MODELS))
 
 evaluate:
-	$(PY) -m hierfm evaluate --config $(CONFIG) --jobs $(JOBS) $(if $(MODELS),--models $(MODELS))
+	$(PY) -m hierfm evaluate --config $(CONFIG) --jobs $(JOBS) $(if $(MODELS),--models $(MODELS)) $(if $(FORCE),--force)
 
 report:
 	$(PY) -m hierfm report --config $(CONFIG)

@@ -4,6 +4,7 @@ CPU only. Origins are independent, so a process pool takes them; one parquet per
 with one row per (origin, window, dependence, method, level).
 """
 
+import hashlib
 import os
 from functools import partial
 from multiprocessing import Pool
@@ -140,7 +141,13 @@ def _score_origin(k, cfg, spec, h):
     return rows
 
 
-def run(cfg, jobs=None, only_models=None):
+def _fingerprint(cfg, spec, h, test):
+    """What a score file depends on besides the code: a changed config re-scores, a rerun does not."""
+    key = f"{cfg!r}|{spec!r}|{h}|{len(test)}|{test[0] if test else ''}|{test[-1] if test else ''}"
+    return hashlib.sha1(key.encode()).hexdigest()
+
+
+def run(cfg, jobs=None, only_models=None, force=False):
     ds = data.load(cfg.processed)
     origins, test_start = data.origins(ds, cfg)
     R_bottom = bottom_prior(cfg, ds, test_start)
@@ -159,6 +166,13 @@ def run(cfg, jobs=None, only_models=None):
             mi = _median_index(load_q(cfg, spec, h, have[0])[0])
             med = np.stack([load_q(cfg, spec, h, o)[1][:, :, mi] for o in have])
             test = [o for o in have if o >= test_start]
+            out = out_dir / f"{spec.key}_h{h}.parquet"
+            stamp = out.with_suffix(".sha1")
+            fp = _fingerprint(cfg, spec, h, test)
+            # a restarted suite keeps finished scores; files made before the stamps existed are kept too
+            if not force and out.exists() and (not stamp.exists() or stamp.read_text() == fp):
+                print(f"evaluate: {spec.key} h{h} already scored, skip (FORCE=1 re-scores)", flush=True)
+                continue
             state = dict(ds=ds, med=med, opos=np.array([ds.pos(o) for o in have]), test=test, R_bottom=R_bottom,
                          cold=cold_days(cfg, ds, test, h))
             print(f"evaluate: {spec.key} h{h} · {len(test)} test origins · {jobs} workers", flush=True)
@@ -168,7 +182,8 @@ def run(cfg, jobs=None, only_models=None):
             df = pd.DataFrame([r for p in parts for r in p])
             df.insert(0, "model", spec.key)
             df.insert(1, "h", h)
-            df.to_parquet(out_dir / f"{spec.key}_h{h}.parquet")
+            df.to_parquet(out)
+            stamp.write_text(fp)
             print(f"evaluate: wrote {len(df)} rows", flush=True)
 
 
