@@ -39,7 +39,7 @@ MODELS ?=
 # finished score files are kept on a rerun; FORCE=1 re-scores them
 FORCE  ?=
 
-.PHONY: all install install-torch install-models install-moirai download data forecast evaluate report run suite experiment \
+.PHONY: all install install-torch install-models install-moirai download data forecast evaluate report run suite experiment paper \
         smoke smoke-gpu smoke-suite cpuinfo test clean clean-runs
 
 # data/processed/{ru,europe} come with the clone; the download and data targets rebuild them
@@ -116,6 +116,11 @@ experiment:
 	$(MAKE) suite SUITE=configs/suites/ru.yaml
 	$(MAKE) suite SUITE=configs/suites/europe.yaml
 	$(MAKE) suite SUITE=configs/suites/synthetic.yaml
+	$(MAKE) paper
+
+# the cross-run tables of the paper from runs/<suite>/all_scores.parquet
+paper:
+	$(PY) -m hierfm paper
 
 # ==========================
 # ===  Checks            ===

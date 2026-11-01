@@ -6,6 +6,7 @@
     python -m hierfm report   --config CFG                   stage 3, tables
     python -m hierfm suite    SUITE.yaml                     write the configs of a suite, print their paths
     python -m hierfm collect  SUITE.yaml                     merge the scores of a suite
+    python -m hierfm paper    [ru,europe,synthetic]          cross-run tables -> docs/results
 """
 
 import argparse
@@ -29,7 +30,7 @@ def ensure_synthetic(cfg):
 
 def main():
     ap = argparse.ArgumentParser(prog="hierfm")
-    ap.add_argument("stage", choices=["synth", "forecast", "evaluate", "report", "suite", "collect"])
+    ap.add_argument("stage", choices=["synth", "forecast", "evaluate", "report", "suite", "collect", "paper"])
     ap.add_argument("suite_file", nargs="?")
     ap.add_argument("--config")
     ap.add_argument("--models", default="", help="comma separated subset of the config models")
@@ -38,6 +39,10 @@ def main():
     ap.add_argument("--force", action="store_true", help="evaluate: re-score files that already exist")
     a = ap.parse_args()
 
+    if a.stage == "paper":
+        from . import paper
+        paper.main([n for n in (a.suite_file or "").split(",") if n])
+        return
     if a.stage in ("suite", "collect"):
         from . import suite
         if a.stage == "suite":
