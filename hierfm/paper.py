@@ -90,6 +90,20 @@ def wins(df, value="crps_scaled", ours=OURS, reference=REFERENCE, by=("window",)
     return r.groupby(list(by))["result"].value_counts().unstack(fill_value=0)
 
 
+def best_coherent(df):
+    """Which reconciliation costs least (or gains most) against base, per horizon, window and
+    dependence: the question an operator who must publish coherent forecasts asks."""
+    rows = []
+    for (h, dep), g in df.groupby(["h", "dependence"], observed=True):
+        sk = skill(g, ["window", "method"])
+        for w, r in sk.iterrows():
+            r = r.dropna()
+            if len(r):
+                rows.append({"h": h, "window": w, "dependence": dep, "best": r.idxmax(),
+                             "skill": r.max(), OURS: r.get(OURS, np.nan), REFERENCE: r.get(REFERENCE, np.nan)})
+    return pd.DataFrame(rows).set_index(["h", "window", "dependence"]) if rows else pd.DataFrame()
+
+
 def _pre(df):
     return df[df.model.isin(PRETRAINED)] if df.model.isin(PRETRAINED).any() else df
 
@@ -118,6 +132,8 @@ def sec_main(s, out):
     out.append(("Skill over base by model, window 7 d and window 28 d, all levels",
                 skill(ind[ind.window.isin([7, w])], ["model", "h", "window", "method"])))
 
+    out.append(("Best coherent method by horizon, window and dependence, pretrained models, all levels",
+                best_coherent(_pre(df))))
     out.append((f"Diebold–Mariano, {OURS} vs {REFERENCE}, per model, horizon and level, by window",
                 wins(ind)))
     out.append((f"Diebold–Mariano, {OURS} vs mint_shrink_neff, by window",
@@ -151,6 +167,10 @@ def sec_by_case(s, out, exp, title, models=None):
     ind = df[df.dependence == "independent"] if (df.dependence == "independent").any() else df
     if models:
         ind = ind[ind.model.isin(models)]
+    if exp == "cold_start":
+        # boosting trained on 7..28 days is no forecaster (scaled CRPS about 3, seasonal naive 0.7):
+        # it stays in the runs, the tables leave it out
+        ind = ind[ind.model != "gbm"]
     by = ["case"]
     base = ind[ind.method == "base"].groupby(by + ["model", "h", "level"])["crps_scaled"].mean()
     if len(base):

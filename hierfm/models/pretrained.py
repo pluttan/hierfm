@@ -85,6 +85,7 @@ class ChronosBolt(Model):
     """Chronos-Bolt tiny/mini/small/base (9M..205M): the model-size axis of the experiments."""
     name = "chronos_bolt"
     NATIVE = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    version = 2          # normal tails beyond the deciles (base.to_levels)
 
     # CHECK 2026-10-19 (chronos_bolt.py, base.py of chronos-forecasting 2.3.2): predict_quantiles(inputs,
     # quantile_levels, **kw) takes prediction_length through kw and returns (quantiles, mean) with
@@ -113,6 +114,7 @@ class ChronosBolt(Model):
 class TimesFM25(Model):
     name = "timesfm25"
     NATIVE = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    version = 2          # normal tails beyond the deciles (base.to_levels)
 
     # CHECK 2026-10-19 (google-research/timesfm, src/timesfm/timesfm_2p5/*, timesfm 3.0.2). Fixed here:
     # 1. ForecastConfig.per_core_batch_size defaults to 1 and the compiled decoder runs
@@ -163,6 +165,7 @@ class TimesFM3(Model):
     name = "timesfm3"
     uses_temp = True
     NATIVE = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    version = 2          # normal tails beyond the deciles (base.to_levels)
 
     # CHECK 2026-10-19 (google-research/timesfm, src/timesfm3/torch/{timesfm3_forecaster,evaluator}.py,
     # package timesfm 3.0.2 installs the top-level module timesfm3). No change needed:
@@ -214,6 +217,7 @@ class Moirai2(Model):
     with --no-deps (make install-moirai); if it does not run on current torch the model is skipped."""
     name = "moirai2"
     NATIVE = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    version = 2          # normal tails beyond the deciles (base.to_levels)
 
     # CHECK 2026-10-19 (SalesforceAIResearch/uni2ts main, src/uni2ts/model/moirai2/forecast.py; PyPI
     # uni2ts 2.0.0 of 2025-11-04 contains uni2ts/model/moirai2). Changed: the model is now called

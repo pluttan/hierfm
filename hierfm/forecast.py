@@ -58,10 +58,53 @@ def run(cfg, only_models=None, chunk=8):
             print(f"[rank {rank}] skip {spec.key}: {exc}", flush=True)
 
 
+def file_version(path):
+    """Version of the model code that wrote a forecast file; None when there is no file."""
+    if not path.exists():
+        return None
+    with np.load(path) as f:
+        return int(f["version"]) if "version" in f.files else 1
+
+
+def _upgrade(cfg, spec, cls, h, stale):
+    """Older files the model can bring up to date in place; returns the origins it could not."""
+    left = []
+    for o in stale:
+        path = out_path(cfg, spec.key, h, o)
+        with np.load(path) as f:
+            levels, q, old = f["levels"], f["q"], int(f["version"]) if "version" in f.files else 1
+        new = cls.upgrade(levels, q, old)
+        if new is None:
+            left.append(o)
+        else:
+            _save(path, levels, new, cls.version)
+    return left
+
+
+def _save(path, levels, q, version):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".tmp.npz")
+    np.savez_compressed(tmp, levels=np.asarray(levels, np.float32), q=np.asarray(q, np.float32),
+                        version=np.int32(version))
+    tmp.rename(path)                                      # a half-written file never looks finished
+
+
 def _run_model(cfg, ds, origins, spec, device, rank, world, chunk):
+    cls = models.REGISTRY[spec.name]
     for h in cfg.horizons:
-        todo = [o for o in origins if not out_path(cfg, spec.key, h, o).exists()]
+        todo, stale = [], []
+        for o in origins:
+            v = file_version(out_path(cfg, spec.key, h, o))
+            if v is None:
+                todo.append(o)
+            elif v < cls.version:
+                stale.append(o)
         mine = todo[rank::world]
+        if stale[rank::world]:
+            left = _upgrade(cfg, spec, cls, h, stale[rank::world])
+            print(f"[rank {rank}] {spec.key} h{h}: {len(stale[rank::world]) - len(left)} files of an older "
+                  f"version upgraded in place, {len(left)} to redo", flush=True)
+            mine += left                                   # this rank's share of the stale files
         if not mine:
             continue
         model = models.make(spec, device)
@@ -128,9 +171,6 @@ def _predict_chunk(cfg, ds, model, name, h, chunk):
             levels, q = model.predict(ctx, h, cfg.quantiles, tp, tf, ds.h.nodes * len(pos))
             results = [(levels, q[j * n:(j + 1) * n]) for j in range(len(pos))]
 
+    version = getattr(model, "version", 1)
     for o, (levels, q) in zip(chunk, results):
-        path = out_path(cfg, name, h, o)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = path.with_suffix(".tmp.npz")
-        np.savez_compressed(tmp, levels=np.asarray(levels, np.float32), q=np.asarray(q, np.float32))
-        tmp.rename(path)                                  # a half-written file never looks finished
+        _save(out_path(cfg, name, h, o), levels, q, version)

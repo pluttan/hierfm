@@ -142,9 +142,15 @@ def _score_origin(k, cfg, spec, h):
 
 
 def _fingerprint(cfg, spec, h, test):
-    """What a score file depends on besides the code: a changed config re-scores, a rerun does not."""
+    """What a score file depends on besides the code: a changed config or a newer version of the
+    forecasts re-scores, a rerun does not."""
+    from .forecast import file_version
+    versions = [file_version(out_path(cfg, m, h, test[0])) if test else None for m in members(spec)]
     key = f"{cfg!r}|{spec!r}|{h}|{len(test)}|{test[0] if test else ''}|{test[-1] if test else ''}"
-    return hashlib.sha1(key.encode()).hexdigest()
+    newer = any(v and v > 1 for v in versions)
+    if newer:
+        key += f"|versions {versions}"            # version 1 keeps the stamps written before versions
+    return hashlib.sha1(key.encode()).hexdigest(), newer
 
 
 def run(cfg, jobs=None, only_models=None, force=False):
@@ -168,9 +174,10 @@ def run(cfg, jobs=None, only_models=None, force=False):
             test = [o for o in have if o >= test_start]
             out = out_dir / f"{spec.key}_h{h}.parquet"
             stamp = out.with_suffix(".sha1")
-            fp = _fingerprint(cfg, spec, h, test)
-            # a restarted suite keeps finished scores; files made before the stamps existed are kept too
-            if not force and out.exists() and (not stamp.exists() or stamp.read_text() == fp):
+            fp, newer = _fingerprint(cfg, spec, h, test)
+            # a restarted suite keeps finished scores; files made before the stamps existed are kept
+            # too, unless the forecasts behind them have since been upgraded
+            if not force and out.exists() and (stamp.read_text() == fp if stamp.exists() else not newer):
                 print(f"evaluate: {spec.key} h{h} already scored, skip (FORCE=1 re-scores)", flush=True)
                 continue
             state = dict(ds=ds, med=med, opos=np.array([ds.pos(o) for o in have]), test=test, R_bottom=R_bottom,

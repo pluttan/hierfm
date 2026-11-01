@@ -138,6 +138,61 @@ Skill: 100 * (1 - CRPS(method) / CRPS(base)), percent, positive is better. Score
 | ('timesfm3_temp', 168, 7)   | -0.461 | -11.875 |       -1.864 |    -2.919 |        -5.844 |             -2.434 |         -0.953 |            -11.732 |       -0.959 |
 | ('timesfm3_temp', 168, 28)  | -0.612 | -11.753 |       -1.934 |    -2.823 |       -10.475 |             -1.234 |          0.507 |            -11.192 |        0.504 |
 
+## Best coherent method by horizon, window and dependence, pretrained models, all levels
+
+|                            | best             |   skill |   prior_shrink |   mint_shrink |
+|:---------------------------|:-----------------|--------:|---------------:|--------------:|
+| (24, 7, 'gauss_copula')    | mint_shrink_neff |   1.714 |         -0.820 |         0.434 |
+| (24, 14, 'gauss_copula')   | mint_shrink_neff |   1.711 |         -0.899 |         0.462 |
+| (24, 28, 'gauss_copula')   | mint_shrink_neff |   1.864 |         -0.435 |         0.751 |
+| (24, 91, 'gauss_copula')   | wls_var          |   1.702 |          0.920 |         0.686 |
+| (24, 365, 'gauss_copula')  | mint_shrink_neff |   1.891 |          1.616 |         1.572 |
+| (24, 7, 'independent')     | mint_shrink      |  -1.321 |         -2.006 |        -1.321 |
+| (24, 14, 'independent')    | mint_shrink      |  -1.673 |         -1.951 |        -1.673 |
+| (24, 28, 'independent')    | prior_shrink_raw |  -0.870 |         -2.058 |        -0.927 |
+| (24, 91, 'independent')    | prior_shrink_raw |  -0.548 |         -1.785 |        -0.750 |
+| (24, 365, 'independent')   | prior_shrink_raw |  -0.035 |         -3.583 |        -0.181 |
+| (24, 7, 'schaake_err')     | mint_shrink_neff |   0.127 |         -2.194 |        -1.827 |
+| (24, 14, 'schaake_err')    | mint_shrink_neff |   0.811 |         -1.695 |        -1.068 |
+| (24, 28, 'schaake_err')    | mint_shrink_neff |   1.453 |         -0.542 |         0.134 |
+| (24, 91, 'schaake_err')    | wls_var          |   1.759 |          0.967 |         0.473 |
+| (24, 365, 'schaake_err')   | mint_shrink_neff |   1.938 |          1.698 |         1.398 |
+| (24, 7, 'schaake_hist')    | mint_shrink_neff |   2.003 |         -1.420 |         0.210 |
+| (24, 14, 'schaake_hist')   | mint_shrink_neff |   1.887 |         -1.347 |        -0.070 |
+| (24, 28, 'schaake_hist')   | mint_shrink_neff |   1.974 |         -0.785 |         0.522 |
+| (24, 91, 'schaake_hist')   | wls_var          |   2.072 |          0.931 |         0.733 |
+| (24, 365, 'schaake_hist')  | mint_shrink_neff |   2.084 |          1.804 |         1.523 |
+| (24, 7, 'schaake_temp')    | mint_shrink_neff |   1.740 |         -1.438 |        -0.184 |
+| (24, 14, 'schaake_temp')   | mint_shrink_neff |   1.484 |         -1.427 |        -0.319 |
+| (24, 28, 'schaake_temp')   | mint_shrink_neff |   1.635 |         -1.024 |         0.289 |
+| (24, 91, 'schaake_temp')   | mint_shrink_neff |   1.676 |          0.717 |         0.202 |
+| (24, 365, 'schaake_temp')  | mint_shrink_neff |   1.750 |          1.499 |         1.045 |
+| (168, 7, 'gauss_copula')   | bu               |   2.000 |         -0.030 |        -2.357 |
+| (168, 14, 'gauss_copula')  | bu               |   1.997 |          0.334 |        -5.548 |
+| (168, 28, 'gauss_copula')  | bu               |   2.171 |          0.490 |        -4.377 |
+| (168, 91, 'gauss_copula')  | bu               |   2.245 |          1.603 |        -0.309 |
+| (168, 365, 'gauss_copula') | bu               |   2.276 |          2.023 |         1.526 |
+| (168, 7, 'independent')    | prior_only       |  -1.318 |         -1.349 |        -8.116 |
+| (168, 14, 'independent')   | prior_only       |  -0.790 |         -0.947 |       -19.944 |
+| (168, 28, 'independent')   | prior_only       |  -1.124 |         -1.240 |       -19.575 |
+| (168, 91, 'independent')   | prior_shrink     |  -0.769 |         -0.769 |        -8.439 |
+| (168, 365, 'independent')  | prior_only       |  -0.796 |         -1.002 |        -2.589 |
+| (168, 7, 'schaake_err')    | prior_only       |  -1.352 |         -1.358 |        -8.117 |
+| (168, 14, 'schaake_err')   | wls_var          |   0.581 |         -0.955 |        -7.918 |
+| (168, 28, 'schaake_err')   | bu               |   1.606 |          0.061 |        -5.070 |
+| (168, 91, 'schaake_err')   | bu               |   2.120 |          1.446 |        -0.781 |
+| (168, 365, 'schaake_err')  | bu               |   2.446 |          2.173 |         1.398 |
+| (168, 7, 'schaake_hist')   | bu               |   2.428 |         -0.157 |        -3.124 |
+| (168, 14, 'schaake_hist')  | bu               |   2.459 |          0.460 |        -6.125 |
+| (168, 28, 'schaake_hist')  | bu               |   2.485 |          0.905 |        -4.546 |
+| (168, 91, 'schaake_hist')  | bu               |   2.610 |          1.683 |        -0.763 |
+| (168, 365, 'schaake_hist') | bu               |   2.459 |          2.204 |         1.247 |
+| (168, 7, 'schaake_temp')   | bu               |   2.084 |         -0.260 |        -3.199 |
+| (168, 14, 'schaake_temp')  | bu               |   2.165 |          0.234 |        -5.941 |
+| (168, 28, 'schaake_temp')  | wls_var          |   1.877 |         -0.005 |        -4.952 |
+| (168, 91, 'schaake_temp')  | bu               |   1.858 |          0.995 |        -1.551 |
+| (168, 365, 'schaake_temp') | bu               |   2.012 |          1.671 |         0.861 |
+
 ## Diebold–Mariano, prior_shrink vs mint_shrink, per model, horizon and level, by window
 
 |   window |   no difference |   ours better |   reference better |

@@ -138,6 +138,61 @@ Skill: 100 * (1 - CRPS(method) / CRPS(base)), percent, positive is better. Score
 | ('timesfm3_temp', 168, 7)   | -4.238 |  -8.520 |       -3.717 |    -3.240 |        -3.300 |             -3.093 |          0.637 |            -10.538 |        0.593 |
 | ('timesfm3_temp', 168, 28)  | -3.987 |  -8.483 |       -3.476 |    -3.004 |       -10.727 |             -1.973 |          2.838 |            -11.992 |        2.541 |
 
+## Best coherent method by horizon, window and dependence, pretrained models, all levels
+
+|                            | best             |   skill |   prior_shrink |   mint_shrink |
+|:---------------------------|:-----------------|--------:|---------------:|--------------:|
+| (24, 7, 'gauss_copula')    | wls_var          |   0.963 |         -3.582 |        -1.052 |
+| (24, 14, 'gauss_copula')   | wls_var          |   0.900 |         -3.729 |        -0.503 |
+| (24, 28, 'gauss_copula')   | mint_shrink_neff |   0.967 |         -3.687 |        -0.326 |
+| (24, 91, 'gauss_copula')   | mint_shrink_neff |   1.162 |         -1.916 |         0.522 |
+| (24, 365, 'gauss_copula')  | mint_shrink_neff |   1.478 |          0.189 |         1.150 |
+| (24, 7, 'independent')     | mint_shrink      |  -1.223 |         -1.636 |        -1.223 |
+| (24, 14, 'independent')    | mint_shrink      |  -0.745 |         -1.972 |        -0.745 |
+| (24, 28, 'independent')    | mint_shrink      |  -0.409 |         -1.620 |        -0.409 |
+| (24, 91, 'independent')    | mint_shrink      |  -0.112 |         -0.996 |        -0.112 |
+| (24, 365, 'independent')   | prior_shrink_raw |   0.630 |          0.139 |         0.396 |
+| (24, 7, 'schaake_err')     | wls_var          |  -1.326 |         -3.544 |        -4.369 |
+| (24, 14, 'schaake_err')    | wls_var          |  -0.007 |         -2.733 |        -2.514 |
+| (24, 28, 'schaake_err')    | mint_shrink_neff |   0.354 |         -2.262 |        -1.455 |
+| (24, 91, 'schaake_err')    | mint_shrink_neff |   0.783 |         -1.069 |         0.031 |
+| (24, 365, 'schaake_err')   | mint_shrink_neff |   1.111 |         -0.058 |         0.769 |
+| (24, 7, 'schaake_hist')    | wls_var          |   1.606 |         -2.784 |        -1.056 |
+| (24, 14, 'schaake_hist')   | wls_var          |   1.454 |         -2.767 |        -0.651 |
+| (24, 28, 'schaake_hist')   | mint_shrink_neff |   1.500 |         -2.483 |        -0.154 |
+| (24, 91, 'schaake_hist')   | mint_shrink_neff |   1.467 |         -1.889 |         0.459 |
+| (24, 365, 'schaake_hist')  | mint_shrink_neff |   1.807 |          0.027 |         1.235 |
+| (24, 7, 'schaake_temp')    | wls_var          |   0.800 |         -2.934 |        -2.100 |
+| (24, 14, 'schaake_temp')   | wls_var          |   0.782 |         -2.914 |        -1.500 |
+| (24, 28, 'schaake_temp')   | mint_shrink_neff |   0.697 |         -2.946 |        -1.071 |
+| (24, 91, 'schaake_temp')   | mint_shrink_neff |   0.825 |         -2.189 |        -0.160 |
+| (24, 365, 'schaake_temp')  | mint_shrink_neff |   1.065 |         -0.694 |         0.477 |
+| (168, 7, 'gauss_copula')   | mint_shrink_neff |   0.508 |         -2.831 |        -3.385 |
+| (168, 14, 'gauss_copula')  | mint_shrink_neff |   0.449 |         -2.633 |        -9.137 |
+| (168, 28, 'gauss_copula')  | wls_var          |   0.756 |         -1.578 |       -11.062 |
+| (168, 91, 'gauss_copula')  | mint_shrink_neff |   1.090 |         -0.200 |        -4.643 |
+| (168, 365, 'gauss_copula') | mint_shrink_neff |   1.858 |          1.181 |         0.114 |
+| (168, 7, 'independent')    | prior_shrink     |  -1.349 |         -1.349 |        -5.012 |
+| (168, 14, 'independent')   | prior_shrink     |  -1.477 |         -1.477 |       -17.678 |
+| (168, 28, 'independent')   | prior_shrink     |  -0.731 |         -0.731 |       -21.764 |
+| (168, 91, 'independent')   | prior_shrink     |  -0.005 |         -0.005 |       -12.684 |
+| (168, 365, 'independent')  | prior_shrink     |   0.754 |          0.754 |        -1.392 |
+| (168, 7, 'schaake_err')    | ols              |  -4.951 |         -7.388 |        -8.227 |
+| (168, 14, 'schaake_err')   | mint_shrink_neff |  -1.516 |         -2.780 |       -12.346 |
+| (168, 28, 'schaake_err')   | wls_var          |  -0.228 |         -1.615 |       -13.094 |
+| (168, 91, 'schaake_err')   | mint_shrink_neff |   0.609 |         -0.056 |        -5.782 |
+| (168, 365, 'schaake_err')  | mint_shrink_neff |   1.532 |          0.803 |        -0.429 |
+| (168, 7, 'schaake_hist')   | mint_shrink_neff |   1.693 |         -1.817 |        -3.715 |
+| (168, 14, 'schaake_hist')  | mint_shrink_neff |   1.475 |         -1.568 |        -9.267 |
+| (168, 28, 'schaake_hist')  | wls_var          |   1.506 |         -0.843 |       -11.435 |
+| (168, 91, 'schaake_hist')  | mint_shrink_neff |   1.701 |          0.133 |        -5.136 |
+| (168, 365, 'schaake_hist') | mint_shrink_neff |   2.294 |          1.435 |         0.057 |
+| (168, 7, 'schaake_temp')   | mint_shrink_neff |   0.878 |         -2.247 |        -4.534 |
+| (168, 14, 'schaake_temp')  | mint_shrink_neff |   0.815 |         -1.967 |       -10.153 |
+| (168, 28, 'schaake_temp')  | wls_var          |   0.769 |         -1.440 |       -12.223 |
+| (168, 91, 'schaake_temp')  | mint_shrink_neff |   0.845 |         -0.921 |        -6.185 |
+| (168, 365, 'schaake_temp') | mint_shrink_neff |   1.257 |          0.182 |        -1.139 |
+
 ## Diebold–Mariano, prior_shrink vs mint_shrink, per model, horizon and level, by window
 
 |   window |   no difference |   ours better |   reference better |
@@ -277,22 +332,18 @@ Skill: 100 * (1 - CRPS(method) / CRPS(base)), percent, positive is better. Score
 |                                                      |     0 |     1 |     2 |
 |:-----------------------------------------------------|------:|------:|------:|
 | ('history_days=14,windows=7-14', 'chronos2', 24)     | 0.253 | 0.297 | 0.395 |
-| ('history_days=14,windows=7-14', 'gbm', 24)          | 3.388 | 3.012 | 2.017 |
 | ('history_days=14,windows=7-14', 'snaive', 24)       | 0.631 | 0.685 | 0.763 |
 | ('history_days=14,windows=7-14', 'timesfm25', 24)    | 0.411 | 0.363 | 0.419 |
 | ('history_days=14,windows=7-14', 'timesfm3', 24)     | 0.252 | 0.305 | 0.399 |
 | ('history_days=28,windows=7-14-28', 'chronos2', 24)  | 0.226 | 0.282 | 0.379 |
-| ('history_days=28,windows=7-14-28', 'gbm', 24)       | 3.670 | 3.105 | 1.937 |
 | ('history_days=28,windows=7-14-28', 'snaive', 24)    | 0.679 | 0.717 | 0.752 |
 | ('history_days=28,windows=7-14-28', 'timesfm25', 24) | 0.322 | 0.342 | 0.409 |
 | ('history_days=28,windows=7-14-28', 'timesfm3', 24)  | 0.234 | 0.292 | 0.384 |
 | ('history_days=7,windows=7', 'chronos2', 24)         | 0.339 | 0.323 | 0.420 |
-| ('history_days=7,windows=7', 'gbm', 24)              | 3.083 | 2.658 | 1.811 |
 | ('history_days=7,windows=7', 'snaive', 24)           | 0.680 | 0.688 | 0.700 |
 | ('history_days=7,windows=7', 'timesfm25', 24)        | 0.364 | 0.358 | 0.434 |
 | ('history_days=7,windows=7', 'timesfm3', 24)         | 0.300 | 0.330 | 0.424 |
 | ('history_days=91,windows=7-28-91', 'chronos2', 24)  | 0.224 | 0.277 | 0.370 |
-| ('history_days=91,windows=7-28-91', 'gbm', 24)       | 1.295 | 1.322 | 1.026 |
 | ('history_days=91,windows=7-28-91', 'snaive', 24)    | 0.688 | 0.712 | 0.731 |
 | ('history_days=91,windows=7-28-91', 'timesfm25', 24) | 0.256 | 0.309 | 0.388 |
 | ('history_days=91,windows=7-28-91', 'timesfm3', 24)  | 0.220 | 0.279 | 0.372 |
@@ -301,15 +352,15 @@ Skill: 100 * (1 - CRPS(method) / CRPS(base)), percent, positive is better. Score
 
 |                                         |     bu |    ols |   wls_struct |   wls_var |   mint_shrink |   mint_shrink_neff |   prior_shrink |   prior_shrink_raw |   prior_only |
 |:----------------------------------------|-------:|-------:|-------------:|----------:|--------------:|-------------------:|---------------:|-------------------:|-------------:|
-| ('history_days=14,windows=7-14', 7)     | -4.319 | -5.190 |       -3.586 |    -3.695 |        -1.773 |             -3.945 |         -1.903 |             -8.874 |       -1.731 |
-| ('history_days=14,windows=7-14', 14)    | -4.321 | -5.141 |       -3.575 |    -3.679 |        -2.540 |             -4.307 |         -2.223 |            -12.007 |       -1.664 |
-| ('history_days=28,windows=7-14-28', 7)  | -3.861 | -5.212 |       -3.702 |    -3.362 |        -1.576 |             -3.291 |         -2.421 |            -10.582 |       -2.440 |
-| ('history_days=28,windows=7-14-28', 14) | -3.877 | -5.154 |       -3.717 |    -3.580 |        -3.621 |             -3.353 |         -2.628 |            -14.998 |       -2.809 |
-| ('history_days=28,windows=7-14-28', 28) | -3.763 | -5.160 |       -3.651 |    -3.542 |        -4.251 |             -3.057 |         -2.048 |            -15.699 |       -2.656 |
-| ('history_days=7,windows=7', 7)         | -4.592 | -5.958 |       -1.978 |    -2.278 |         1.347 |             -2.369 |          0.304 |             -4.399 |        0.405 |
-| ('history_days=91,windows=7-28-91', 7)  | -4.804 | -5.542 |       -4.594 |    -4.726 |        -2.623 |             -4.780 |         -3.623 |            -10.603 |       -3.625 |
-| ('history_days=91,windows=7-28-91', 28) | -4.693 | -5.465 |       -4.551 |    -4.917 |        -3.892 |             -5.110 |         -3.563 |            -16.363 |       -3.714 |
-| ('history_days=91,windows=7-28-91', 91) | -4.894 | -5.414 |       -4.601 |    -4.938 |        -2.896 |             -3.509 |         -0.335 |            -13.799 |       -3.023 |
+| ('history_days=14,windows=7-14', 7)     | -3.670 | -6.443 |       -3.886 |    -3.220 |         0.572 |             -3.196 |         -0.361 |             -8.671 |       -0.382 |
+| ('history_days=14,windows=7-14', 14)    | -3.664 | -6.385 |       -3.870 |    -3.212 |        -0.509 |             -3.101 |         -0.198 |            -12.712 |       -0.341 |
+| ('history_days=28,windows=7-14-28', 7)  | -4.238 | -6.301 |       -4.201 |    -3.582 |        -1.391 |             -3.550 |         -1.706 |            -12.582 |       -1.727 |
+| ('history_days=28,windows=7-14-28', 14) | -4.238 | -6.240 |       -4.216 |    -3.853 |        -4.325 |             -3.699 |         -2.088 |            -18.666 |       -2.162 |
+| ('history_days=28,windows=7-14-28', 28) | -4.108 | -6.232 |       -4.135 |    -3.806 |        -5.875 |             -3.499 |         -1.745 |            -20.445 |       -1.898 |
+| ('history_days=7,windows=7', 7)         | -4.107 | -6.365 |       -1.895 |    -1.409 |         1.863 |             -1.406 |          1.553 |             -5.236 |        1.548 |
+| ('history_days=91,windows=7-28-91', 7)  | -4.195 | -5.969 |       -4.775 |    -4.226 |        -1.465 |             -4.235 |         -1.697 |            -11.451 |       -1.699 |
+| ('history_days=91,windows=7-28-91', 28) | -4.025 | -5.862 |       -4.707 |    -4.503 |        -4.328 |             -4.419 |         -1.705 |            -20.249 |       -1.759 |
+| ('history_days=91,windows=7-28-91', 91) | -4.256 | -5.818 |       -4.772 |    -4.626 |        -5.161 |             -4.306 |         -0.937 |            -18.767 |       -1.411 |
 
 ## Model input length: base scaled CRPS
 

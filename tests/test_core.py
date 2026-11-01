@@ -114,3 +114,19 @@ def test_snaive_survives_a_one_week_cold_start():
         levels, q = SeasonalNaive(season=168).predict(ctx, 24, [0.1, 0.5, 0.9])
         assert q.shape == (3, 24, 3) and np.isfinite(q).all()
         assert (np.diff(q, axis=-1) >= 0).all()
+
+
+def test_decile_tails_follow_a_normal_and_old_files_upgrade():
+    from hierfm.models.base import to_levels
+    from hierfm.models.pretrained import TimesFM3
+    native = TimesFM3.NATIVE
+    levels = [round(0.05 * i, 2) for i in range(1, 20)]
+    q = (10 + 2 * norm.ppf(native))[None, None, :]                   # deciles of N(10, 2)
+    new = to_levels(native, q, levels)
+    assert np.allclose(new[0, 0, [0, 2, -3, -1]], 10 + 2 * norm.ppf([0.05, 0.15, 0.85, 0.95]), atol=0.1)
+    assert np.allclose(new[0, 0, 1::2], q[0, 0])                   # the deciles stay as they were
+    # a version-1 file: the outer levels clamped to the outer deciles
+    old = new.copy()
+    old[..., 0], old[..., -1] = q[..., 0], q[..., -1]
+    assert np.allclose(TimesFM3.upgrade(levels, old, 1), new)
+    assert TimesFM3.upgrade(levels, new, 2) is None
