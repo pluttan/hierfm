@@ -95,6 +95,9 @@ def _score_origin(k, cfg, spec, h):
     levels_idx = {lv: hh.level_index(lv) for lv in range(len(hh.levels))}
 
     obs = ds.obs[pos:pos + h]                     # scores only on measured cells (ATS skips weekends)
+    # energy and variogram scores cost more than everything else together (K x d x d per step) and
+    # the paper reads them at one window: the one closest to the main 28 days
+    joint_w = min(cfg.windows, key=lambda v: abs(v - 28))
     rows = []
     for w in cfg.windows:
         E, n_eff = _window_errors(pos, h, w)
@@ -114,9 +117,16 @@ def _score_origin(k, cfg, spec, h):
             base = dependence.draw(levels, q, cfg.samples, dep, rng, template=tpl, corr=corr_a)
             for m, (G, info) in mats.items():
                 s = rec.apply(hh, G, base)
-                med = np.median(s, 0)
-                c = metrics.crps(s, y)
+                xs = np.sort(s, 0)                     # one sort: CRPS, median and interval ends
+                K = len(xs)
+                med = 0.5 * (xs[(K - 1) // 2] + xs[K // 2])
+                c = metrics.crps_sorted(xs, y)
                 ae = np.abs(med - y)
+                bands = {}
+                for nominal in cfg.coverage:
+                    a = (1 - nominal) / 2
+                    lo, hi = metrics.sorted_quantile(xs, a), metrics.sorted_quantile(xs, 1 - a)
+                    bands[nominal] = (((y >= lo) & (y <= hi)).astype(float), hi - lo)
                 for lv, idx in levels_idx.items():
                     mk = obs[:, idx]
                     if not mk.any():
@@ -128,12 +138,11 @@ def _score_origin(k, cfg, spec, h):
                            "crps_scaled": _masked_mean(c[:, idx] / scale[idx], mk),
                            "measured": float(mk.mean()),
                            "lambda": info.get("lambda", np.nan), "n_err": len(E), "n_eff": n_eff}
-                    for nominal in cfg.coverage:
-                        hit, width = metrics.coverage_cells(s[..., idx], y[:, idx], nominal)
-                        row[f"cov{int(nominal * 100)}"] = _masked_mean(hit, mk)
-                        row[f"width{int(nominal * 100)}"] = _masked_mean(width / scale[idx], mk)
+                    for nominal, (hit, width) in bands.items():
+                        row[f"cov{int(nominal * 100)}"] = _masked_mean(hit[:, idx], mk)
+                        row[f"width{int(nominal * 100)}"] = _masked_mean(width[:, idx] / scale[idx], mk)
                     full = mk.all(1)                       # joint scores need every node of the level
-                    if len(idx) > 1 and full.any():
+                    if w == joint_w and len(idx) > 1 and full.any():
                         sv, yv = s[:, full][..., idx] / scale[idx], y[full][:, idx] / scale[idx]
                         row["energy"] = metrics.energy_score(sv, yv)
                         row["variogram"] = metrics.variogram_score(sv, yv)

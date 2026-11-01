@@ -20,24 +20,20 @@ def invert(levels, q, u):
     """Quantile function by linear interpolation, linear tails from the outer two quantiles.
 
     levels (Q,), q (n, H, Q), u (K, n) or (K, n, H) uniforms -> samples (K, H, n).
+    Vectorised: the segment [k-1, k] of every uniform is found at once; below the first level
+    and above the last the outer segment is extended, which is the linear tail.
     """
-    levels = np.asarray(levels)
+    levels = np.asarray(levels, float)
     K, n = u.shape[:2]
-    H = q.shape[1]
+    H, Q = q.shape[1], q.shape[2]
+    k = np.clip(np.searchsorted(levels, u, side="right"), 1, Q - 1)
+    w = (u - levels[k - 1]) / (levels[k] - levels[k - 1])
     if u.ndim == 2:                       # one uniform per path and node: comonotone over the horizon
-        u = np.repeat(u[:, :, None], H, 2)
-    out = np.empty((K, H, n))
-    lo_slope = (q[..., 1] - q[..., 0]) / (levels[1] - levels[0])
-    hi_slope = (q[..., -1] - q[..., -2]) / (levels[-1] - levels[-2])
-    for i in range(n):
-        for t in range(H):
-            x = u[:, i, t]
-            v = np.interp(x, levels, q[i, t])
-            low, high = x < levels[0], x > levels[-1]
-            v[low] = q[i, t, 0] - lo_slope[i, t] * (levels[0] - x[low])
-            v[high] = q[i, t, -1] + hi_slope[i, t] * (x[high] - levels[-1])
-            out[:, t, i] = v
-    return out
+        k, w = k[:, :, None], w[:, :, None]
+    cell = ((np.arange(n)[:, None] * H + np.arange(H)[None, :]) * Q)[None]  # flat (i, t) offset
+    flat = q.reshape(-1)
+    qa, qb = flat[cell + k - 1], flat[cell + k]
+    return (qa + w * (qb - qa)).transpose(0, 2, 1)
 
 
 def reorder(samples, template, rng):

@@ -38,6 +38,9 @@ JOBS   ?= $(shell echo $(CORES) | awk '{print ($$1 > 3) ? $$1 - 2 : 1}')
 MODELS ?=
 # finished score files are kept on a rerun; FORCE=1 re-scores them
 FORCE  ?=
+# ONLY=main,ensemble runs only those experiments of every suite; the rest keep their scores
+ONLY   ?=
+ONLY_RE = $(if $(ONLY),/($(subst $(comma),|,$(ONLY)))/,.)
 
 .PHONY: all install install-torch install-models install-moirai download data forecast evaluate report run suite experiment paper \
         smoke smoke-gpu smoke-suite cpuinfo test clean clean-runs
@@ -106,7 +109,7 @@ run: forecast evaluate report
 
 # every case of a suite in turn, then one table of all scores (runs/<suite>/summary.md)
 suite:
-	@set -e; for c in $$($(PY) -m hierfm suite $(SUITE)); do \
+	@set -e; for c in $$($(PY) -m hierfm suite $(SUITE) | grep -E '$(ONLY_RE)'); do \
 		echo "=== $$c"; $(MAKE) --no-print-directory run CONFIG=$$c; \
 	done
 	$(PY) -m hierfm collect $(SUITE)

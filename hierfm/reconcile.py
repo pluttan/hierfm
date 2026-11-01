@@ -60,4 +60,6 @@ def apply(h, G, samples):
     """samples (K, H, n) -> reconciled (K, H, n)."""
     if G is None:
         return samples
-    return samples @ (h.S @ G).T
+    # one (K*H, n) x (n, n) product: a (K, H, n) @ (n, n) product runs K small ones, 10x slower
+    n = samples.shape[-1]
+    return (samples.reshape(-1, n) @ (h.S @ G).T).reshape(samples.shape)
