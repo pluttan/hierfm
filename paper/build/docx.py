@@ -30,9 +30,9 @@ from docx.shared import Mm, Pt
 FRONT = {"title": "title", "название": "title", "index terms": "keywords",
          "ключевые слова": "keywords", "abstract": "abstract", "аннотация": "abstract",
          "authors": "authors", "авторы": "authors"}
-LABELS = {"en": {"abstract": "Abstract—", "keywords": "Keywords—", "refs": "References",
+LABELS = {"en": {"abstract": "Abstract", "keywords": "Keywords", "refs": "References",
                  "fig": "Fig. %1.", "table": "TABLE %1. "},
-          "ru": {"abstract": "Аннотация—", "keywords": "Ключевые слова—", "refs": "Список литературы",
+          "ru": {"abstract": "Аннотация", "keywords": "Ключевые слова", "refs": "Список литературы",
                  "fig": "Рис. %1.", "table": "ТАБЛИЦА %1. "}}
 TABLE_PREFIX = re.compile(r"^(Table|Таблица): ")
 COLUMN_MM = 85  # one column of the A4 template: (210 - 2*15.8 - 6.35) / 2
@@ -286,14 +286,17 @@ def build(template, paper_md, refs_md, out, lang="en"):
     table_pr = copy.deepcopy(doc.tables[0]._tbl.tblPr) if doc.tables else None
     anchor = body_anchor(doc)
     w = Writer(doc, anchor, base, table_pr)
-    abstract = w.para("Abstract")
-    run = abstract.add_run(labels["abstract"])
-    run.italic = True
-    add_inline(abstract, " ".join(front.get("abstract", ["[DATA abstract]"])))
-    kw = w.para("Keywords")
-    run = kw.add_run(labels["keywords"])
-    run.italic = True
-    add_inline(kw, " ".join(front.get("keywords", [])))
+    # the authors want the label on a line of its own instead of the IEEE em dash; a separate
+    # paragraph, because a line break inside a justified one stretches the label across the column
+    for style, key, text in (("Abstract", "abstract", " ".join(front.get("abstract", ["[DATA abstract]"]))),
+                             ("Keywords", "keywords", " ".join(front.get("keywords", [])))):
+        head = w.para(style)
+        head.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        head.paragraph_format.keep_with_next = True
+        head.paragraph_format.space_after = Pt(0)
+        run = head.add_run(labels[key])
+        run.italic = True
+        add_inline(w.para(style), text)
 
     for kind, payload in body:
         if kind == "h1":
