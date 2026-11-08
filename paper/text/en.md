@@ -10,11 +10,11 @@ English text of the paper for REEPE 2027, the source of `make article`. Numbers 
 
 ## Authors
 
-- [CHECK: author names]
-- [CHECK: academic degree, title]
-- [CHECK: department], Bauman Moscow State Technical University
+- Filinov Dmitry Grigorievich, Plyutto Andrey Petrovich, Ibragimov Stanislav Vadimovich
+- Master's students (Filinov D. G., Plyutto A. P.); Senior Lecturer (Ibragimov S. V.)
+- Computer Systems and Networks Department (IU6), Bauman Moscow State Technical University
 - 2nd Baumanskaya St., 5, bldg. 1, Moscow, 105005, Russian Federation
-- [CHECK: e-mail]
+- filinovdg@student.bmstu.ru, plyuttoap@student.bmstu.ru, sibragimov@bmstu.ru
 
 ## Abstract
 
