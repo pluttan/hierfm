@@ -43,7 +43,7 @@ ONLY   ?=
 ONLY_RE = $(if $(ONLY),/($(subst $(comma),|,$(ONLY)))/,.)
 
 .PHONY: all install install-torch install-models install-moirai download data forecast evaluate report run suite experiment paper \
-        smoke smoke-gpu smoke-suite cpuinfo test clean clean-runs
+        article article-install article-numbers article-figures smoke smoke-gpu smoke-suite cpuinfo test clean clean-runs
 
 # data/processed/{ru,europe} come with the clone; the download and data targets rebuild them
 all: install install-models experiment
@@ -124,6 +124,46 @@ experiment:
 # the cross-run tables of the paper from runs/<suite>/all_scores.parquet
 paper:
 	$(PY) -m hierfm paper
+
+# ==========================
+# ===  Article (REEPE)   ===
+# ==========================
+# Markdown text -> REEPE IEEE template (.docx) -> PDF. Runs on the Mac: LibreOffice converts the
+# template (Strict OOXML, python-docx reads only the transitional form) and renders the PDF.
+ART      := paper
+ART_OUT  := $(ART)/build/out
+ART_PY   := $(ART)/venv/bin/python3.12
+SOFFICE  ?= /opt/homebrew/bin/soffice
+PDFINFO  ?= /opt/homebrew/bin/pdfinfo
+# a folder with runs/<suite>/all_scores.parquet, e.g. the unpacked cluster archive
+RESULTS  ?= .
+
+article-install:
+	python3.12 -m venv $(ART)/venv && $(ART)/venv/bin/pip install -U pip && $(ART)/venv/bin/pip install -r $(ART)/requirements.txt
+
+# the numbers of the paper as small CSVs in paper/data (committed); needs the score archive
+article-numbers:
+	$(PY) -I $(ART)/build/numbers.py $(RESULTS) $(ART)/data
+
+article-figures:
+	$(ART_PY) -I $(ART)/build/figures.py $(ART)/data $(ART)/text/figs en
+	$(ART_PY) -I $(ART)/build/figures.py $(ART)/data $(ART)/text/figs/ru ru
+
+$(ART_OUT)/template.docx: $(ART)/template/reepe-same-affiliation.docx
+	mkdir -p $(ART_OUT)/conv
+	$(SOFFICE) --headless --convert-to "docx:MS Word 2007 XML" --outdir $(ART_OUT)/conv $<
+	mv $(ART_OUT)/conv/reepe-same-affiliation.docx $@
+
+# the submission copy (English) and its Russian twin land in paper/
+article: $(ART_OUT)/template.docx article-figures
+	$(ART_PY) -I $(ART)/build/docx.py $(ART_OUT)/template.docx $(ART)/text/en.md $(ART)/text/refs.md $(ART_OUT)/paper.docx en
+	$(ART_PY) -I $(ART)/build/docx.py $(ART_OUT)/template.docx $(ART)/text/ru.md $(ART)/text/refs.md $(ART_OUT)/paper-ru.docx ru
+	$(SOFFICE) --headless --convert-to pdf --outdir $(ART_OUT) $(ART_OUT)/paper.docx $(ART_OUT)/paper-ru.docx
+	@for f in paper paper-ru; do echo "$$f: $$($(PDFINFO) $(ART_OUT)/$$f.pdf | grep Pages)"; done
+	cp $(ART_OUT)/paper.docx $(ART)/hierfm_REEPE-2027_EN.docx
+	cp $(ART_OUT)/paper.pdf $(ART)/hierfm_REEPE-2027_EN.pdf
+	cp $(ART_OUT)/paper-ru.docx $(ART)/hierfm_REEPE-2027_RU.docx
+	cp $(ART_OUT)/paper-ru.pdf $(ART)/hierfm_REEPE-2027_RU.pdf
 
 # ==========================
 # ===  Checks            ===

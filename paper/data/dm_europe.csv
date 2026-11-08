@@ -1,0 +1,13 @@
+suite,method,h,no difference,ours better,reference better
+europe,mint_shrink_neff,24,7,14,0.0
+europe,mint_shrink_neff,168,10,10,1.0
+europe,wls_var,24,7,14,0.0
+europe,wls_var,168,7,13,1.0
+europe,bu,24,9,5,0.0
+europe,bu,168,2,12,0.0
+europe,mint_shrink,24,14,1,6.0
+europe,mint_shrink,168,7,0,14.0
+europe,prior_shrink,24,14,0,7.0
+europe,prior_shrink,168,14,2,5.0
+europe,neff_vs_mint_shrink,24,5,16,0.0
+europe,neff_vs_mint_shrink,168,1,20,0.0

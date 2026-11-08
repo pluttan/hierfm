@@ -19,3 +19,5 @@ __pycache__/
 /runs-smoke-gpu-*.log
 /src/__pycache__/
 /src/smoke/__pycache__/
+/paper/venv/
+/paper/build/out/
